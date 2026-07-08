@@ -1,4 +1,4 @@
-import { Task, TaskStatus } from '../types/index.js';
+import { Task, TaskStatus, TaskTag } from '../types/index.js';
 
 interface TaskCardProps {
   task: Task;
@@ -32,10 +32,24 @@ const statusIcons: Record<TaskStatus, string> = {
   COMPLETE: '✓✓',
 };
 
+const tagColors: Record<TaskTag, { bg: string; text: string }> = {
+  FLOW: { bg: 'bg-cyan-900/50', text: 'text-cyan-200' },
+  CAMPAIGN: { bg: 'bg-indigo-900/50', text: 'text-indigo-200' },
+  SIDE_QUEST: { bg: 'bg-amber-900/50', text: 'text-amber-200' },
+};
+
+const tagLabels: Record<TaskTag, string> = {
+  FLOW: 'Flow',
+  CAMPAIGN: 'Campaign',
+  SIDE_QUEST: 'Side Quest',
+};
+
 export default function TaskCard({ task, onClick }: TaskCardProps) {
   const colors = statusColors[task.status];
   const label = statusLabels[task.status];
   const icon = statusIcons[task.status];
+  const tagColor = tagColors[task.tag];
+  const tagLabel = tagLabels[task.tag];
 
   return (
     <button
@@ -46,7 +60,12 @@ export default function TaskCard({ task, onClick }: TaskCardProps) {
       <div className="flex items-start gap-1.5">
         <span className="text-xs mt-0.5 flex-shrink-0">{icon}</span>
         <div className="flex-1 min-w-0">
-          <div className="text-xs font-semibold truncate group-hover:text-white transition">{task.title}</div>
+          <div className="flex items-center gap-1.5">
+            <div className="text-xs font-semibold truncate group-hover:text-white transition flex-1">{task.title}</div>
+            <div className={`text-xs px-1.5 py-0.5 rounded-full whitespace-nowrap flex-shrink-0 ${tagColor.bg} ${tagColor.text}`}>
+              {tagLabel}
+            </div>
+          </div>
           <div className="text-xs opacity-70 mt-0.5">{label}</div>
         </div>
       </div>

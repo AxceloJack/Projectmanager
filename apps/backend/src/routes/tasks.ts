@@ -13,6 +13,7 @@ interface CreateTaskBody {
   title: string;
   description?: string;
   dueDate: string;
+  tag?: string;
   figmaLink?: string;
   assigneeId?: string;
 }
@@ -22,6 +23,7 @@ interface UpdateTaskBody {
   description?: string;
   dueDate?: string;
   status?: TaskStatus;
+  tag?: string;
   figmaLink?: string;
   assigneeId?: string;
 }
@@ -59,7 +61,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
 
-    const { clientId, title, description, dueDate, figmaLink, assigneeId } = req.body as CreateTaskBody;
+    const { clientId, title, description, dueDate, tag = 'FLOW', figmaLink, assigneeId } = req.body as CreateTaskBody;
 
     const client = await prisma.client.findFirst({
       where: { id: clientId, workspaceId: req.user.workspaceId },
@@ -75,6 +77,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
         title,
         description,
         dueDate: new Date(dueDate),
+        tag,
         figmaLink,
         assigneeId,
       },
@@ -126,7 +129,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
 
-    const { title, description, dueDate, status, figmaLink, assigneeId } = req.body as UpdateTaskBody;
+    const { title, description, dueDate, status, tag, figmaLink, assigneeId } = req.body as UpdateTaskBody;
 
     const task = await prisma.task.findFirst({
       where: {
@@ -146,6 +149,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         description,
         dueDate: dueDate ? new Date(dueDate) : undefined,
         status,
+        tag,
         figmaLink,
         assigneeId,
       },

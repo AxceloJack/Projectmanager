@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, addMonths, subMonths } from 'date-fns';
+import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, isSunday, isSaturday, addMonths, subMonths } from 'date-fns';
 import { tasksAPI } from '../lib/api.js';
 import { Client, Task } from '../types/index.js';
 import TaskModal from './TaskModal.js';
@@ -40,10 +40,14 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
     end: endOfMonth(currentMonth),
   });
 
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const calendarDays = Array(days[0].getDay())
+  // Filter to show only Monday-Friday
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  const allDays = Array(days[0].getDay() || 7)
     .fill(null)
     .concat(days);
+
+  // Filter calendar to show only Mon-Fri
+  const calendarDays = allDays.filter((day) => !day || (!isSunday(day) && !isSaturday(day)));
 
   const getDayTasks = (date: Date) => {
     return tasks.filter(
@@ -108,7 +112,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
       <div className="flex-1 overflow-auto p-8">
         <div className="bg-gray-900/50 backdrop-blur border border-gray-800 rounded-xl overflow-hidden shadow-2xl">
           {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-0 bg-black/50 border-b border-gray-800">
+          <div className="grid grid-cols-5 gap-0 bg-black/50 border-b border-gray-800">
             {weekDays.map((day) => (
               <div
                 key={day}
@@ -120,7 +124,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7">
+          <div className="grid grid-cols-5">
             {calendarDays.map((day, index) => (
               <div
                 key={index}

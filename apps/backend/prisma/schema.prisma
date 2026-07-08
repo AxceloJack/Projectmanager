@@ -79,6 +79,7 @@ model Task {
   description     String?
   dueDate         DateTime
   status          String   @default("NOT_STARTED")
+  tag             String   @default("FLOW")
   assigneeId      String?
   assignee        User?    @relation("assigned_to", fields: [assigneeId], references: [id], onDelete: SetNull)
   figmaLink       String?

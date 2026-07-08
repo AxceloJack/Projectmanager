@@ -1,45 +1,47 @@
 import { PrismaClient } from '@prisma/client';
 
 type ServiceType = 'FLOW_ONLY' | 'FULL_EMAIL_MARKETING' | 'CAMPAIGNS_ONLY';
+type TaskTag = 'FLOW' | 'CAMPAIGN' | 'SIDE_QUEST';
 
 interface TaskTemplate {
   title: string;
   description: string;
   day: number; // Day of the 21-day timeline
   status: string;
+  tag: TaskTag;
 }
 
 const FLOW_BUILD_TASKS: TaskTemplate[] = [
   // Week 1
-  { title: 'Welcome Flow', description: 'Design and build welcome flow', day: 2, status: 'NOT_STARTED' },
-  { title: 'Site Flow', description: 'Create site flow', day: 3, status: 'NOT_STARTED' },
-  { title: 'Browse Flow', description: 'Build browse flow', day: 4, status: 'NOT_STARTED' },
+  { title: 'Welcome Flow', description: 'Design and build welcome flow', day: 2, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Site Flow', description: 'Create site flow', day: 3, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Browse Flow', description: 'Build browse flow', day: 4, status: 'NOT_STARTED', tag: 'FLOW' },
 
   // Week 2
-  { title: 'Cart/Checkout Flow', description: 'Design cart and checkout flows', day: 7, status: 'NOT_STARTED' },
-  { title: 'Post Purchase Flow', description: 'Create post-purchase sequence', day: 9, status: 'NOT_STARTED' },
-  { title: 'Winback Flow', description: 'Build winback/re-engagement flow', day: 10, status: 'NOT_STARTED' },
+  { title: 'Cart/Checkout Flow', description: 'Design cart and checkout flows', day: 7, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Post Purchase Flow', description: 'Create post-purchase sequence', day: 9, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Winback Flow', description: 'Build winback/re-engagement flow', day: 10, status: 'NOT_STARTED', tag: 'FLOW' },
 
   // Week 3
-  { title: 'Replenishment Flow', description: 'Design replenishment flow', day: 14, status: 'NOT_STARTED' },
-  { title: 'Sunset Flow', description: 'Create sunset/inactive user flow', day: 15, status: 'NOT_STARTED' },
-  { title: 'All Flows Client Review', description: 'Present all flows to client for review', day: 17, status: 'NOT_STARTED' },
-  { title: 'Flows Ready for Klaviyo', description: 'All flows approved and ready to launch', day: 21, status: 'NOT_STARTED' },
+  { title: 'Replenishment Flow', description: 'Design replenishment flow', day: 14, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Sunset Flow', description: 'Create sunset/inactive user flow', day: 15, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'All Flows Client Review', description: 'Present all flows to client for review', day: 17, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Flows Ready for Klaviyo', description: 'All flows approved and ready to launch', day: 21, status: 'NOT_STARTED', tag: 'FLOW' },
 ];
 
 const FULL_EMAIL_TASKS: TaskTemplate[] = [
   ...FLOW_BUILD_TASKS,
   // Additional email marketing tasks
-  { title: 'Email Design Templates', description: 'Create base email templates and components', day: 18, status: 'NOT_STARTED' },
-  { title: 'Campaign Planning', description: 'Plan initial campaigns and cadence', day: 19, status: 'NOT_STARTED' },
+  { title: 'Email Design Templates', description: 'Create base email templates and components', day: 18, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+  { title: 'Campaign Planning', description: 'Plan initial campaigns and cadence', day: 19, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
 ];
 
 const CAMPAIGNS_ONLY_TASKS: TaskTemplate[] = [
-  { title: 'Campaign Strategy', description: 'Define campaign goals and targeting', day: 2, status: 'NOT_STARTED' },
-  { title: 'Campaign Design', description: 'Create campaign email designs', day: 5, status: 'NOT_STARTED' },
-  { title: 'Campaign Setup', description: 'Set up campaigns in Klaviyo', day: 10, status: 'NOT_STARTED' },
-  { title: 'Campaign Review', description: 'Client review of campaigns', day: 15, status: 'NOT_STARTED' },
-  { title: 'Campaign Launch Ready', description: 'Campaigns ready to send', day: 21, status: 'NOT_STARTED' },
+  { title: 'Campaign Strategy', description: 'Define campaign goals and targeting', day: 2, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+  { title: 'Campaign Design', description: 'Create campaign email designs', day: 5, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+  { title: 'Campaign Setup', description: 'Set up campaigns in Klaviyo', day: 10, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+  { title: 'Campaign Review', description: 'Client review of campaigns', day: 15, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+  { title: 'Campaign Launch Ready', description: 'Campaigns ready to send', day: 21, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
 ];
 
 export async function generateTimelineTasks(
@@ -75,6 +77,7 @@ export async function generateTimelineTasks(
         description: taskTemplate.description,
         dueDate,
         status: taskTemplate.status,
+        tag: taskTemplate.tag,
       },
     });
 

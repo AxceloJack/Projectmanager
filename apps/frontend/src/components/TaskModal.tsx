@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { tasksAPI } from '../lib/api.js';
-import { Task, TaskStatus } from '../types/index.js';
+import { Task, TaskStatus, TaskTag } from '../types/index.js';
 
 interface TaskModalProps {
   task?: Task;
@@ -19,6 +19,8 @@ const taskStatuses: TaskStatus[] = [
   'COMPLETE',
 ];
 
+const taskTags: TaskTag[] = ['FLOW', 'CAMPAIGN', 'SIDE_QUEST'];
+
 const statusLabels: Record<TaskStatus, string> = {
   NOT_STARTED: 'Not Started',
   DESIGN_PHASE: 'Design Phase',
@@ -26,6 +28,12 @@ const statusLabels: Record<TaskStatus, string> = {
   NEEDS_REVISIONS: 'Needs Revisions',
   READY_FOR_KLAVIYO: 'Ready for Klaviyo',
   COMPLETE: 'Complete',
+};
+
+const tagLabels: Record<TaskTag, string> = {
+  FLOW: 'Flow',
+  CAMPAIGN: 'Campaign',
+  SIDE_QUEST: 'Side Quest',
 };
 
 export default function TaskModal({
@@ -40,6 +48,7 @@ export default function TaskModal({
     task ? format(new Date(task.dueDate), 'yyyy-MM-dd') : ''
   );
   const [status, setStatus] = useState<TaskStatus>(task?.status || 'NOT_STARTED');
+  const [tag, setTag] = useState<TaskTag>(task?.tag || 'FLOW');
   const [figmaLink, setFigmaLink] = useState(task?.figmaLink || '');
   const [comments, setComments] = useState(task?.comments || []);
   const [newComment, setNewComment] = useState('');
@@ -56,6 +65,7 @@ export default function TaskModal({
           description,
           dueDate,
           status,
+          tag,
           figmaLink,
         });
       } else {
@@ -65,6 +75,7 @@ export default function TaskModal({
           description,
           dueDate,
           status,
+          tag,
           figmaLink,
         });
       }
@@ -142,7 +153,7 @@ export default function TaskModal({
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-bold text-gray-300 mb-2">Due Date</label>
               <input
@@ -164,6 +175,21 @@ export default function TaskModal({
                 {taskStatuses.map((s) => (
                   <option key={s} value={s}>
                     {statusLabels[s]}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-bold text-gray-300 mb-2">Tag</label>
+              <select
+                value={tag}
+                onChange={(e) => setTag(e.target.value as TaskTag)}
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+              >
+                {taskTags.map((t) => (
+                  <option key={t} value={t}>
+                    {tagLabels[t]}
                   </option>
                 ))}
               </select>

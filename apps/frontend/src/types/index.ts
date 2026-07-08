@@ -1,4 +1,5 @@
 export type TaskStatus = 'NOT_STARTED' | 'DESIGN_PHASE' | 'CLIENT_REVIEW' | 'NEEDS_REVISIONS' | 'READY_FOR_KLAVIYO' | 'COMPLETE';
+export type TaskTag = 'SIDE_QUEST' | 'FLOW' | 'CAMPAIGN';
 
 export interface User {
   id: string;
@@ -13,6 +14,16 @@ export interface Client {
   workspaceId: string;
   createdAt: string;
   tasks?: Task[];
+  serviceType?: string;
+  kickOffDate?: string;
+  slackId?: string;
+  klaviyoApi?: string;
+  googleDriveLink?: string;
+  figmaLink?: string;
+  contactName?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  notes?: string;
 }
 
 export interface Task {
@@ -23,6 +34,7 @@ export interface Task {
   description?: string;
   dueDate: string;
   status: TaskStatus;
+  tag: TaskTag;
   assigneeId?: string;
   assignee?: User;
   figmaLink?: string;
