@@ -17,31 +17,8 @@ export default function Sidebar({
   onSelectClient,
   onClientsChange,
 }: SidebarProps) {
-  const [showNewClientForm, setShowNewClientForm] = useState(false);
-  const [newClientName, setNewClientName] = useState('');
-  const [newClientEmail, setNewClientEmail] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
-
-  const handleCreateClient = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsCreating(true);
-    try {
-      await clientsAPI.create({
-        name: newClientName,
-        email: newClientEmail,
-      });
-      setNewClientName('');
-      setNewClientEmail('');
-      setShowNewClientForm(false);
-      onClientsChange();
-    } catch (error) {
-      console.error('Failed to create client:', error);
-    } finally {
-      setIsCreating(false);
-    }
-  };
 
   const handleLogout = () => {
     logout();
@@ -67,53 +44,6 @@ export default function Sidebar({
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto p-4">
-        {/* New Client Button */}
-        <button
-          onClick={() => setShowNewClientForm(!showNewClientForm)}
-          className="w-full bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-4 rounded-lg hover:from-orange-600 hover:to-orange-700 text-sm font-semibold transition-all shadow-lg hover:shadow-orange-500/25 mb-6 flex items-center justify-center gap-2"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          New Client
-        </button>
-
-        {/* New Client Form */}
-        {showNewClientForm && (
-          <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-4 mb-6 space-y-3">
-            <input
-              type="text"
-              placeholder="Client name"
-              value={newClientName}
-              onChange={(e) => setNewClientName(e.target.value)}
-              required
-              className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 transition"
-            />
-            <input
-              type="email"
-              placeholder="Email (optional)"
-              value={newClientEmail}
-              onChange={(e) => setNewClientEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 transition"
-            />
-            <div className="flex gap-2">
-              <button
-                onClick={handleCreateClient}
-                disabled={isCreating}
-                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-1.5 px-3 rounded-lg text-xs font-semibold disabled:opacity-50 transition"
-              >
-                {isCreating ? 'Creating...' : 'Create'}
-              </button>
-              <button
-                onClick={() => setShowNewClientForm(false)}
-                className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 py-1.5 px-3 rounded-lg text-xs font-semibold transition"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Clients List */}
         <div className="mb-4">
           <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3 px-1">
