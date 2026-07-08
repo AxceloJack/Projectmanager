@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -32,7 +32,7 @@ model User {
   passwordHash String
   workspaceId  String
   workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  role         Role     @default(MEMBER)
+  role         String   @default("MEMBER")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -42,11 +42,6 @@ model User {
 
   @@index([workspaceId])
   @@map("users")
-}
-
-enum Role {
-  ADMIN
-  MEMBER
 }
 
 model Client {
@@ -73,7 +68,7 @@ model Task {
   title           String
   description     String?
   dueDate         DateTime
-  status          TaskStatus @default(NOT_STARTED)
+  status          String   @default("NOT_STARTED")
   assigneeId      String?
   assignee        User?    @relation("assigned_to", fields: [assigneeId], references: [id], onDelete: SetNull)
   figmaLink       String?
@@ -86,15 +81,6 @@ model Task {
   @@index([assigneeId])
   @@index([dueDate])
   @@map("tasks")
-}
-
-enum TaskStatus {
-  NOT_STARTED
-  DESIGN_PHASE
-  CLIENT_REVIEW
-  NEEDS_REVISIONS
-  READY_FOR_KLAVIYO
-  COMPLETE
 }
 
 model TaskComment {
@@ -120,7 +106,7 @@ model Campaign {
   startDate DateTime
   sendDate  DateTime?
   status    String   @default("draft")
-  metrics   Json?
+  metrics   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -138,7 +124,7 @@ model ABTest {
   variantA   String
   variantB   String
   winner     String?
-  results    Json?
+  results    String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
