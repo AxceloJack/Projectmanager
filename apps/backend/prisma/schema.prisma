@@ -1,0 +1,162 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workspace {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  ownerId   String
+  owner     User     @relation("owned_workspaces", fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users              User[]
+  clients            Client[]
+  slackIntegrations  SlackIntegration[]
+
+  @@map("workspaces")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  workspaceId  String
+  workspace    Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  role         Role     @default(MEMBER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ownedWorkspaces Workspace[] @relation("owned_workspaces")
+  tasks           Task[]      @relation("assigned_to")
+  taskComments    TaskComment[]
+
+  @@index([workspaceId])
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Client {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  name        String
+  email       String?
+  publicKey   String   @unique @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tasks     Task[]
+  campaigns Campaign[]
+
+  @@index([workspaceId])
+  @@map("clients")
+}
+
+model Task {
+  id              String   @id @default(cuid())
+  clientId        String
+  client          Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title           String
+  description     String?
+  dueDate         DateTime
+  status          TaskStatus @default(NOT_STARTED)
+  assigneeId      String?
+  assignee        User?    @relation("assigned_to", fields: [assigneeId], references: [id], onDelete: SetNull)
+  figmaLink       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  comments TaskComment[]
+
+  @@index([clientId])
+  @@index([assigneeId])
+  @@index([dueDate])
+  @@map("tasks")
+}
+
+enum TaskStatus {
+  NOT_STARTED
+  DESIGN_PHASE
+  CLIENT_REVIEW
+  NEEDS_REVISIONS
+  READY_FOR_KLAVIYO
+  COMPLETE
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([taskId])
+  @@index([userId])
+  @@map("task_comments")
+}
+
+model Campaign {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name      String
+  startDate DateTime
+  sendDate  DateTime?
+  status    String   @default("draft")
+  metrics   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  abTests ABTest[]
+
+  @@index([clientId])
+  @@map("campaigns")
+}
+
+model ABTest {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  name       String
+  variantA   String
+  variantB   String
+  winner     String?
+  results    Json?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([campaignId])
+  @@map("ab_tests")
+}
+
+model SlackIntegration {
+  id          String   @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  teamId      String
+  botToken    String
+  channelId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([workspaceId, teamId])
+  @@index([workspaceId])
+  @@map("slack_integrations")
+}
