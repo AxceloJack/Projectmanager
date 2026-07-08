@@ -7,3 +7,5 @@ dist/
 *.pem
 .vscode/
 .idea/
+*.db
+*.db-journal

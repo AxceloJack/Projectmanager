@@ -91,7 +91,7 @@ export default function TaskModal({
 
   const handleDelete = async () => {
     if (!task) return;
-    if (!confirm('Are you sure you want to delete this task?')) return;
+    if (!confirm('Delete this task?')) return;
 
     try {
       await tasksAPI.delete(task.id);
@@ -102,159 +102,149 @@ export default function TaskModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-96 overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">
-              {task ? 'Edit Task' : 'New Task'}
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl"
-            >
-              ×
-            </button>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-gray-900/95 border border-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-gray-900/95">
+          <h2 className="text-2xl font-bold text-white">
+            {task ? 'Edit Task' : 'Create Task'}
+          </h2>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-white p-2 hover:bg-gray-800 rounded-lg transition"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <div>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Task Title</label>
+            <input
+              type="text"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+              placeholder="Enter task title"
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Description</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition resize-none"
+              placeholder="Enter task description"
+              rows={3}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Task Title
-              </label>
+              <label className="block text-sm font-bold text-gray-300 mb-2">Due Date</label>
               <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                type="date"
+                value={dueDate}
+                onChange={(e) => setDueDate(e.target.value)}
                 required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter task title"
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Description
-              </label>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="Enter task description"
-                rows={3}
-              />
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Due Date
-                </label>
-                <input
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Status
-                </label>
-                <select
-                  value={status}
-                  onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                >
-                  {taskStatuses.map((s) => (
-                    <option key={s} value={s}>
-                      {statusLabels[s]}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Figma Link
-              </label>
-              <input
-                type="url"
-                value={figmaLink}
-                onChange={(e) => setFigmaLink(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                placeholder="https://figma.com/..."
-              />
-            </div>
-
-            <div className="flex gap-2 pt-4">
-              <button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400"
+              <label className="block text-sm font-bold text-gray-300 mb-2">Status</label>
+              <select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as TaskStatus)}
+                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
               >
-                {loading ? 'Saving...' : 'Save Task'}
-              </button>
+                {taskStatuses.map((s) => (
+                  <option key={s} value={s}>
+                    {statusLabels[s]}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-bold text-gray-300 mb-2">Figma Link</label>
+            <input
+              type="url"
+              value={figmaLink}
+              onChange={(e) => setFigmaLink(e.target.value)}
+              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+              placeholder="https://figma.com/..."
+            />
+          </div>
+
+          <div className="flex gap-3 pt-4 border-t border-gray-800">
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-4 rounded-lg hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all shadow-lg hover:shadow-orange-500/25"
+            >
+              {loading ? 'Saving...' : task ? 'Update' : 'Create'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 py-3 px-4 rounded-lg font-semibold transition"
+            >
+              Cancel
+            </button>
+            {task && (
               <button
                 type="button"
-                onClick={onClose}
-                className="flex-1 bg-gray-200 text-gray-900 py-2 px-4 rounded-md hover:bg-gray-300"
+                onClick={handleDelete}
+                className="bg-red-600/20 hover:bg-red-600/30 text-red-400 py-3 px-4 rounded-lg font-semibold transition border border-red-600/30"
               >
-                Cancel
+                Delete
               </button>
-              {task && (
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
-          </form>
+            )}
+          </div>
+        </form>
 
-          {task && comments.length > 0 && (
-            <div className="mt-6 pt-6 border-t">
-              <h3 className="font-semibold text-gray-900 mb-3">Comments</h3>
-              <div className="space-y-3">
+        {/* Comments Section */}
+        {task && (
+          <div className="border-t border-gray-800 p-6 bg-black/30 space-y-4">
+            <h3 className="font-bold text-gray-300">Comments & Notes</h3>
+
+            {comments.length > 0 && (
+              <div className="space-y-3 max-h-48 overflow-y-auto">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="bg-gray-50 p-3 rounded">
-                    <div className="text-sm font-medium text-gray-900">
+                  <div key={comment.id} className="bg-gray-800/30 border border-gray-700/50 p-3 rounded-lg">
+                    <div className="text-xs font-semibold text-gray-400 mb-1">
                       {comment.user?.email}
                     </div>
-                    <div className="text-sm text-gray-600 mt-1">
+                    <div className="text-sm text-gray-300">
                       {comment.content}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          )}
+            )}
 
-          {task && (
-            <form onSubmit={handleAddComment} className="mt-4 border-t pt-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-                <button
-                  type="submit"
-                  className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700"
-                >
-                  Comment
-                </button>
-              </div>
+            <form onSubmit={handleAddComment} className="flex gap-2">
+              <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Add a note..."
+                className="flex-1 px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 transition"
+              />
+              <button
+                type="submit"
+                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition"
+              >
+                Add
+              </button>
             </form>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
