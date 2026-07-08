@@ -14,6 +14,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [showNewTaskForm, setShowNewTaskForm] = useState(false);
+  const [selectedDateForNewTask, setSelectedDateForNewTask] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   useEffect(() => {
@@ -60,20 +61,9 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
     <div className="flex-1 flex flex-col bg-gradient-to-br from-black via-gray-950 to-black">
       {/* Header */}
       <div className="bg-black/50 backdrop-blur border-b border-gray-800 px-8 py-6">
-        <div className="flex justify-between items-start mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-white">{client.name}</h1>
-            <p className="text-gray-500 text-sm mt-1">Campaign Timeline</p>
-          </div>
-          <button
-            onClick={() => setShowNewTaskForm(true)}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-lg hover:from-orange-600 hover:to-orange-700 font-semibold text-sm transition-all shadow-lg hover:shadow-orange-500/25 flex items-center gap-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            New Task
-          </button>
+        <div className="mb-4">
+          <h1 className="text-3xl font-bold text-white">{client.name}</h1>
+          <p className="text-gray-500 text-sm mt-1">Campaign Timeline • Click + to add tasks</p>
         </div>
 
         {/* Month Navigation */}
@@ -129,13 +119,29 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
               <div
                 key={index}
                 className={`min-h-32 p-3 border-r border-b border-gray-800 last:border-r-0 ${
-                  day && isSameMonth(day, currentMonth) ? 'bg-gray-900/30 hover:bg-gray-900/50' : 'bg-black/30'
+                  day && isSameMonth(day, currentMonth) ? 'bg-gray-900/30 hover:bg-gray-900/50 group relative' : 'bg-black/30'
                 } transition`}
               >
                 {day && (
                   <>
-                    <div className={`font-bold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-600'}`}>
-                      {format(day, 'd')}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className={`font-bold text-sm ${isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-600'}`}>
+                        {format(day, 'd')}
+                      </div>
+                      {isSameMonth(day, currentMonth) && (
+                        <button
+                          onClick={() => {
+                            setSelectedDateForNewTask(day);
+                            setShowNewTaskForm(true);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-orange-500/20 rounded text-orange-400 hover:text-orange-300"
+                          title="Add task"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                          </svg>
+                        </button>
+                      )}
                     </div>
                     <div className="space-y-1">
                       {getDayTasks(day).map((task) => (
@@ -158,7 +164,11 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
       {showNewTaskForm && (
         <TaskModal
           clientId={client.id}
-          onClose={() => setShowNewTaskForm(false)}
+          defaultDueDate={selectedDateForNewTask}
+          onClose={() => {
+            setShowNewTaskForm(false);
+            setSelectedDateForNewTask(null);
+          }}
           onSave={handleTaskUpdate}
         />
       )}

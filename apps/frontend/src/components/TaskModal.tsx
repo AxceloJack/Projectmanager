@@ -6,6 +6,7 @@ import { Task, TaskStatus, TaskTag } from '../types/index.js';
 interface TaskModalProps {
   task?: Task;
   clientId: string;
+  defaultDueDate?: Date | null;
   onClose: () => void;
   onSave: () => void;
 }
@@ -39,13 +40,18 @@ const tagLabels: Record<TaskTag, string> = {
 export default function TaskModal({
   task,
   clientId,
+  defaultDueDate,
   onClose,
   onSave,
 }: TaskModalProps) {
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [dueDate, setDueDate] = useState(
-    task ? format(new Date(task.dueDate), 'yyyy-MM-dd') : ''
+    task
+      ? format(new Date(task.dueDate), 'yyyy-MM-dd')
+      : defaultDueDate
+      ? format(defaultDueDate, 'yyyy-MM-dd')
+      : ''
   );
   const [status, setStatus] = useState<TaskStatus>(task?.status || 'NOT_STARTED');
   const [tag, setTag] = useState<TaskTag>(task?.tag || 'FLOW');
