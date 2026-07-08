@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { clientsAPI } from '../lib/api.js';
 import { Client } from '../types/index.js';
-import ClientForm from './ClientForm.js';
+import ClientFormModal from './ClientFormModal.js';
 import { format } from 'date-fns';
 
 interface ClientsPageProps {
@@ -75,18 +75,7 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
 
       {/* Content */}
       <div className="flex-1 overflow-auto p-8">
-        {showForm ? (
-          <div className="flex justify-center">
-            <ClientForm
-              client={selectedClientForEdit || undefined}
-              onSave={handleSave}
-              onCancel={() => {
-                setShowForm(false);
-                setSelectedClientForEdit(null);
-              }}
-            />
-          </div>
-        ) : clients.length === 0 ? (
+        {clients.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <svg className="w-16 h-16 text-gray-700 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -149,6 +138,18 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
           </div>
         )}
       </div>
+
+      {/* Modal Form */}
+      {showForm && (
+        <ClientFormModal
+          client={selectedClientForEdit || undefined}
+          onSave={handleSave}
+          onCancel={() => {
+            setShowForm(false);
+            setSelectedClientForEdit(null);
+          }}
+        />
+      )}
     </div>
   );
 }
