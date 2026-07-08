@@ -23,7 +23,7 @@ export const authAPI = {
 export const clientsAPI = {
   list: () => API.get('/clients'),
   get: (id: string) => API.get(`/clients/${id}`),
-  create: (data: { name: string; email?: string }) =>
+  create: (data: any) =>
     API.post('/clients', data),
   update: (id: string, data: any) =>
     API.patch(`/clients/${id}`, data),
