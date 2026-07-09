@@ -18,12 +18,7 @@ interface CreateClientBody {
   slackId?: string;
   slackUserId?: string;
   klaviyoApi?: string;
-  googleDriveLink?: string;
   figmaLink?: string;
-  contactName?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  notes?: string;
 }
 
 router.get('/', async (req: AuthRequest, res: Response) => {
@@ -63,12 +58,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       slackId,
       slackUserId,
       klaviyoApi,
-      googleDriveLink,
       figmaLink,
-      contactName,
-      contactEmail,
-      contactPhone,
-      notes,
     } = req.body as CreateClientBody;
 
     const client = await prisma.client.create({
@@ -82,12 +72,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
         slackId,
         slackUserId,
         klaviyoApi,
-        googleDriveLink,
         figmaLink,
-        contactName,
-        contactEmail,
-        contactPhone,
-        notes,
       },
     });
 
@@ -159,12 +144,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
       slackId,
       slackUserId,
       klaviyoApi,
-      googleDriveLink,
       figmaLink,
-      contactName,
-      contactEmail,
-      contactPhone,
-      notes,
     } = req.body as CreateClientBody;
 
     const client = await prisma.client.findFirst({
@@ -194,12 +174,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         ...(slackId !== undefined && { slackId }),
         ...(slackUserId !== undefined && { slackUserId }),
         ...(klaviyoApi !== undefined && { klaviyoApi }),
-        ...(googleDriveLink !== undefined && { googleDriveLink }),
         ...(figmaLink !== undefined && { figmaLink }),
-        ...(contactName !== undefined && { contactName }),
-        ...(contactEmail !== undefined && { contactEmail }),
-        ...(contactPhone !== undefined && { contactPhone }),
-        ...(notes !== undefined && { notes }),
       },
       include: {
         tasks: {
