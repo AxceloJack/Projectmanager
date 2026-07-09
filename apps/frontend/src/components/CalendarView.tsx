@@ -41,14 +41,13 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
     end: endOfMonth(currentMonth),
   });
 
-  // Filter to show only Monday-Friday
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
-  const allDays = Array(days[0].getDay() || 7)
+  // Show all 7 days of the week
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const allDays = Array(days[0].getDay())
     .fill(null)
     .concat(days);
 
-  // Filter calendar to show only Mon-Fri
-  const calendarDays = allDays.filter((day) => !day || (!isSunday(day) && !isSaturday(day)));
+  const calendarDays = allDays;
 
   const getDayTasks = (date: Date) => {
     return tasks.filter(
@@ -117,7 +116,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
       <div className="flex-1 overflow-auto p-8">
         <div className="border border-gray-800 rounded-lg overflow-hidden">
           {/* Week Days Header */}
-          <div className="grid grid-cols-5 gap-0 bg-gray-900 border-b border-gray-800">
+          <div className="grid grid-cols-7 gap-0 bg-gray-900 border-b border-gray-800">
             {weekDays.map((day) => (
               <div
                 key={day}
@@ -129,7 +128,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-5">
+          <div className="grid grid-cols-7">
             {calendarDays.map((day, index) => (
               <div
                 key={index}

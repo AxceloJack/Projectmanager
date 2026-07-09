@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, isSunday, isSaturday, addMonths, subMonths } from 'date-fns';
+import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, addMonths, subMonths } from 'date-fns';
 import { Client, Task } from '../types/index.js';
 import ClientTaskCard from './ClientTaskCard.js';
 
@@ -15,18 +15,18 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
 
   // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST)
   const visibleTasks = (client.tasks || []).filter((task) => task.tag === 'FLOW' || task.tag === 'CAMPAIGN');
-  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
   });
 
-  // Filter calendar to show only Mon-Fri
-  const allDays = Array(days[0].getDay() || 7)
+  // Show all 7 days of the week
+  const allDays = Array(days[0].getDay())
     .fill(null)
     .concat(days);
-  const calendarDays = allDays.filter((day) => !day || (!isSunday(day) && !isSaturday(day)));
+  const calendarDays = allDays;
 
   const getDayTasks = (date: Date) => {
     return visibleTasks.filter(
@@ -56,7 +56,7 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
       </div>
 
       <div className="border border-gray-800 rounded-lg overflow-hidden">
-        <div className="grid grid-cols-5 gap-0 border-b bg-gray-900">
+        <div className="grid grid-cols-7 gap-0 border-b bg-gray-900">
           {weekDays.map((day) => (
             <div
               key={day}
@@ -67,7 +67,7 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
           ))}
         </div>
 
-        <div className="grid grid-cols-5 gap-0">
+        <div className="grid grid-cols-7 gap-0">
           {calendarDays.map((day, index) => (
             <div
               key={index}

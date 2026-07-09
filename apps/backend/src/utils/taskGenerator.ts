@@ -16,11 +16,11 @@ const FLOW_BUILD_TASKS: TaskTemplate[] = [
   { title: 'Welcome Flow', description: 'Design and build welcome flow', day: 3, status: 'NOT_STARTED', tag: 'FLOW' },
   { title: 'Site Abandoned Flow', description: 'Build site abandoned flow', day: 5, status: 'NOT_STARTED', tag: 'FLOW' },
   { title: 'Browse Abandoned Flow', description: 'Create browse abandoned flow', day: 7, status: 'NOT_STARTED', tag: 'FLOW' },
-  { title: 'Cart/Checkout Flow', description: 'Design cart and checkout flows', day: 9, status: 'NOT_STARTED', tag: 'FLOW' },
-  { title: 'Post Purchase Flow', description: 'Create post-purchase sequence', day: 11, status: 'NOT_STARTED', tag: 'FLOW' },
-  { title: 'Winback Flow', description: 'Build winback/re-engagement flow', day: 13, status: 'NOT_STARTED', tag: 'FLOW' },
-  { title: 'Sunset Flow', description: 'Create sunset/inactive user flow', day: 16, status: 'NOT_STARTED', tag: 'FLOW' },
-  { title: 'Replenishment Flow', description: 'Design replenishment flow', day: 18, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Cart/Checkout Flow', description: 'Design cart and checkout flows', day: 10, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Post Purchase Flow', description: 'Create post-purchase sequence', day: 13, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Winback Flow', description: 'Build winback/re-engagement flow', day: 15, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Sunset Flow', description: 'Create sunset/inactive user flow', day: 18, status: 'NOT_STARTED', tag: 'FLOW' },
+  { title: 'Replenishment Flow', description: 'Design replenishment flow', day: 20, status: 'NOT_STARTED', tag: 'FLOW' },
 ];
 
 // Soft deliverables (internal)
