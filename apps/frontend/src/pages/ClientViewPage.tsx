@@ -46,6 +46,16 @@ export default function ClientViewPage() {
     );
   }
 
+  const handleTaskUpdate = async () => {
+    if (!publicKey) return;
+    try {
+      const response = await publicAPI.getClient(publicKey);
+      setClient(response.data);
+    } catch (err) {
+      console.error('Failed to refresh client data:', err);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black">
       {/* Axcelo Header */}
@@ -71,7 +81,7 @@ export default function ClientViewPage() {
           <p className="mt-2 text-gray-500">Project Timeline & Deliverables</p>
         </div>
 
-        <ClientCalendar client={client} publicKey={publicKey!} />
+        <ClientCalendar client={client} publicKey={publicKey!} onTaskUpdate={handleTaskUpdate} />
       </div>
     </div>
   );

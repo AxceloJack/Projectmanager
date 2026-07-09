@@ -6,14 +6,17 @@ import ClientTaskCard from './ClientTaskCard.js';
 interface ClientCalendarProps {
   client: Client;
   publicKey: string;
+  onTaskUpdate?: () => void;
 }
 
-export default function ClientCalendar({ client, publicKey }: ClientCalendarProps) {
+export default function ClientCalendar({ client, publicKey, onTaskUpdate }: ClientCalendarProps) {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST)
-  const visibleTasks = (client.tasks || []).filter((task) => task.tag === 'FLOW' || task.tag === 'CAMPAIGN');
+  // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST) and only CLIENT_REVIEW status
+  const visibleTasks = (client.tasks || []).filter(
+    (task) => (task.tag === 'FLOW' || task.tag === 'CAMPAIGN') && task.status === 'CLIENT_REVIEW'
+  );
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
   const days = eachDayOfInterval({
@@ -101,6 +104,7 @@ export default function ClientCalendar({ client, publicKey }: ClientCalendarProp
           task={selectedTask}
           publicKey={publicKey}
           onClose={() => setSelectedTask(null)}
+          onTaskUpdate={onTaskUpdate}
         />
       )}
     </div>
@@ -111,34 +115,26 @@ function ClientTaskDetail({
   task,
   publicKey,
   onClose,
+  onTaskUpdate,
 }: {
   task: Task;
   publicKey: string;
   onClose: () => void;
+  onTaskUpdate?: () => void;
 }) {
-  const [status, setStatus] = useState(task.status);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
   const statusColors: Record<string, string> = {
-    NOT_STARTED: 'bg-gray-100 text-gray-800',
-    DESIGN_PHASE: 'bg-blue-100 text-blue-800',
-    CLIENT_REVIEW: 'bg-orange-100 text-orange-800',
-    NEEDS_REVISIONS: 'bg-red-100 text-red-800',
-    READY_FOR_KLAVIYO: 'bg-green-100 text-green-800',
-    COMPLETE: 'bg-purple-100 text-purple-800',
+    NOT_STARTED: 'bg-gray-700 text-gray-300',
+    DESIGN_PHASE: 'bg-blue-900 text-blue-300',
+    CLIENT_REVIEW: 'bg-orange-600 text-orange-100',
+    NEEDS_REVISIONS: 'bg-red-900 text-red-300',
+    READY_FOR_KLAVIYO: 'bg-green-900 text-green-300',
+    COMPLETE: 'bg-purple-900 text-purple-300',
   };
 
-  const statusOptions = [
-    'NOT_STARTED',
-    'DESIGN_PHASE',
-    'CLIENT_REVIEW',
-    'NEEDS_REVISIONS',
-    'READY_FOR_KLAVIYO',
-    'COMPLETE',
-  ];
-
-  const handleStatusChange = async (newStatus: string) => {
+  const handleApprove = async () => {
     setError('');
     setLoading(true);
     try {
@@ -147,17 +143,45 @@ function ClientTaskDetail({
         {
           method: 'PATCH',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({ status: 'READY_FOR_KLAVIYO' }),
         }
       );
 
       if (!response.ok) {
-        throw new Error('Failed to update status');
+        throw new Error('Failed to approve');
       }
 
-      setStatus(newStatus);
+      onTaskUpdate?.();
+      onClose();
     } catch (err) {
-      setError('Failed to update status');
+      setError('Failed to approve task');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleNeedsRevision = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/public/clients/${publicKey}/tasks/${task.id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: 'NEEDS_REVISIONS' }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to request revisions');
+      }
+
+      onTaskUpdate?.();
+      onClose();
+    } catch (err) {
+      setError('Failed to request revisions');
       console.error(err);
     } finally {
       setLoading(false);
@@ -171,23 +195,9 @@ function ClientTaskDetail({
           <div className="flex justify-between items-start">
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-white mb-2">{task.title}</h2>
-              <div className="flex items-center gap-3">
-                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[status] || 'bg-gray-800 text-gray-300'}`}>
-                  {status.replace(/_/g, ' ')}
-                </span>
-                <select
-                  value={status}
-                  onChange={(e) => handleStatusChange(e.target.value)}
-                  disabled={loading}
-                  className="px-3 py-1 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 disabled:opacity-50"
-                >
-                  {statusOptions.map((opt) => (
-                    <option key={opt} value={opt}>
-                      {opt.replace(/_/g, ' ')}
-                    </option>
-                  ))}
-                </select>
-              </div>
+              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[task.status] || 'bg-gray-800 text-gray-300'}`}>
+                {task.status.replace(/_/g, ' ')}
+              </span>
             </div>
             <button
               onClick={onClose}
@@ -249,10 +259,26 @@ function ClientTaskDetail({
             </div>
           )}
 
-          {status === 'CLIENT_REVIEW' && (
+          {task.status === 'CLIENT_REVIEW' && (
             <div className="border-t border-gray-800 pt-6">
               <h3 className="font-semibold text-gray-300 mb-3">Your Action</h3>
-              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and update the status when ready.</p>
+              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and let us know your feedback.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleApprove}
+                  disabled={loading}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  {loading ? 'Processing...' : 'Approved'}
+                </button>
+                <button
+                  onClick={handleNeedsRevision}
+                  disabled={loading}
+                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                  {loading ? 'Processing...' : 'Needs Revision'}
+                </button>
+              </div>
             </div>
           )}
         </div>
