@@ -25,6 +25,8 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
     client?.klaviyoBillingDate ? format(new Date(client.klaviyoBillingDate), 'yyyy-MM-dd') : ''
   );
   const [klaviyoApi, setKlaviyoApi] = useState(client?.klaviyoApi || '');
+  const [figmaLink, setFigmaLink] = useState(client?.figmaLink || '');
+  const [slackId, setSlackId] = useState(client?.slackId || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,6 +42,8 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
         kickOffDate: kickOffDate || undefined,
         klaviyoBillingDate: klaviyoBillingDate || undefined,
         klaviyoApi: klaviyoApi || undefined,
+        figmaLink: figmaLink || undefined,
+        slackId: slackId || undefined,
       };
 
       let response;
@@ -121,6 +125,26 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           <div className="border-t border-gray-800 pt-5">
             <h3 className="text-sm font-semibold text-gray-300 mb-3">Integrations</h3>
             <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Figma</label>
+                <input
+                  type="url"
+                  value={figmaLink}
+                  onChange={(e) => setFigmaLink(e.target.value)}
+                  placeholder="Figma project link"
+                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Slack</label>
+                <input
+                  type="text"
+                  value={slackId}
+                  onChange={(e) => setSlackId(e.target.value)}
+                  placeholder="Slack ID or workspace URL"
+                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                />
+              </div>
               <div>
                 <label className="block text-sm font-medium text-gray-400 mb-2">Klaviyo</label>
                 <input
