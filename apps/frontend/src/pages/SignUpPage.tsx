@@ -6,7 +6,6 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [workspaceName, setWorkspaceName] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -28,7 +27,7 @@ export default function SignUpPage() {
     setLoading(true);
 
     try {
-      await authAPI.register(email, password, workspaceName);
+      await authAPI.register(email, password, 'Axcelo');
       setSuccess(true);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Registration failed');
@@ -97,18 +96,6 @@ export default function SignUpPage() {
                 required
                 className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
                 placeholder="name@axcelo.co"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Team Name</label>
-              <input
-                type="text"
-                value={workspaceName}
-                onChange={(e) => setWorkspaceName(e.target.value)}
-                required
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
-                placeholder="Your Team Name"
               />
             </div>
 
