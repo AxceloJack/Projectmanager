@@ -16,6 +16,7 @@ export interface Client {
   tasks?: Task[];
   serviceType?: string;
   kickOffDate?: string;
+  klaviyoBillingDate?: string;
   slackId?: string;
   klaviyoApi?: string;
   googleDriveLink?: string;

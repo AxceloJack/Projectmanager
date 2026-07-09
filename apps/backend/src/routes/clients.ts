@@ -14,6 +14,7 @@ interface CreateClientBody {
   email?: string;
   serviceType?: string;
   kickOffDate?: string;
+  klaviyoBillingDate?: string;
   slackId?: string;
   klaviyoApi?: string;
   googleDriveLink?: string;
@@ -57,6 +58,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       email,
       serviceType = 'FLOW_ONLY',
       kickOffDate,
+      klaviyoBillingDate,
       slackId,
       klaviyoApi,
       googleDriveLink,
@@ -74,6 +76,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
         email,
         serviceType,
         kickOffDate: kickOffDate ? new Date(kickOffDate) : null,
+        klaviyoBillingDate: klaviyoBillingDate ? new Date(klaviyoBillingDate) : null,
         slackId,
         klaviyoApi,
         googleDriveLink,
@@ -91,7 +94,8 @@ router.post('/', async (req: AuthRequest, res: Response) => {
         prisma,
         client.id,
         serviceType as 'FLOW_ONLY' | 'FULL_EMAIL_MARKETING' | 'CAMPAIGNS_ONLY',
-        new Date(kickOffDate)
+        new Date(kickOffDate),
+        klaviyoBillingDate ? new Date(klaviyoBillingDate) : undefined
       );
     }
 
@@ -148,6 +152,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
       email,
       serviceType,
       kickOffDate,
+      klaviyoBillingDate,
       slackId,
       klaviyoApi,
       googleDriveLink,
@@ -181,6 +186,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         ...(email !== undefined && { email }),
         ...(serviceType && { serviceType }),
         ...(kickOffDate && { kickOffDate: new Date(kickOffDate) }),
+        ...(klaviyoBillingDate !== undefined && { klaviyoBillingDate: klaviyoBillingDate ? new Date(klaviyoBillingDate) : null }),
         ...(slackId !== undefined && { slackId }),
         ...(klaviyoApi !== undefined && { klaviyoApi }),
         ...(googleDriveLink !== undefined && { googleDriveLink }),
@@ -203,7 +209,8 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         prisma,
         req.params.id,
         serviceType as 'FLOW_ONLY' | 'FULL_EMAIL_MARKETING' | 'CAMPAIGNS_ONLY',
-        new Date(kickOffDate)
+        new Date(kickOffDate),
+        klaviyoBillingDate ? new Date(klaviyoBillingDate) : undefined
       );
     }
 

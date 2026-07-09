@@ -22,6 +22,9 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
   const [kickOffDate, setKickOffDate] = useState(
     client?.kickOffDate ? format(new Date(client.kickOffDate), 'yyyy-MM-dd') : ''
   );
+  const [klaviyoBillingDate, setKlaviyoBillingDate] = useState(
+    client?.klaviyoBillingDate ? format(new Date(client.klaviyoBillingDate), 'yyyy-MM-dd') : ''
+  );
   const [slackId, setSlackId] = useState(client?.slackId || '');
   const [klaviyoApi, setKlaviyoApi] = useState(client?.klaviyoApi || '');
   const [googleDriveLink, setGoogleDriveLink] = useState(client?.googleDriveLink || '');
@@ -44,6 +47,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
         email: email || undefined,
         serviceType,
         kickOffDate: kickOffDate || undefined,
+        klaviyoBillingDate: klaviyoBillingDate || undefined,
         slackId: slackId || undefined,
         klaviyoApi: klaviyoApi || undefined,
         googleDriveLink: googleDriveLink || undefined,
@@ -121,7 +125,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
 
           <div>
             <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Service & Timeline</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               <select
                 value={serviceType}
                 onChange={(e) => setServiceType(e.target.value)}
@@ -137,7 +141,16 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
                 type="date"
                 value={kickOffDate}
                 onChange={(e) => setKickOffDate(e.target.value)}
+                placeholder="Kick-off date"
                 className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+              />
+              <input
+                type="date"
+                value={klaviyoBillingDate}
+                onChange={(e) => setKlaviyoBillingDate(e.target.value)}
+                placeholder="Klaviyo billing date"
+                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                title="Klaviyo billing date - cleanup task will be scheduled 1 day before"
               />
             </div>
           </div>
