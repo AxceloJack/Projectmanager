@@ -18,13 +18,9 @@ export interface Client {
   kickOffDate?: string;
   klaviyoBillingDate?: string;
   slackId?: string;
+  slackUserId?: string;
   klaviyoApi?: string;
-  googleDriveLink?: string;
   figmaLink?: string;
-  contactName?: string;
-  contactEmail?: string;
-  contactPhone?: string;
-  notes?: string;
 }
 
 export interface Task {

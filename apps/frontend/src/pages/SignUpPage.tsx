@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { authAPI } from '../lib/api.js';
 
@@ -9,6 +9,15 @@ export default function SignUpPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => {
+        window.location.href = '/login';
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,9 +80,6 @@ export default function SignUpPage() {
               </p>
               <div className="pt-4 border-t border-gray-800">
                 <p className="text-gray-500 text-sm mb-4">Redirecting to login...</p>
-                {setTimeout(() => {
-                  window.location.href = '/login';
-                }, 3000)}
               </div>
             </div>
           ) : (

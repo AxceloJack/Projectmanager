@@ -113,7 +113,7 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold text-white">{client.name}</h3>
                       <span className="bg-gray-800 text-gray-300 text-xs font-medium px-2.5 py-1 rounded border border-gray-700">
-                        {SERVICE_TYPE_LABELS[client.serviceType] || client.serviceType}
+                        {SERVICE_TYPE_LABELS[client.serviceType as keyof typeof SERVICE_TYPE_LABELS] || client.serviceType}
                       </span>
                     </div>
                     <div className="text-sm text-gray-400 space-y-1">

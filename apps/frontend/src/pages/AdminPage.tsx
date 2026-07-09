@@ -84,7 +84,7 @@ export default function AdminPage() {
     try {
       const response = await slackAPI.connectWorkspace(slackForm);
       setSlackIntegration(response.data);
-      setSlackForm({ teamId: '', botToken: '', channelId: '' });
+      setSlackForm({ teamId: '', botToken: '' });
       setError('');
     } catch (err: any) {
       setError(err.response?.data?.error || 'Failed to connect Slack workspace');
