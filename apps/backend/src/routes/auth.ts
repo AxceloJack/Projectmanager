@@ -31,27 +31,35 @@ router.post('/register', async (req, res: Response) => {
     const passwordHash = await bcrypt.hash(password, 10);
     const workspaceSlug = workspaceName.toLowerCase().replace(/\s+/g, '-') + '-' + uuidv4().slice(0, 8);
 
+    // Create workspace first
     const workspace = await prisma.workspace.create({
       data: {
         name: workspaceName,
         slug: workspaceSlug,
-        owner: {
-          create: {
-            email,
-            passwordHash,
-            role: 'MEMBER',
-            approved: false,
-          },
-        },
       },
-      include: {
-        owner: true,
+    });
+
+    // Then create user with workspace reference
+    const user = await prisma.user.create({
+      data: {
+        email,
+        passwordHash,
+        workspaceId: workspace.id,
+        role: 'MEMBER',
+        approved: false,
       },
+    });
+
+    // Update workspace to set owner
+    const updatedWorkspace = await prisma.workspace.update({
+      where: { id: workspace.id },
+      data: { ownerId: user.id },
+      include: { owner: true },
     });
 
     res.status(201).json({
       message: 'Registration successful. Please wait for admin approval.',
-      workspace,
+      workspace: updatedWorkspace,
     });
   } catch (error) {
     console.error('Registration error:', error);
