@@ -22,14 +22,13 @@ export default function ClientForm({ client, onSave, onCancel }: ClientFormProps
   const [kickOffDate, setKickOffDate] = useState(
     client?.kickOffDate ? format(new Date(client.kickOffDate), 'yyyy-MM-dd') : ''
   );
+  const [klaviyoBillingDate, setKlaviyoBillingDate] = useState(
+    client?.klaviyoBillingDate ? format(new Date(client.klaviyoBillingDate), 'yyyy-MM-dd') : ''
+  );
   const [slackId, setSlackId] = useState(client?.slackId || '');
+  const [slackUserId, setSlackUserId] = useState(client?.slackUserId || '');
   const [klaviyoApi, setKlaviyoApi] = useState(client?.klaviyoApi || '');
-  const [googleDriveLink, setGoogleDriveLink] = useState(client?.googleDriveLink || '');
   const [figmaLink, setFigmaLink] = useState(client?.figmaLink || '');
-  const [contactName, setContactName] = useState(client?.contactName || '');
-  const [contactEmail, setContactEmail] = useState(client?.contactEmail || '');
-  const [contactPhone, setContactPhone] = useState(client?.contactPhone || '');
-  const [notes, setNotes] = useState(client?.notes || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -44,14 +43,11 @@ export default function ClientForm({ client, onSave, onCancel }: ClientFormProps
         email: email || undefined,
         serviceType,
         kickOffDate: kickOffDate || undefined,
+        klaviyoBillingDate: klaviyoBillingDate || undefined,
         slackId: slackId || undefined,
+        slackUserId: slackUserId || undefined,
         klaviyoApi: klaviyoApi || undefined,
-        googleDriveLink: googleDriveLink || undefined,
         figmaLink: figmaLink || undefined,
-        contactName: contactName || undefined,
-        contactEmail: contactEmail || undefined,
-        contactPhone: contactPhone || undefined,
-        notes: notes || undefined,
       };
 
       let response;
@@ -132,42 +128,30 @@ export default function ClientForm({ client, onSave, onCancel }: ClientFormProps
               className="px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
             />
           </div>
-        </div>
-
-        {/* Contact */}
-        <div>
-          <h3 className="text-sm font-bold text-orange-400 mb-3 uppercase tracking-wider">Primary Contact</h3>
           <input
-            type="text"
-            value={contactName}
-            onChange={(e) => setContactName(e.target.value)}
-            placeholder="Contact name"
-            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 mb-2"
-          />
-          <input
-            type="email"
-            value={contactEmail}
-            onChange={(e) => setContactEmail(e.target.value)}
-            placeholder="Contact email"
-            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 mb-2"
-          />
-          <input
-            type="tel"
-            value={contactPhone}
-            onChange={(e) => setContactPhone(e.target.value)}
-            placeholder="Contact phone"
-            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
+            type="date"
+            value={klaviyoBillingDate}
+            onChange={(e) => setKlaviyoBillingDate(e.target.value)}
+            placeholder="Klaviyo billing date"
+            className="w-full mt-3 px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
           />
         </div>
 
         {/* Integrations */}
         <div>
-          <h3 className="text-sm font-bold text-orange-400 mb-3 uppercase tracking-wider">Integration Links</h3>
+          <h3 className="text-sm font-bold text-orange-400 mb-3 uppercase tracking-wider">Integrations</h3>
           <input
             type="text"
             value={slackId}
             onChange={(e) => setSlackId(e.target.value)}
-            placeholder="Slack ID or Workspace URL"
+            placeholder="Slack Channel ID"
+            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 mb-2"
+          />
+          <input
+            type="text"
+            value={slackUserId}
+            onChange={(e) => setSlackUserId(e.target.value)}
+            placeholder="Slack User ID"
             className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 mb-2"
           />
           <input
@@ -179,29 +163,10 @@ export default function ClientForm({ client, onSave, onCancel }: ClientFormProps
           />
           <input
             type="url"
-            value={googleDriveLink}
-            onChange={(e) => setGoogleDriveLink(e.target.value)}
-            placeholder="Google Drive folder link"
-            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 mb-2"
-          />
-          <input
-            type="url"
             value={figmaLink}
             onChange={(e) => setFigmaLink(e.target.value)}
             placeholder="Figma project link"
             className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30"
-          />
-        </div>
-
-        {/* Notes */}
-        <div>
-          <h3 className="text-sm font-bold text-orange-400 mb-3 uppercase tracking-wider">Notes</h3>
-          <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            placeholder="Internal notes..."
-            className="w-full px-3 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 resize-none"
-            rows={3}
           />
         </div>
       </form>
