@@ -75,7 +75,7 @@ router.get('/integration', async (req: AuthRequest, res: Response) => {
       where: { workspaceId: req.user.workspaceId },
       select: {
         teamId: true,
-        channelId: true,
+        botToken: true,
         createdAt: true,
       },
     });
