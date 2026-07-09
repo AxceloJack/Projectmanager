@@ -2,16 +2,19 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar.js';
 import CalendarView from '../components/CalendarView.js';
 import ClientsPage from '../components/ClientsPage.js';
+import AdminPage from './AdminPage.js';
 import { clientsAPI } from '../lib/api.js';
+import { useAuthStore } from '../store/auth.js';
 import { Client } from '../types/index.js';
 
-type TabType = 'calendar' | 'clients';
+type TabType = 'calendar' | 'clients' | 'admin';
 
 export default function DashboardPage() {
   const [clients, setClients] = useState<Client[]>([]);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<TabType>('calendar');
+  const token = useAuthStore((state) => state.token);
 
   useEffect(() => {
     fetchClients();
@@ -82,6 +85,19 @@ export default function DashboardPage() {
             </svg>
             Clients
           </button>
+          <button
+            onClick={() => setActiveTab('admin')}
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+              activeTab === 'admin'
+                ? 'border-orange-500 text-orange-500'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            <svg className="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            Admin
+          </button>
         </div>
 
         {/* Content */}
@@ -93,8 +109,10 @@ export default function DashboardPage() {
               <p className="text-gray-500">Select a client from the sidebar to get started.</p>
             </div>
           )
-        ) : (
+        ) : activeTab === 'clients' ? (
           <ClientsPage onClientSelect={handleClientSelect} />
+        ) : (
+          <AdminPage />
         )}
       </main>
     </div>

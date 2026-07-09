@@ -59,4 +59,13 @@ export const publicAPI = {
     }),
 };
 
+export const adminAPI = {
+  getPendingUsers: () =>
+    API.get('/admin/users/pending'),
+  approveUser: (userId: string) =>
+    API.post(`/admin/users/${userId}/approve`),
+  rejectUser: (userId: string) =>
+    API.post(`/admin/users/${userId}/reject`),
+};
+
 export default API;
