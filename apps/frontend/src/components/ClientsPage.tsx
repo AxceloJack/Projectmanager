@@ -50,12 +50,12 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-gradient-to-br from-black via-gray-950 to-black">
+    <div className="flex-1 flex flex-col bg-black">
       {/* Header */}
-      <div className="bg-black/50 backdrop-blur border-b border-gray-800 px-8 py-6">
+      <div className="border-b border-gray-800 px-8 py-6">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-3xl font-bold text-white">Clients</h1>
+            <h1 className="text-2xl font-semibold text-white">Clients</h1>
             <p className="text-gray-500 text-sm mt-1">Manage all your client projects and workflows</p>
           </div>
           <button
@@ -63,7 +63,7 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
               setSelectedClientForEdit(null);
               setShowForm(true);
             }}
-            className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-lg hover:from-orange-600 hover:to-orange-700 font-semibold text-sm transition-all shadow-lg hover:shadow-orange-500/25 flex items-center gap-2"
+            className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2.5 rounded font-semibold text-sm transition flex items-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -90,17 +90,17 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
             </button>
           </div>
         ) : (
-          <div className="grid gap-4">
+          <div className="grid gap-3">
             {clients.map((client) => (
               <div
                 key={client.id}
-                className="bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-orange-500/50 hover:bg-gray-900/80 transition-all cursor-pointer group"
+                className="bg-gray-900 border border-gray-800 rounded p-6 hover:border-orange-500/50 hover:bg-gray-800/50 transition cursor-pointer group"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold text-white">{client.name}</h3>
-                      <span className="bg-orange-500/20 text-orange-300 text-xs font-semibold px-3 py-1 rounded-full border border-orange-500/30">
+                      <h3 className="text-lg font-semibold text-white">{client.name}</h3>
+                      <span className="bg-gray-800 text-gray-300 text-xs font-medium px-2.5 py-1 rounded border border-gray-700">
                         {SERVICE_TYPE_LABELS[client.serviceType] || client.serviceType}
                       </span>
                     </div>
@@ -121,13 +121,13 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
                         setSelectedClientForEdit(client);
                         setShowForm(true);
                       }}
-                      className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded-lg transition"
+                      className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded transition"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onClientSelect(client)}
-                      className="px-4 py-2 bg-orange-600/20 hover:bg-orange-600/30 text-orange-300 text-sm rounded-lg border border-orange-600/30 transition"
+                      className="px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-sm rounded border border-orange-500/30 transition"
                     >
                       View Calendar
                     </button>

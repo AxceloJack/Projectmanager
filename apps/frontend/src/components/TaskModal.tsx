@@ -120,14 +120,14 @@ export default function TaskModal({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-gray-900/95 border border-gray-800 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-gray-900/95">
-          <h2 className="text-2xl font-bold text-white">
+      <div className="bg-black border border-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-black">
+          <h2 className="text-xl font-semibold text-white">
             {task ? 'Edit Task' : 'Create Task'}
           </h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-2 hover:bg-gray-800 rounded-lg transition"
+            className="text-gray-400 hover:text-white p-2 hover:bg-gray-900 rounded transition"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -137,23 +137,23 @@ export default function TaskModal({
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           <div>
-            <label className="block text-sm font-bold text-gray-300 mb-2">Task Title</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Task Title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
               placeholder="Enter task title"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-300 mb-2">Description</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition resize-none"
+              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition resize-none"
               placeholder="Enter task description"
               rows={3}
             />
@@ -161,22 +161,22 @@ export default function TaskModal({
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">Due Date</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Due Date</label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
               >
                 {taskStatuses.map((s) => (
                   <option key={s} value={s}>
@@ -187,11 +187,11 @@ export default function TaskModal({
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-300 mb-2">Tag</label>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">Tag</label>
               <select
                 value={tag}
                 onChange={(e) => setTag(e.target.value as TaskTag)}
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
               >
                 {taskTags.map((t) => (
                   <option key={t} value={t}>
@@ -203,12 +203,12 @@ export default function TaskModal({
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-gray-300 mb-2">Figma Link</label>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Figma Link</label>
             <input
               type="url"
               value={figmaLink}
               onChange={(e) => setFigmaLink(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/20 transition"
+              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
               placeholder="https://figma.com/..."
             />
           </div>
@@ -217,14 +217,14 @@ export default function TaskModal({
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 px-4 rounded-lg hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold transition-all shadow-lg hover:shadow-orange-500/25"
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               {loading ? 'Saving...' : task ? 'Update' : 'Create'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-300 py-3 px-4 rounded-lg font-semibold transition"
+              className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-300 py-2.5 px-4 rounded font-semibold transition"
             >
               Cancel
             </button>
@@ -232,7 +232,7 @@ export default function TaskModal({
               <button
                 type="button"
                 onClick={handleDelete}
-                className="bg-red-600/20 hover:bg-red-600/30 text-red-400 py-3 px-4 rounded-lg font-semibold transition border border-red-600/30"
+                className="bg-red-950 hover:bg-red-900 text-red-400 py-2.5 px-4 rounded font-semibold transition border border-red-900"
               >
                 Delete
               </button>

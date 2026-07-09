@@ -55,12 +55,12 @@ export default function DashboardPage() {
 
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Tab Navigation */}
-        <div className="bg-black/50 backdrop-blur border-b border-gray-800 px-8 flex gap-8">
+        <div className="border-b border-gray-800 px-8 flex gap-8">
           <button
             onClick={() => setActiveTab('calendar')}
-            className={`py-4 font-semibold text-sm transition-colors border-b-2 ${
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'calendar'
-                ? 'border-orange-500 text-orange-400'
+                ? 'border-orange-500 text-orange-500'
                 : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
           >
@@ -71,9 +71,9 @@ export default function DashboardPage() {
           </button>
           <button
             onClick={() => setActiveTab('clients')}
-            className={`py-4 font-semibold text-sm transition-colors border-b-2 ${
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'clients'
-                ? 'border-orange-500 text-orange-400'
+                ? 'border-orange-500 text-orange-500'
                 : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
           >
