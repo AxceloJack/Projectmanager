@@ -19,13 +19,13 @@ async function main() {
   const passwordHash = await bcrypt.hash('2008Milana2008!', 10);
 
   const adminUser = await prisma.user.upsert({
-    where: { email: 'admin' },
+    where: { email: 'admin@axcelo.co' },
     update: {
       approved: true,
       role: 'ADMIN',
     },
     create: {
-      email: 'admin',
+      email: 'admin@axcelo.co',
       passwordHash,
       workspaceId: adminWorkspace.id,
       role: 'ADMIN',
@@ -34,7 +34,7 @@ async function main() {
   });
 
   console.log('✅ Admin user created/updated');
-  console.log('📧 Email: admin');
+  console.log('📧 Email: admin@axcelo.co');
   console.log('🔑 Password: 2008Milana2008!');
 }
 
