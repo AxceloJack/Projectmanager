@@ -54,8 +54,9 @@ router.post('/register', async (req, res: Response) => {
       workspace,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Registration failed' });
+    console.error('Registration error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Registration failed';
+    res.status(500).json({ error: errorMessage });
   }
 });
 
