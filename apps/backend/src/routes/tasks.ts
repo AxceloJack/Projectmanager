@@ -1,5 +1,5 @@
 import { Router, Response } from 'express';
-import { PrismaClient, TaskStatus } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth.js';
 import { AuthRequest } from '../types/index.js';
 import { notifyTaskClientReview } from '../services/slack.js';
@@ -8,6 +8,8 @@ const router = Router();
 const prisma = new PrismaClient();
 
 router.use(authMiddleware);
+
+type TaskStatus = 'NOT_STARTED' | 'DESIGN_PHASE' | 'CLIENT_REVIEW' | 'NEEDS_REVISIONS' | 'READY_FOR_KLAVIYO' | 'COMPLETE';
 
 interface CreateTaskBody {
   clientId: string;
