@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/auth.js';
 import LoginPage from './pages/LoginPage.js';
+import SignUpPage from './pages/SignUpPage.js';
 import DashboardPage from './pages/DashboardPage.js';
 import ClientViewPage from './pages/ClientViewPage.js';
 import ProtectedRoute from './components/ProtectedRoute.js';
@@ -22,6 +23,7 @@ function App() {
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />}
         />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
         <Route
           path="/dashboard/*"
           element={
