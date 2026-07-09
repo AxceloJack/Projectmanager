@@ -41,6 +41,18 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
     setSelectedClientForEdit(null);
   };
 
+  const handleDeleteClient = async (clientId: string) => {
+    if (!confirm('Delete this client and all associated tasks? This cannot be undone.')) return;
+
+    try {
+      await clientsAPI.delete(clientId);
+      fetchClients();
+    } catch (error) {
+      console.error('Failed to delete client:', error);
+      alert('Failed to delete client');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center">
@@ -130,6 +142,12 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
                       className="px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-sm rounded border border-orange-500/30 transition"
                     >
                       View Calendar
+                    </button>
+                    <button
+                      onClick={() => handleDeleteClient(client.id)}
+                      className="px-4 py-2 bg-red-950 hover:bg-red-900 text-red-400 text-sm rounded border border-red-900 transition"
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>
