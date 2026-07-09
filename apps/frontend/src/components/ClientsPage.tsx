@@ -117,10 +117,11 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
                       </span>
                     </div>
                     <div className="text-sm text-gray-400 space-y-1">
-                      {client.email && <p>📧 {client.email}</p>}
-                      {client.contactName && <p>👤 {client.contactName}</p>}
                       {client.kickOffDate && (
-                        <p>📅 Kick-off: {format(new Date(client.kickOffDate), 'MMM d, yyyy')}</p>
+                        <p>📅 Kick off Date: {format(new Date(client.kickOffDate), 'MMM d, yyyy')}</p>
+                      )}
+                      {client.klaviyoBillingDate && (
+                        <p>💳 Klaviyo Billing Date: {format(new Date(client.klaviyoBillingDate), 'MMM d, yyyy')}</p>
                       )}
                       {client.tasks && (
                         <p>📋 {client.tasks.length} tasks scheduled</p>

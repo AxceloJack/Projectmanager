@@ -116,70 +116,92 @@ function ClientTaskDetail({
   publicKey: string;
   onClose: () => void;
 }) {
+  const statusColors: Record<string, string> = {
+    NOT_STARTED: 'bg-gray-100 text-gray-800',
+    DESIGN_PHASE: 'bg-blue-100 text-blue-800',
+    CLIENT_REVIEW: 'bg-orange-100 text-orange-800',
+    NEEDS_REVISIONS: 'bg-red-100 text-red-800',
+    READY_FOR_KLAVIYO: 'bg-green-100 text-green-800',
+    COMPLETE: 'bg-purple-100 text-purple-800',
+  };
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-96 overflow-y-auto">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-gray-900">{task.title}</h2>
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b border-gray-800">
+          <div className="flex justify-between items-start">
+            <div className="flex-1">
+              <h2 className="text-2xl font-bold text-white mb-2">{task.title}</h2>
+              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[task.status] || 'bg-gray-800 text-gray-300'}`}>
+                {task.status.replace(/_/g, ' ')}
+              </span>
+            </div>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 text-2xl"
+              className="text-gray-400 hover:text-white text-2xl"
             >
               ×
             </button>
           </div>
+        </div>
 
-          <div className="space-y-4">
-            {task.description && (
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-600">{task.description}</p>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Due Date</h3>
-                <p className="text-gray-600">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-1">Status</h3>
-                <p className="text-gray-600">{task.status.replace(/_/g, ' ')}</p>
-              </div>
+        <div className="p-6 space-y-6">
+          {task.description && (
+            <div>
+              <h3 className="font-semibold text-gray-300 mb-2">Description</h3>
+              <p className="text-gray-400">{task.description}</p>
             </div>
+          )}
 
-            {task.figmaLink && (
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Deliverables</h3>
-                <a
-                  href={task.figmaLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:text-blue-700 break-all"
-                >
-                  View Figma Design
-                </a>
-              </div>
-            )}
-
-            {task.comments && task.comments.length > 0 && (
-              <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Comments</h3>
-                <div className="space-y-2">
-                  {task.comments.map((comment) => (
-                    <div key={comment.id} className="bg-gray-50 p-3 rounded text-sm">
-                      <p className="text-gray-600">{comment.content}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="font-semibold text-gray-300 mb-1">Due Date</h3>
+              <p className="text-gray-400">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
+            </div>
           </div>
 
+          {task.figmaLink && (
+            <div className="border-t border-gray-800 pt-6">
+              <h3 className="font-semibold text-gray-300 mb-3">Deliverables</h3>
+              <a
+                href={task.figmaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                View Figma Design
+              </a>
+            </div>
+          )}
+
+          {task.comments && task.comments.length > 0 && (
+            <div className="border-t border-gray-800 pt-6">
+              <h3 className="font-semibold text-gray-300 mb-3">Notes & Feedback</h3>
+              <div className="space-y-2">
+                {task.comments.map((comment) => (
+                  <div key={comment.id} className="bg-gray-900 border border-gray-800 p-3 rounded">
+                    <p className="text-gray-400 text-sm">{comment.content}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {task.status === 'CLIENT_REVIEW' && (
+            <div className="border-t border-gray-800 pt-6">
+              <h3 className="font-semibold text-gray-300 mb-3">Your Action</h3>
+              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and let us know if everything looks good.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="border-t border-gray-800 p-6 bg-black">
           <button
             onClick={onClose}
-            className="mt-6 w-full bg-gray-200 text-gray-900 py-2 px-4 rounded-md hover:bg-gray-300"
+            className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 py-2 px-4 rounded-lg font-medium transition"
           >
             Close
           </button>
