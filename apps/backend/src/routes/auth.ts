@@ -29,17 +29,22 @@ router.post('/register', async (req, res: Response) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const workspaceSlug = workspaceName.toLowerCase().replace(/\s+/g, '-') + '-' + uuidv4().slice(0, 8);
 
-    // Create workspace first
-    const workspace = await prisma.workspace.create({
-      data: {
-        name: workspaceName,
-        slug: workspaceSlug,
-      },
+    // Find or create the Axcelo workspace
+    let workspace = await prisma.workspace.findUnique({
+      where: { slug: 'axcelo-admin' },
     });
 
-    // Then create user with workspace reference
+    if (!workspace) {
+      workspace = await prisma.workspace.create({
+        data: {
+          name: 'Axcelo',
+          slug: 'axcelo-admin',
+        },
+      });
+    }
+
+    // Create user in the Axcelo workspace
     const user = await prisma.user.create({
       data: {
         email,
@@ -50,10 +55,8 @@ router.post('/register', async (req, res: Response) => {
       },
     });
 
-    // Update workspace to set owner
-    const updatedWorkspace = await prisma.workspace.update({
+    const updatedWorkspace = await prisma.workspace.findUnique({
       where: { id: workspace.id },
-      data: { ownerId: user.id },
       include: { owner: true },
     });
 
