@@ -16,6 +16,7 @@ interface CreateClientBody {
   kickOffDate?: string;
   klaviyoBillingDate?: string;
   slackId?: string;
+  slackUserId?: string;
   klaviyoApi?: string;
   googleDriveLink?: string;
   figmaLink?: string;
@@ -60,6 +61,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
       kickOffDate,
       klaviyoBillingDate,
       slackId,
+      slackUserId,
       klaviyoApi,
       googleDriveLink,
       figmaLink,
@@ -78,6 +80,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
         kickOffDate: kickOffDate ? new Date(kickOffDate) : null,
         klaviyoBillingDate: klaviyoBillingDate ? new Date(klaviyoBillingDate) : null,
         slackId,
+        slackUserId,
         klaviyoApi,
         googleDriveLink,
         figmaLink,
@@ -154,6 +157,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
       kickOffDate,
       klaviyoBillingDate,
       slackId,
+      slackUserId,
       klaviyoApi,
       googleDriveLink,
       figmaLink,
@@ -188,6 +192,7 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         ...(kickOffDate && { kickOffDate: new Date(kickOffDate) }),
         ...(klaviyoBillingDate !== undefined && { klaviyoBillingDate: klaviyoBillingDate ? new Date(klaviyoBillingDate) : null }),
         ...(slackId !== undefined && { slackId }),
+        ...(slackUserId !== undefined && { slackUserId }),
         ...(klaviyoApi !== undefined && { klaviyoApi }),
         ...(googleDriveLink !== undefined && { googleDriveLink }),
         ...(figmaLink !== undefined && { figmaLink }),

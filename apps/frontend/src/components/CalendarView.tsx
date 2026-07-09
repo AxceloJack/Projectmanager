@@ -116,14 +116,14 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
       </div>
 
       {/* Calendar */}
-      <div className="flex-1 overflow-auto p-8">
-        <div className="border border-gray-800 rounded-lg overflow-hidden">
+      <div className="flex-1 overflow-auto p-4 sm:p-8">
+        <div className="border border-gray-800 rounded-lg overflow-hidden w-full">
           {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-0 bg-gray-900 border-b border-gray-800">
+          <div className="grid grid-cols-7 gap-0 bg-gray-900 border-b border-gray-800 w-full">
             {weekDays.map((day) => (
               <div
                 key={day}
-                className="px-4 py-3 font-semibold text-gray-300 text-center text-sm uppercase tracking-wide border-r border-gray-800 last:border-r-0"
+                className="px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-300 text-center text-xs sm:text-sm uppercase tracking-wide border-r border-gray-800 last:border-r-0"
               >
                 {day}
               </div>
@@ -131,11 +131,11 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7">
+          <div className="grid grid-cols-7 w-full">
             {calendarDays.map((day, index) => (
               <div
                 key={index}
-                className={`min-h-32 p-3 border-r border-b border-gray-800 last:border-r-0 group relative ${
+                className={`min-h-24 sm:min-h-32 p-2 sm:p-3 border-r border-b border-gray-800 last:border-r-0 group relative overflow-hidden ${
                   day && isSameMonth(day, currentMonth) ? 'bg-black hover:bg-gray-900' : 'bg-gray-950'
                 } transition`}
               >

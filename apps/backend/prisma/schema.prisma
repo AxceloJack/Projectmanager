@@ -56,13 +56,9 @@ model Client {
   kickOffDate           DateTime?
   klaviyoBillingDate    DateTime?
   slackId               String?
+  slackUserId           String?
   klaviyoApi            String?
-  googleDriveLink       String?
   figmaLink             String?
-  contactName           String?
-  contactEmail          String?
-  contactPhone          String?
-  notes                 String?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
@@ -151,7 +147,6 @@ model SlackIntegration {
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   teamId      String
   botToken    String
-  channelId   String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

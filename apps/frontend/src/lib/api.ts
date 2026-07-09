@@ -68,4 +68,11 @@ export const adminAPI = {
     API.post(`/admin/users/${userId}/reject`),
 };
 
+export const slackAPI = {
+  getIntegration: () =>
+    API.get('/slack/integration'),
+  connectWorkspace: (data: any) =>
+    API.post('/slack/workspace-connect', data),
+};
+
 export default API;

@@ -1,5 +1,7 @@
 import { Router, Response, Request } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { authMiddleware } from '../middleware/auth.js';
+import { AuthRequest } from '../types/index.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -61,19 +63,51 @@ router.post('/actions', async (req: Request, res: Response) => {
   }
 });
 
-router.post('/workspace-connect', async (req: Request, res: Response) => {
+router.use(authMiddleware);
+
+router.get('/integration', async (req: AuthRequest, res: Response) => {
   try {
-    const { workspaceId, teamId, botToken, channelId } = req.body;
+    if (!req.user) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    const integration = await prisma.slackIntegration.findFirst({
+      where: { workspaceId: req.user.workspaceId },
+      select: {
+        teamId: true,
+        channelId: true,
+        createdAt: true,
+      },
+    });
+
+    res.json(integration || null);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch Slack integration' });
+  }
+});
+
+router.post('/workspace-connect', async (req: AuthRequest, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
+
+    const { teamId, botToken } = req.body;
 
     const integration = await prisma.slackIntegration.upsert({
       where: {
         workspaceId_teamId: {
-          workspaceId,
+          workspaceId: req.user.workspaceId,
           teamId,
         },
       },
-      update: { botToken, channelId },
-      create: { workspaceId, teamId, botToken, channelId },
+      update: { botToken },
+      create: {
+        workspaceId: req.user.workspaceId,
+        teamId,
+        botToken,
+      },
     });
 
     res.json(integration);

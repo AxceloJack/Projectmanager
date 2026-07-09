@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { PrismaClient, TaskStatus } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth.js';
 import { AuthRequest } from '../types/index.js';
+import { notifyTaskClientReview } from '../services/slack.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -162,6 +163,10 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
         },
       },
     });
+
+    if (status === 'CLIENT_REVIEW') {
+      notifyTaskClientReview(req.params.id, req.user.workspaceId);
+    }
 
     res.json(updated);
   } catch (error) {

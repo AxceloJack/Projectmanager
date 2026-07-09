@@ -54,18 +54,13 @@ export default function TaskCard({ task, onClick }: TaskCardProps) {
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-2 py-1.5 rounded border transition-all hover:shadow-md cursor-pointer group ${colors.bg} ${colors.text} ${colors.border}`}
+      className={`w-full text-left px-1.5 sm:px-2 py-1 sm:py-1.5 rounded border transition-all hover:shadow-md cursor-pointer group text-xs sm:text-sm ${colors.bg} ${colors.text} ${colors.border}`}
       title={task.title}
     >
-      <div className="flex items-start gap-1.5">
-        <span className="text-xs mt-0.5 flex-shrink-0">{icon}</span>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1.5">
-            <div className="text-xs font-medium truncate flex-1">{task.title}</div>
-            <div className={`text-xs px-1.5 py-0.5 rounded whitespace-nowrap flex-shrink-0 ${tagColor.bg} ${tagColor.text}`}>
-              {tagLabel}
-            </div>
-          </div>
+      <div className="flex items-start gap-1">
+        <span className="mt-0.5 flex-shrink-0">{icon}</span>
+        <div className="flex-1 min-w-0 overflow-hidden">
+          <div className="text-xs font-medium truncate">{task.title}</div>
           <div className="text-xs opacity-70 mt-0.5">{label}</div>
         </div>
       </div>

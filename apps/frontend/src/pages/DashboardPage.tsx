@@ -61,41 +61,32 @@ export default function DashboardPage() {
         <div className="border-b border-gray-800 px-8 flex gap-8">
           <button
             onClick={() => setActiveTab('calendar')}
-            className={`py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'calendar'
                 ? 'border-orange-500 text-orange-500'
                 : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
           >
-            <svg className="w-5 h-5" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 10 L85 75 L65 75 L75 90 L50 70 L25 90 L35 75 L15 75 Z"/>
-            </svg>
             Calendar
           </button>
           <button
             onClick={() => setActiveTab('clients')}
-            className={`py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'clients'
                 ? 'border-orange-500 text-orange-500'
                 : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
           >
-            <svg className="w-5 h-5" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 10 L85 75 L65 75 L75 90 L50 70 L25 90 L35 75 L15 75 Z"/>
-            </svg>
             Clients
           </button>
           <button
             onClick={() => setActiveTab('admin')}
-            className={`py-3 font-medium text-sm transition-colors border-b-2 flex items-center gap-2 ${
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'admin'
                 ? 'border-orange-500 text-orange-500'
                 : 'border-transparent text-gray-400 hover:text-gray-300'
             }`}
           >
-            <svg className="w-5 h-5" viewBox="0 0 100 100" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 10 L85 75 L65 75 L75 90 L50 70 L25 90 L35 75 L15 75 Z"/>
-            </svg>
             Admin
           </button>
         </div>

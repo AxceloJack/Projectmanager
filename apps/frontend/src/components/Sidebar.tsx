@@ -37,7 +37,7 @@ export default function Sidebar({
           </div>
           <div>
             <h1 className="text-base font-semibold text-white tracking-tight">Axcelo</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Campaign Hub</p>
+            <p className="text-xs text-gray-500 mt-0.5">Project Manager</p>
           </div>
         </div>
       </div>

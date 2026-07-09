@@ -128,25 +128,25 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
                       )}
                     </div>
                   </div>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 flex-wrap">
                     <button
                       onClick={() => {
                         setSelectedClientForEdit(client);
                         setShowForm(true);
                       }}
-                      className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-sm rounded transition"
+                      className="px-3 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 text-xs sm:text-sm rounded transition whitespace-nowrap"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => onClientSelect(client)}
-                      className="px-4 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-sm rounded border border-orange-500/30 transition"
+                      className="px-3 py-2 bg-orange-500/10 hover:bg-orange-500/20 text-orange-400 text-xs sm:text-sm rounded border border-orange-500/30 transition whitespace-nowrap"
                     >
-                      View Calendar
+                      View
                     </button>
                     <button
                       onClick={() => handleDeleteClient(client.id)}
-                      className="px-4 py-2 bg-red-950 hover:bg-red-900 text-red-400 text-sm rounded border border-red-900 transition"
+                      className="px-3 py-2 bg-red-950 hover:bg-red-900 text-red-400 text-xs sm:text-sm rounded border border-red-900 transition whitespace-nowrap"
                     >
                       Delete
                     </button>
