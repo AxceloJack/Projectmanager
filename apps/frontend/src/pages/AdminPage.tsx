@@ -23,9 +23,11 @@ export default function AdminPage() {
     try {
       setLoading(true);
       const response = await adminAPI.getPendingUsers();
+      console.log('Pending users response:', response.data);
       setPendingUsers(response.data);
       setError('');
     } catch (err: any) {
+      console.error('Error fetching pending users:', err);
       setError(err.response?.data?.error || 'Failed to fetch pending users');
       setPendingUsers([]);
     } finally {

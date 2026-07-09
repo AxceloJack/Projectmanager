@@ -32,6 +32,7 @@ const adminMiddleware = async (req: AuthRequest, res: Response, next: Function) 
 // Get all pending users
 router.get('/users/pending', adminMiddleware, async (req: AuthRequest, res: Response) => {
   try {
+    console.log('Fetching pending users for workspace:', req.user!.workspaceId);
     const pendingUsers = await prisma.user.findMany({
       where: {
         workspaceId: req.user!.workspaceId,
@@ -46,9 +47,10 @@ router.get('/users/pending', adminMiddleware, async (req: AuthRequest, res: Resp
       orderBy: { createdAt: 'asc' },
     });
 
+    console.log('Found pending users:', pendingUsers);
     res.json(pendingUsers);
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching pending users:', error);
     res.status(500).json({ error: 'Failed to fetch pending users' });
   }
 });
