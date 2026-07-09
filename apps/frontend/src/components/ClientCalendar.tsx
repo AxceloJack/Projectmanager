@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth } from 'date-fns';
+import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, isSunday, isSaturday, addMonths, subMonths } from 'date-fns';
 import { Client, Task } from '../types/index.js';
 import ClientTaskCard from './ClientTaskCard.js';
 
@@ -12,20 +12,23 @@ export default function ClientCalendar({ client, publicKey }: ClientCalendarProp
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const tasks = client.tasks || [];
-  const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST)
+  const visibleTasks = (client.tasks || []).filter((task) => task.tag === 'FLOW' || task.tag === 'CAMPAIGN');
+  const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
   });
 
-  const calendarDays = Array(days[0].getDay())
+  // Filter calendar to show only Mon-Fri
+  const allDays = Array(days[0].getDay() || 7)
     .fill(null)
     .concat(days);
+  const calendarDays = allDays.filter((day) => !day || (!isSunday(day) && !isSaturday(day)));
 
   const getDayTasks = (date: Date) => {
-    return tasks.filter(
+    return visibleTasks.filter(
       (task) =>
         format(new Date(task.dueDate), 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
     );
@@ -35,45 +38,45 @@ export default function ClientCalendar({ client, publicKey }: ClientCalendarProp
     <div>
       <div className="flex justify-between items-center mb-6">
         <button
-          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1))}
-          className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded"
+          onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
+          className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
         >
           ← Previous
         </button>
-        <h2 className="text-xl font-semibold text-gray-900">
+        <h2 className="text-xl font-semibold text-white">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
         <button
-          onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1))}
-          className="px-4 py-2 text-gray-700 hover:bg-gray-200 rounded"
+          onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
+          className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
         >
           Next →
         </button>
       </div>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="grid grid-cols-7 gap-0 border-b bg-gray-50">
+      <div className="border border-gray-800 rounded-lg overflow-hidden">
+        <div className="grid grid-cols-5 gap-0 border-b bg-gray-900">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="px-4 py-3 font-semibold text-gray-900 text-center border-r last:border-r-0"
+              className="px-4 py-3 font-semibold text-gray-300 text-center border-r border-gray-800 last:border-r-0"
             >
               {day}
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-7 gap-0">
+        <div className="grid grid-cols-5 gap-0">
           {calendarDays.map((day, index) => (
             <div
               key={index}
-              className={`min-h-32 p-3 border-r border-b last:border-r-0 ${
-                day && isSameMonth(day, currentMonth) ? 'bg-white' : 'bg-gray-50'
-              }`}
+              className={`min-h-32 p-3 border-r border-b border-gray-800 last:border-r-0 ${
+                day && isSameMonth(day, currentMonth) ? 'bg-black hover:bg-gray-900' : 'bg-gray-950'
+              } transition`}
             >
               {day && (
                 <>
-                  <div className="font-semibold text-sm text-gray-900 mb-2">
+                  <div className={`font-semibold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-600'}`}>
                     {format(day, 'd')}
                   </div>
                   <div className="space-y-1">

@@ -30,7 +30,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/client/:publicKey" element={<ClientViewPage />} />
+        <Route path="/public/:publicKey" element={<ClientViewPage />} />
       </Routes>
     </Router>
   );
