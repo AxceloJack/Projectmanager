@@ -1,8 +1,6 @@
 import axios from 'axios';
 
-const baseURL = (import.meta.env.VITE_API_URL as string | undefined)
-  ? `${import.meta.env.VITE_API_URL as string}/api`
-  : '/api';
+const baseURL = 'https://projectmanager-production-ab23.up.railway.app/api';
 
 const API = axios.create({
   baseURL,
