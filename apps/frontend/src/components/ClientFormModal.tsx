@@ -17,7 +17,6 @@ const SERVICE_TYPES = [
 
 export default function ClientFormModal({ client, onSave, onCancel }: ClientFormModalProps) {
   const [name, setName] = useState(client?.name || '');
-  const [email, setEmail] = useState(client?.email || '');
   const [serviceType, setServiceType] = useState(client?.serviceType || 'FLOW_ONLY');
   const [kickOffDate, setKickOffDate] = useState(
     client?.kickOffDate ? format(new Date(client.kickOffDate), 'yyyy-MM-dd') : ''
@@ -25,14 +24,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
   const [klaviyoBillingDate, setKlaviyoBillingDate] = useState(
     client?.klaviyoBillingDate ? format(new Date(client.klaviyoBillingDate), 'yyyy-MM-dd') : ''
   );
-  const [slackId, setSlackId] = useState(client?.slackId || '');
   const [klaviyoApi, setKlaviyoApi] = useState(client?.klaviyoApi || '');
-  const [googleDriveLink, setGoogleDriveLink] = useState(client?.googleDriveLink || '');
-  const [figmaLink, setFigmaLink] = useState(client?.figmaLink || '');
-  const [contactName, setContactName] = useState(client?.contactName || '');
-  const [contactEmail, setContactEmail] = useState(client?.contactEmail || '');
-  const [contactPhone, setContactPhone] = useState(client?.contactPhone || '');
-  const [notes, setNotes] = useState(client?.notes || '');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -44,18 +36,10 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
     try {
       const payload = {
         name,
-        email: email || undefined,
         serviceType,
         kickOffDate: kickOffDate || undefined,
         klaviyoBillingDate: klaviyoBillingDate || undefined,
-        slackId: slackId || undefined,
         klaviyoApi: klaviyoApi || undefined,
-        googleDriveLink: googleDriveLink || undefined,
-        figmaLink: figmaLink || undefined,
-        contactName: contactName || undefined,
-        contactEmail: contactEmail || undefined,
-        contactPhone: contactPhone || undefined,
-        notes: notes || undefined,
       };
 
       let response;
@@ -75,17 +59,12 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg w-full max-w-2xl max-h-[90vh] flex flex-col">
+      <div className="bg-black border border-gray-800 rounded-lg w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="p-6 border-b border-gray-800 flex justify-between items-center">
-          <div>
-            <h2 className="text-xl font-semibold text-white">
-              {client ? 'Edit Client' : 'New Client'}
-            </h2>
-            <p className="text-gray-400 text-sm mt-1">
-              {client ? 'Update client information' : 'Create a new client and set up timeline'}
-            </p>
-          </div>
+          <h2 className="text-xl font-semibold text-white">
+            {client ? 'Edit Client' : 'New Client'}
+          </h2>
           <button
             onClick={onCancel}
             className="text-gray-400 hover:text-white text-2xl"
@@ -103,124 +82,66 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           )}
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Basic Info</h3>
-            <div className="grid grid-cols-2 gap-3">
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                placeholder="Client name *"
-                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-              />
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Email"
-                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Service & Timeline</h3>
-            <div className="grid grid-cols-3 gap-3">
-              <select
-                value={serviceType}
-                onChange={(e) => setServiceType(e.target.value)}
-                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-              >
-                {SERVICE_TYPES.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
-                  </option>
-                ))}
-              </select>
-              <input
-                type="date"
-                value={kickOffDate}
-                onChange={(e) => setKickOffDate(e.target.value)}
-                placeholder="Kick-off date"
-                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-              />
-              <input
-                type="date"
-                value={klaviyoBillingDate}
-                onChange={(e) => setKlaviyoBillingDate(e.target.value)}
-                placeholder="Klaviyo billing date"
-                className="px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-                title="Klaviyo billing date - cleanup task will be scheduled 1 day before"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Contact</h3>
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Client Name</label>
             <input
               type="text"
-              value={contactName}
-              onChange={(e) => setContactName(e.target.value)}
-              placeholder="Contact name"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 mb-2"
-            />
-            <input
-              type="email"
-              value={contactEmail}
-              onChange={(e) => setContactEmail(e.target.value)}
-              placeholder="Contact email"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 mb-2"
-            />
-            <input
-              type="tel"
-              value={contactPhone}
-              onChange={(e) => setContactPhone(e.target.value)}
-              placeholder="Contact phone"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="Enter client name"
               className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
             />
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Integrations</h3>
-            <input
-              type="text"
-              value={slackId}
-              onChange={(e) => setSlackId(e.target.value)}
-              placeholder="Slack ID or workspace URL"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 mb-2"
-            />
-            <input
-              type="text"
-              value={klaviyoApi}
-              onChange={(e) => setKlaviyoApi(e.target.value)}
-              placeholder="Klaviyo API Key"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 mb-2"
-            />
-            <input
-              type="url"
-              value={googleDriveLink}
-              onChange={(e) => setGoogleDriveLink(e.target.value)}
-              placeholder="Google Drive folder link"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 mb-2"
-            />
-            <input
-              type="url"
-              value={figmaLink}
-              onChange={(e) => setFigmaLink(e.target.value)}
-              placeholder="Figma project link"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-            />
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Service</label>
+            <select
+              value={serviceType}
+              onChange={(e) => setServiceType(e.target.value)}
+              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+            >
+              {SERVICE_TYPES.map((type) => (
+                <option key={type.value} value={type.value}>
+                  {type.label}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div>
-            <h3 className="text-sm font-semibold text-gray-400 mb-3 uppercase tracking-wider">Notes</h3>
-            <textarea
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              placeholder="Internal notes..."
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 resize-none"
-              rows={3}
+            <label className="block text-sm font-semibold text-gray-300 mb-2">Timeline</label>
+            <input
+              type="date"
+              value={kickOffDate}
+              onChange={(e) => setKickOffDate(e.target.value)}
+              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
             />
+          </div>
+
+          <div className="border-t border-gray-800 pt-5">
+            <h3 className="text-sm font-semibold text-gray-300 mb-3">Integrations</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Klaviyo</label>
+                <input
+                  type="text"
+                  value={klaviyoApi}
+                  onChange={(e) => setKlaviyoApi(e.target.value)}
+                  placeholder="Klaviyo API Key"
+                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-2">Billing Date</label>
+                <input
+                  type="date"
+                  value={klaviyoBillingDate}
+                  onChange={(e) => setKlaviyoBillingDate(e.target.value)}
+                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  title="Cleanup task will be scheduled 1 day before"
+                />
+              </div>
+            </div>
           </div>
         </form>
 
