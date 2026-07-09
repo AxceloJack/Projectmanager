@@ -13,10 +13,8 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST) and only CLIENT_REVIEW status
-  const visibleTasks = (client.tasks || []).filter(
-    (task) => (task.tag === 'FLOW' || task.tag === 'CAMPAIGN') && task.status === 'CLIENT_REVIEW'
-  );
+  // Filter to only show FLOW and CAMPAIGN tasks (hide SIDE_QUEST)
+  const visibleTasks = (client.tasks || []).filter((task) => task.tag === 'FLOW' || task.tag === 'CAMPAIGN');
   const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
 
   const days = eachDayOfInterval({
