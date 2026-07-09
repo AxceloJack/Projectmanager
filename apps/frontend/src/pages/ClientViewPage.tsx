@@ -59,17 +59,16 @@ export default function ClientViewPage() {
             </div>
             <div>
               <p className="text-sm font-semibold text-white">Axcelo</p>
-              <p className="text-xs text-gray-500">Campaign Management</p>
+              <p className="text-xs text-gray-500">Project Management</p>
             </div>
           </div>
-          <p className="text-sm text-gray-400">Project: {client.name}</p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div className="mb-8 border-b border-gray-800 pb-8">
           <h1 className="text-3xl font-bold text-white">{client.name}</h1>
-          <p className="mt-2 text-gray-500">Campaign Timeline & Deliverables</p>
+          <p className="mt-2 text-gray-500">Project Timeline & Deliverables</p>
         </div>
 
         <ClientCalendar client={client} publicKey={publicKey!} />

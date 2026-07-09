@@ -116,6 +116,10 @@ function ClientTaskDetail({
   publicKey: string;
   onClose: () => void;
 }) {
+  const [status, setStatus] = useState(task.status);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
   const statusColors: Record<string, string> = {
     NOT_STARTED: 'bg-gray-100 text-gray-800',
     DESIGN_PHASE: 'bg-blue-100 text-blue-800',
@@ -125,6 +129,41 @@ function ClientTaskDetail({
     COMPLETE: 'bg-purple-100 text-purple-800',
   };
 
+  const statusOptions = [
+    'NOT_STARTED',
+    'DESIGN_PHASE',
+    'CLIENT_REVIEW',
+    'NEEDS_REVISIONS',
+    'READY_FOR_KLAVIYO',
+    'COMPLETE',
+  ];
+
+  const handleStatusChange = async (newStatus: string) => {
+    setError('');
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/public/clients/${publicKey}/tasks/${task.id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to update status');
+      }
+
+      setStatus(newStatus);
+    } catch (err) {
+      setError('Failed to update status');
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -132,9 +171,23 @@ function ClientTaskDetail({
           <div className="flex justify-between items-start">
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-white mb-2">{task.title}</h2>
-              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[task.status] || 'bg-gray-800 text-gray-300'}`}>
-                {task.status.replace(/_/g, ' ')}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[status] || 'bg-gray-800 text-gray-300'}`}>
+                  {status.replace(/_/g, ' ')}
+                </span>
+                <select
+                  value={status}
+                  onChange={(e) => handleStatusChange(e.target.value)}
+                  disabled={loading}
+                  className="px-3 py-1 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 disabled:opacity-50"
+                >
+                  {statusOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt.replace(/_/g, ' ')}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
             <button
               onClick={onClose}
@@ -146,6 +199,12 @@ function ClientTaskDetail({
         </div>
 
         <div className="p-6 space-y-6">
+          {error && (
+            <div className="bg-red-950 border border-red-900 rounded p-3">
+              <p className="text-red-400 text-sm">{error}</p>
+            </div>
+          )}
+
           {task.description && (
             <div>
               <h3 className="font-semibold text-gray-300 mb-2">Description</h3>
@@ -190,10 +249,10 @@ function ClientTaskDetail({
             </div>
           )}
 
-          {task.status === 'CLIENT_REVIEW' && (
+          {status === 'CLIENT_REVIEW' && (
             <div className="border-t border-gray-800 pt-6">
               <h3 className="font-semibold text-gray-300 mb-3">Your Action</h3>
-              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and let us know if everything looks good.</p>
+              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and update the status when ready.</p>
             </div>
           )}
         </div>

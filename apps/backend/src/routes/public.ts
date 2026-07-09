@@ -125,4 +125,46 @@ router.post('/clients/:publicKey/tasks/:taskId/request-revisions', async (req, r
   }
 });
 
+router.patch('/clients/:publicKey/tasks/:taskId', async (req, res: Response) => {
+  try {
+    const { publicKey, taskId } = req.params;
+    const { status } = req.body;
+
+    const client = await prisma.client.findUnique({
+      where: { publicKey },
+    });
+
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+
+    const task = await prisma.task.findFirst({
+      where: {
+        id: taskId,
+        clientId: client.id,
+      },
+    });
+
+    if (!task) {
+      return res.status(404).json({ error: 'Task not found' });
+    }
+
+    const updatedTask = await prisma.task.update({
+      where: { id: taskId },
+      data: { status },
+      include: {
+        comments: {
+          include: { user: { select: { id: true, email: true } } },
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    res.json(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update task' });
+  }
+});
+
 export default router;
