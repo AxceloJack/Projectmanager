@@ -39,6 +39,8 @@ router.post('/register', async (req, res: Response) => {
           create: {
             email,
             passwordHash,
+            role: 'MEMBER',
+            approved: false,
           },
         },
       },
@@ -47,17 +49,10 @@ router.post('/register', async (req, res: Response) => {
       },
     });
 
-    const token = jwt.sign(
-      {
-        userId: workspace.owner.id,
-        workspaceId: workspace.id,
-        email: workspace.owner.email,
-      },
-      process.env.JWT_SECRET || 'dev-secret',
-      { expiresIn: '7d' }
-    );
-
-    res.json({ token, workspace });
+    res.status(201).json({
+      message: 'Registration successful. Please wait for admin approval.',
+      workspace,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Registration failed' });
@@ -75,6 +70,10 @@ router.post('/login', async (req, res: Response) => {
 
     if (!user || !(await bcrypt.compare(password, user.passwordHash))) {
       return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    if (!user.approved) {
+      return res.status(403).json({ error: 'Your account is pending admin approval' });
     }
 
     const token = jwt.sign(

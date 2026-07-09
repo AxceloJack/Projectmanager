@@ -22,7 +22,12 @@ export default function LoginPage() {
       setAuth(token, workspace);
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Invalid credentials');
+      const errorMsg = err.response?.data?.error;
+      if (errorMsg === 'Your account is pending admin approval') {
+        setError('Your account is pending admin approval. Please contact your administrator.');
+      } else {
+        setError(errorMsg || 'Invalid credentials');
+      }
     } finally {
       setLoading(false);
     }
