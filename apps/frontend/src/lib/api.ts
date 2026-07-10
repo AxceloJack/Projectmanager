@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://projectmanager-production-ab23.up.railway.app/api';
+const baseURL = '/api';
 
 const API = axios.create({
   baseURL,
