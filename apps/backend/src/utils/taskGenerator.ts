@@ -23,20 +23,27 @@ const FLOW_BUILD_TASKS: TaskTemplate[] = [
   { title: 'Replenishment Flow', description: 'Design replenishment flow', day: 20, status: 'NOT_STARTED', tag: 'FLOW' },
 ];
 
-// Soft deliverables (internal)
-const SOFT_DELIVERABLES: TaskTemplate[] = [
-  { title: 'Introduce Client to Application', description: 'Onboard client to Axcelo CRM', day: 0, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
-  { title: 'Create Figma Page', description: 'Set up Figma design file for project', day: 1, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
-  { title: 'Campaign Strategy', description: 'Complete campaign strategy documentation', day: 2, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+// Internal onboarding side quests — added for every client.
+// day is a 0-indexed offset from the kick-off date, so day 0 = "Day 1".
+const ONBOARDING_SIDE_QUESTS: TaskTemplate[] = [
+  { title: 'Introduce Client to Axcelo App', description: 'Walk the client through the Axcelo app and give them access', day: 0, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+  { title: 'Create Figma Page', description: 'Set up the Figma design file for the project', day: 0, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+  { title: 'Core Segments Inside Klaviyo', description: 'Build the core segments inside Klaviyo', day: 4, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+  { title: 'Report on GlockApps', description: 'Run the GlockApps deliverability test and report findings', day: 5, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
 ];
 
-const FULL_EMAIL_TASKS: TaskTemplate[] = [
-  ...FLOW_BUILD_TASKS,
-  { title: 'Campaign Planning', description: 'Plan initial campaigns and cadence', day: 2, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
+// Flow-building services only (Full Email Marketing + Flow Build Only)
+const FLOW_DIAGRAM_SIDE_QUESTS: TaskTemplate[] = [
+  { title: 'Report on Flow Diagram', description: 'Deliver the flow diagram report to the client', day: 2, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+];
+
+// Campaign services only (Full Email Marketing + Campaigns Only)
+const CAMPAIGN_PLANNING_SIDE_QUESTS: TaskTemplate[] = [
+  { title: 'Campaign Strategy', description: 'Complete the campaign strategy documentation', day: 1, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
+  { title: 'Campaign Planning', description: 'Plan the initial campaigns and cadence', day: 1, status: 'NOT_STARTED', tag: 'SIDE_QUEST' },
 ];
 
 const CAMPAIGNS_ONLY_TASKS: TaskTemplate[] = [
-  { title: 'Campaign Strategy', description: 'Define campaign goals and targeting', day: 2, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
   { title: 'Campaign Design', description: 'Create campaign email designs', day: 5, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
   { title: 'Campaign Setup', description: 'Set up campaigns in Klaviyo', day: 10, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
   { title: 'Campaign Review', description: 'Client review of campaigns', day: 15, status: 'NOT_STARTED', tag: 'CAMPAIGN' },
@@ -52,15 +59,30 @@ export async function generateTimelineTasks(
 ) {
   let tasks: TaskTemplate[] = [];
 
-  // Always add soft deliverables
-  tasks.push(...SOFT_DELIVERABLES);
+  const buildsFlows =
+    serviceType === 'FULL_EMAIL_MARKETING' || serviceType === 'FLOW_ONLY';
+  const runsCampaigns =
+    serviceType === 'FULL_EMAIL_MARKETING' || serviceType === 'CAMPAIGNS_ONLY';
+
+  // Onboarding side quests for every client
+  tasks.push(...ONBOARDING_SIDE_QUESTS);
+
+  // Flow diagram report only for services that build flows
+  if (buildsFlows) {
+    tasks.push(...FLOW_DIAGRAM_SIDE_QUESTS);
+  }
+
+  // Campaign strategy + planning only for services that run campaigns
+  if (runsCampaigns) {
+    tasks.push(...CAMPAIGN_PLANNING_SIDE_QUESTS);
+  }
 
   switch (serviceType) {
     case 'FLOW_ONLY':
       tasks.push(...FLOW_BUILD_TASKS);
       break;
     case 'FULL_EMAIL_MARKETING':
-      tasks.push(...FULL_EMAIL_TASKS);
+      tasks.push(...FLOW_BUILD_TASKS);
       break;
     case 'CAMPAIGNS_ONLY':
       tasks.push(...CAMPAIGNS_ONLY_TASKS);
