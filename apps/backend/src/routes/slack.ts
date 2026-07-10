@@ -40,19 +40,38 @@ router.post('/events', async (req: Request, res: Response) => {
 router.post('/actions', async (req: Request, res: Response) => {
   try {
     const payload = JSON.parse(req.body.payload as string);
-    const { actions, team, trigger_id } = payload;
+    const action = payload.actions?.[0];
+    const responseUrl = payload.response_url as string | undefined;
+    const clickedBy = payload.user?.id ? `<@${payload.user.id}>` : 'the client';
 
-    if (actions?.[0]?.action_id === 'approve_task') {
-      const taskId = actions[0].value;
-      await prisma.task.update({
-        where: { id: taskId },
+    let confirmation: string | null = null;
+
+    if (action?.action_id === 'approve_task') {
+      const task = await prisma.task.update({
+        where: { id: action.value },
         data: { status: 'READY_FOR_KLAVIYO' },
       });
-    } else if (actions?.[0]?.action_id === 'request_revisions') {
-      const taskId = actions[0].value;
-      await prisma.task.update({
-        where: { id: taskId },
+      confirmation = `✅ *${task.title}* approved by ${clickedBy} — moving to Klaviyo.`;
+    } else if (action?.action_id === 'request_revisions') {
+      const task = await prisma.task.update({
+        where: { id: action.value },
         data: { status: 'NEEDS_REVISIONS' },
+      });
+      confirmation = `🔄 ${clickedBy} requested revisions on *${task.title}* — the team is on it.`;
+    }
+
+    if (confirmation && responseUrl) {
+      // Replace the original buttons message so the click has visible
+      // feedback. Must complete before res.json(): Vercel freezes the
+      // function after the response is sent.
+      await fetch(responseUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          replace_original: true,
+          text: confirmation,
+          blocks: [{ type: 'section', text: { type: 'mrkdwn', text: confirmation } }],
+        }),
       });
     }
 
