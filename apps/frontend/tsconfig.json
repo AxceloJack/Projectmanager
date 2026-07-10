@@ -14,9 +14,7 @@
     "noImplicitThis": true,
     "resolveJsonModule": true,
     "moduleResolution": "node",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "noEmit": true,
     "jsx": "react-jsx",
     "types": ["vite/client"]
   },
