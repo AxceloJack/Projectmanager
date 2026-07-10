@@ -71,3 +71,4 @@ setupDefaultAdmin().then(() => {
     console.log(`Server running on http://localhost:${PORT}`);
   });
 });
+// deployment trigger
