@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authAPI } from '../lib/api.js';
 import { useAuthStore } from '../store/auth.js';
+import AxceloLogo from '../components/AxceloLogo.js';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -45,9 +46,7 @@ export default function LoginPage() {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg mb-4 shadow-lg">
-            <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
-            </svg>
+            <AxceloLogo className="w-9 h-9 text-white" mono />
           </div>
           <h1 className="text-4xl font-bold text-white mb-2">Axcelo</h1>
           <p className="text-gray-400 text-sm tracking-wide">Email Campaign Command Center</p>
