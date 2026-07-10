@@ -25,10 +25,18 @@ export default function DashboardPage() {
   const fetchClients = async () => {
     try {
       const response = await clientsAPI.list();
-      setClients(response.data);
-      if (response.data.length > 0) {
-        setSelectedClient(response.data[0]);
-      }
+      const list: Client[] = response.data;
+      setClients(list);
+      // Keep the client the user is currently viewing (refreshed to the
+      // latest data); only fall back to the first client if none is
+      // selected or the selected one no longer exists.
+      setSelectedClient((prev) => {
+        if (prev) {
+          const stillThere = list.find((c) => c.id === prev.id);
+          if (stillThere) return stillThere;
+        }
+        return list[0] || null;
+      });
     } catch (error) {
       console.error('Failed to fetch clients:', error);
     } finally {

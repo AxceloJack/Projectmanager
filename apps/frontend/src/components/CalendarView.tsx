@@ -33,7 +33,11 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
   const handleTaskUpdate = () => {
     fetchTasks();
     onTasksChange();
+    // Close whichever modal was open (edit or create) so the refreshed
+    // calendar is visible without needing a page refresh.
     setSelectedTask(null);
+    setShowNewTaskForm(false);
+    setSelectedDateForNewTask(null);
   };
 
   const days = eachDayOfInterval({
