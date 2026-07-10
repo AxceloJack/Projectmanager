@@ -101,6 +101,7 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
         <ClientTaskDetail
           task={selectedTask}
           publicKey={publicKey}
+          clientFigmaLink={client.figmaLink}
           onClose={() => setSelectedTask(null)}
           onTaskUpdate={onTaskUpdate}
         />
@@ -112,16 +113,21 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
 function ClientTaskDetail({
   task,
   publicKey,
+  clientFigmaLink,
   onClose,
   onTaskUpdate,
 }: {
   task: Task;
   publicKey: string;
+  clientFigmaLink?: string;
   onClose: () => void;
   onTaskUpdate?: () => void;
 }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Tasks without their own Figma link fall back to the client's board.
+  const figmaLink = task.figmaLink || clientFigmaLink;
 
   const statusColors: Record<string, string> = {
     NOT_STARTED: 'bg-gray-700 text-gray-300',
@@ -227,11 +233,11 @@ function ClientTaskDetail({
             </div>
           </div>
 
-          {task.figmaLink && (
+          {figmaLink && (
             <div className="border-t border-gray-800 pt-6">
               <h3 className="font-semibold text-gray-300 mb-3">Deliverables</h3>
               <a
-                href={task.figmaLink}
+                href={figmaLink}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition"

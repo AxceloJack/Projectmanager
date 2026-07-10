@@ -209,7 +209,7 @@ export default function TaskModal({
               value={figmaLink}
               onChange={(e) => setFigmaLink(e.target.value)}
               className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-              placeholder="https://figma.com/..."
+              placeholder="Leave empty to use the client's Figma board"
             />
           </div>
 

@@ -32,12 +32,13 @@ export async function notifyTaskClientReview(taskId: string, workspaceId: string
     const client = new WebClient(integration.botToken);
 
     const userTag = task.client.slackUserId ? `<@${task.client.slackUserId}>` : task.client.name;
-    const figmaSection = task.figmaLink
+    const figmaLink = task.figmaLink || task.client.figmaLink;
+    const figmaSection = figmaLink
       ? {
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `<${task.figmaLink}|View Figma Design>`,
+            text: `<${figmaLink}|View Figma Design>`,
           },
         }
       : null;

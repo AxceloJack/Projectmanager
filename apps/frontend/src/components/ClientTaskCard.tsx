@@ -6,13 +6,13 @@ interface ClientTaskCardProps {
   publicKey: string;
 }
 
-const statusColors: Record<TaskStatus, { bg: string; text: string }> = {
-  NOT_STARTED: { bg: 'bg-gray-100', text: 'text-gray-700' },
-  DESIGN_PHASE: { bg: 'bg-blue-100', text: 'text-blue-700' },
-  CLIENT_REVIEW: { bg: 'bg-yellow-100', text: 'text-yellow-700' },
-  NEEDS_REVISIONS: { bg: 'bg-red-100', text: 'text-red-700' },
-  READY_FOR_KLAVIYO: { bg: 'bg-green-100', text: 'text-green-700' },
-  COMPLETE: { bg: 'bg-purple-100', text: 'text-purple-700' },
+const statusColors: Record<TaskStatus, { bg: string; text: string; border: string }> = {
+  NOT_STARTED: { bg: 'bg-gray-900', text: 'text-gray-300', border: 'border-gray-800' },
+  DESIGN_PHASE: { bg: 'bg-blue-950', text: 'text-blue-300', border: 'border-blue-800' },
+  CLIENT_REVIEW: { bg: 'bg-orange-950', text: 'text-orange-300', border: 'border-orange-800' },
+  NEEDS_REVISIONS: { bg: 'bg-red-950', text: 'text-red-300', border: 'border-red-800' },
+  READY_FOR_KLAVIYO: { bg: 'bg-green-950', text: 'text-green-300', border: 'border-green-800' },
+  COMPLETE: { bg: 'bg-purple-950', text: 'text-purple-300', border: 'border-purple-800' },
 };
 
 const statusLabels: Record<TaskStatus, string> = {
@@ -35,11 +35,11 @@ export default function ClientTaskCard({
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-2 py-1 rounded text-xs font-medium truncate transition-opacity hover:opacity-75 cursor-pointer ${colors.bg} ${colors.text}`}
+      className={`w-full text-left px-2 py-1 rounded border text-xs font-medium truncate transition-all hover:shadow-md cursor-pointer ${colors.bg} ${colors.text} ${colors.border}`}
       title={task.title}
     >
       <span className="block truncate">{task.title}</span>
-      <span className="text-xs opacity-75">{label}</span>
+      <span className="text-xs opacity-70">{label}</span>
     </button>
   );
 }
