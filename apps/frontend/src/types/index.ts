@@ -40,18 +40,31 @@ export interface Task {
   updatedAt: string;
 }
 
+export type FormType = 'CAMPAIGN' | 'ONBOARDING';
+
 export interface CampaignForm {
   id: string;
   clientId: string;
   client?: { id: string; name: string };
-  month: string;
+  type: FormType;
+  month?: string | null;
   publicKey: string;
   status: 'PENDING' | 'SUBMITTED';
+  // Campaign answers
   sales?: string | null;
   launches?: string | null;
   specialDates?: string | null;
   avoidances?: string | null;
   notes?: string | null;
+  // Onboarding answers
+  brandOverview?: string | null;
+  targetAudience?: string | null;
+  brandVoice?: string | null;
+  goals?: string | null;
+  currentSetup?: string | null;
+  keyProducts?: string | null;
+  links?: string | null;
+  inspiration?: string | null;
   submittedAt?: string | null;
   createdAt: string;
 }

@@ -17,13 +17,24 @@ router.get('/forms/:publicKey', async (req, res: Response) => {
 
     res.json({
       clientName: form.client.name,
+      type: form.type,
       month: form.month,
       status: form.status,
+      // Campaign answers
       sales: form.sales,
       launches: form.launches,
       specialDates: form.specialDates,
       avoidances: form.avoidances,
       notes: form.notes,
+      // Onboarding answers
+      brandOverview: form.brandOverview,
+      targetAudience: form.targetAudience,
+      brandVoice: form.brandVoice,
+      goals: form.goals,
+      currentSetup: form.currentSetup,
+      keyProducts: form.keyProducts,
+      links: form.links,
+      inspiration: form.inspiration,
     });
   } catch (error) {
     console.error(error);
@@ -41,19 +52,27 @@ router.post('/forms/:publicKey', async (req, res: Response) => {
       return res.status(404).json({ error: 'Form not found' });
     }
 
-    const { sales, launches, specialDates, avoidances, notes } = req.body as Record<
-      string,
-      string | undefined
-    >;
+    const b = req.body as Record<string, string | undefined>;
+    const clean = (v?: string) => v || null;
 
     await prisma.campaignForm.update({
       where: { id: form.id },
       data: {
-        sales: sales || null,
-        launches: launches || null,
-        specialDates: specialDates || null,
-        avoidances: avoidances || null,
-        notes: notes || null,
+        // Campaign answers
+        sales: clean(b.sales),
+        launches: clean(b.launches),
+        specialDates: clean(b.specialDates),
+        avoidances: clean(b.avoidances),
+        notes: clean(b.notes),
+        // Onboarding answers
+        brandOverview: clean(b.brandOverview),
+        targetAudience: clean(b.targetAudience),
+        brandVoice: clean(b.brandVoice),
+        goals: clean(b.goals),
+        currentSetup: clean(b.currentSetup),
+        keyProducts: clean(b.keyProducts),
+        links: clean(b.links),
+        inspiration: clean(b.inspiration),
         status: 'SUBMITTED',
         submittedAt: new Date(),
       },

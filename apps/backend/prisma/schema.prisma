@@ -75,17 +75,31 @@ model CampaignForm {
   id           String    @id @default(cuid())
   clientId     String
   client       Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  month        String // YYYY-MM the strategy is planned for
+  type         String    @default("CAMPAIGN") // CAMPAIGN | ONBOARDING
+  month        String? // YYYY-MM the strategy is planned for (campaign only)
   publicKey    String    @unique @default(cuid())
   status       String    @default("PENDING") // PENDING | SUBMITTED
+
+  // Campaign strategy answers
   sales        String?
   launches     String?
   specialDates String?
   avoidances   String?
   notes        String?
-  submittedAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+
+  // Onboarding answers
+  brandOverview  String?
+  targetAudience String?
+  brandVoice     String?
+  goals          String?
+  currentSetup   String?
+  keyProducts    String?
+  links          String?
+  inspiration    String?
+
+  submittedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 
   @@index([clientId])
   @@map("campaign_forms")

@@ -12,8 +12,13 @@ router.get('/', async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
 
+    const type = typeof req.query.type === 'string' ? req.query.type : undefined;
+
     const forms = await prisma.campaignForm.findMany({
-      where: { client: { workspaceId: req.user.workspaceId } },
+      where: {
+        client: { workspaceId: req.user.workspaceId },
+        ...(type ? { type } : {}),
+      },
       include: { client: { select: { id: true, name: true } } },
       orderBy: { createdAt: 'desc' },
     });
@@ -30,9 +35,13 @@ router.post('/', async (req: AuthRequest, res: Response) => {
     if (!req.user) return res.status(401).json({ error: 'Not authenticated' });
 
     const { clientId, month } = req.body as { clientId?: string; month?: string };
+    const type = req.body.type === 'ONBOARDING' ? 'ONBOARDING' : 'CAMPAIGN';
 
-    if (!clientId || !month) {
-      return res.status(400).json({ error: 'Client and month are required' });
+    if (!clientId) {
+      return res.status(400).json({ error: 'Client is required' });
+    }
+    if (type === 'CAMPAIGN' && !month) {
+      return res.status(400).json({ error: 'Month is required' });
     }
 
     const client = await prisma.client.findFirst({
@@ -44,7 +53,7 @@ router.post('/', async (req: AuthRequest, res: Response) => {
     }
 
     const form = await prisma.campaignForm.create({
-      data: { clientId, month },
+      data: { clientId, type, month: type === 'CAMPAIGN' ? month : null },
       include: { client: { select: { id: true, name: true } } },
     });
 

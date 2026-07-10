@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar.js';
 import CalendarView from '../components/CalendarView.js';
 import ClientsPage from '../components/ClientsPage.js';
-import CampaignFormsPage from '../components/CampaignFormsPage.js';
+import FormsPage from '../components/FormsPage.js';
+import { CAMPAIGN_CONFIG, ONBOARDING_CONFIG } from '../lib/formConfig.js';
 import AdminPage from './AdminPage.js';
 import { clientsAPI } from '../lib/api.js';
 import { useAuthStore } from '../store/auth.js';
 import { Client } from '../types/index.js';
 
-type TabType = 'calendar' | 'clients' | 'forms' | 'admin';
+type TabType = 'calendar' | 'clients' | 'forms' | 'onboarding' | 'admin';
 
 export default function DashboardPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -91,6 +92,16 @@ export default function DashboardPage() {
             Campaign Forms
           </button>
           <button
+            onClick={() => setActiveTab('onboarding')}
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+              activeTab === 'onboarding'
+                ? 'border-orange-500 text-orange-500'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            Onboarding
+          </button>
+          <button
             onClick={() => setActiveTab('admin')}
             className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'admin'
@@ -114,7 +125,9 @@ export default function DashboardPage() {
         ) : activeTab === 'clients' ? (
           <ClientsPage onClientSelect={handleClientSelect} />
         ) : activeTab === 'forms' ? (
-          <CampaignFormsPage />
+          <FormsPage config={CAMPAIGN_CONFIG} />
+        ) : activeTab === 'onboarding' ? (
+          <FormsPage config={ONBOARDING_CONFIG} />
         ) : (
           <AdminPage />
         )}

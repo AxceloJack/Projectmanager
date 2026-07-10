@@ -2,51 +2,23 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { format } from 'date-fns';
 import { publicAPI } from '../lib/api.js';
+import { FORM_CONFIGS } from '../lib/formConfig.js';
+import { FormType } from '../types/index.js';
 import AxceloLogo from '../components/AxceloLogo.js';
 
 interface PublicForm {
   clientName: string;
-  month: string;
+  type: FormType;
+  month?: string | null;
   status: 'PENDING' | 'SUBMITTED';
-  sales?: string | null;
-  launches?: string | null;
-  specialDates?: string | null;
-  avoidances?: string | null;
-  notes?: string | null;
+  [key: string]: string | null | undefined;
 }
 
-function formatMonth(month: string) {
+function formatMonth(month?: string | null) {
+  if (!month) return '';
   const [year, m] = month.split('-').map(Number);
   return format(new Date(year, m - 1, 1), 'MMMM yyyy');
 }
-
-const questions = [
-  {
-    key: 'sales',
-    label: 'Are there any sales or promotions planned?',
-    hint: 'Dates, discount amounts, which products — anything you know so far.',
-  },
-  {
-    key: 'launches',
-    label: 'Any product launches or new arrivals?',
-    hint: 'New products, restocks, or collections dropping this month.',
-  },
-  {
-    key: 'specialDates',
-    label: 'Any special dates or events we should plan around?',
-    hint: 'Brand anniversaries, holidays you care about, events, collabs.',
-  },
-  {
-    key: 'avoidances',
-    label: 'Anything we should avoid?',
-    hint: 'Dates not to send on, topics or angles to steer clear of.',
-  },
-  {
-    key: 'notes',
-    label: 'Anything else on your mind for this month?',
-    hint: 'Goals, ideas, feedback — whatever you want us to know.',
-  },
-] as const;
 
 export default function PublicFormPage() {
   const { publicKey } = useParams<{ publicKey: string }>();
@@ -57,6 +29,8 @@ export default function PublicFormPage() {
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
 
+  const config = form ? FORM_CONFIGS[form.type] || FORM_CONFIGS.CAMPAIGN : null;
+
   useEffect(() => {
     if (!publicKey) return;
     publicAPI
@@ -64,13 +38,12 @@ export default function PublicFormPage() {
       .then((res) => {
         const data: PublicForm = res.data;
         setForm(data);
-        setAnswers({
-          sales: data.sales || '',
-          launches: data.launches || '',
-          specialDates: data.specialDates || '',
-          avoidances: data.avoidances || '',
-          notes: data.notes || '',
+        const cfg = FORM_CONFIGS[data.type] || FORM_CONFIGS.CAMPAIGN;
+        const initial: Record<string, string> = {};
+        cfg.questions.forEach((q) => {
+          initial[q.key] = (data[q.key] as string) || '';
         });
+        setAnswers(initial);
       })
       .catch(() => setError('This form link is invalid or has been removed.'))
       .finally(() => setLoading(false));
@@ -100,13 +73,18 @@ export default function PublicFormPage() {
     );
   }
 
-  if (!form) {
+  if (!form || !config) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <p className="text-gray-400">{error || 'Form not found.'}</p>
       </div>
     );
   }
+
+  const subject = config.hasMonth ? formatMonth(form.month) : 'your brand';
+  const heading = config.hasMonth
+    ? `${form.clientName} — ${formatMonth(form.month)}`
+    : `Welcome, ${form.clientName}`;
 
   if (submitted) {
     return (
@@ -116,8 +94,9 @@ export default function PublicFormPage() {
         </div>
         <h1 className="text-3xl font-bold text-white mb-3 text-center">Thank you!</h1>
         <p className="text-gray-400 text-center max-w-md">
-          We've received your plans for {formatMonth(form.month)}. The team will build
-          your campaign strategy around them — you'll see it all on your calendar soon.
+          {config.hasMonth
+            ? `We've received your plans for ${formatMonth(form.month)}. The team will build your campaign strategy around them — you'll see it all on your calendar soon.`
+            : "We've received your details. The team will get everything set up and be in touch shortly — welcome aboard!"}
         </p>
       </div>
     );
@@ -133,22 +112,19 @@ export default function PublicFormPage() {
           </div>
           <div>
             <p className="text-sm font-semibold text-white">Axcelo</p>
-            <p className="text-xs text-gray-500">Campaign Strategy Form</p>
+            <p className="text-xs text-gray-500">
+              {config.hasMonth ? 'Campaign Strategy Form' : 'Onboarding Form'}
+            </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-        <h1 className="text-3xl font-bold text-white mb-2">
-          {form.clientName} — {formatMonth(form.month)}
-        </h1>
-        <p className="text-gray-400 mb-10">
-          Help us plan your email campaigns for {formatMonth(form.month)}. Fill in
-          whatever applies — skip anything that doesn't.
-        </p>
+        <h1 className="text-3xl font-bold text-white mb-2">{heading}</h1>
+        <p className="text-gray-400 mb-10">{config.publicIntro(subject)}</p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
-          {questions.map((q) => (
+          {config.questions.map((q) => (
             <div key={q.key}>
               <label className="block text-white font-semibold mb-1">{q.label}</label>
               <p className="text-gray-500 text-sm mb-3">{q.hint}</p>

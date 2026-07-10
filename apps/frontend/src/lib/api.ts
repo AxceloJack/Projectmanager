@@ -80,9 +80,9 @@ export const adminAPI = {
 };
 
 export const formsAPI = {
-  list: () => API.get('/forms'),
-  create: (clientId: string, month: string) =>
-    API.post('/forms', { clientId, month }),
+  list: (type: string) => API.get('/forms', { params: { type } }),
+  create: (clientId: string, type: string, month?: string) =>
+    API.post('/forms', { clientId, type, month }),
   delete: (id: string) => API.delete(`/forms/${id}`),
 };
 

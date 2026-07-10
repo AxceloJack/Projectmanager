@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { formsAPI, clientsAPI, shareOrigin } from '../lib/api.js';
 import { CampaignForm, Client } from '../types/index.js';
+import { FormConfig } from '../lib/formConfig.js';
 
-function formatMonth(month: string) {
+function formatMonth(month?: string | null) {
+  if (!month) return '';
   const [year, m] = month.split('-').map(Number);
   return format(new Date(year, m - 1, 1), 'MMMM yyyy');
 }
 
-export default function CampaignFormsPage() {
+export default function FormsPage({ config }: { config: FormConfig }) {
   const [forms, setForms] = useState<CampaignForm[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,13 +19,14 @@ export default function CampaignFormsPage() {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   useEffect(() => {
+    setLoading(true);
     fetchData();
-  }, []);
+  }, [config.type]);
 
   const fetchData = async () => {
     try {
       const [formsRes, clientsRes] = await Promise.all([
-        formsAPI.list(),
+        formsAPI.list(config.type),
         clientsAPI.list(),
       ]);
       setForms(formsRes.data);
@@ -42,9 +45,10 @@ export default function CampaignFormsPage() {
   };
 
   const handleDelete = async (form: CampaignForm) => {
-    if (!confirm(`Delete the ${formatMonth(form.month)} form for ${form.client?.name}?`)) {
-      return;
-    }
+    const subject = config.hasMonth
+      ? `${formatMonth(form.month)} form for ${form.client?.name}`
+      : `onboarding form for ${form.client?.name}`;
+    if (!confirm(`Delete the ${subject}?`)) return;
     try {
       await formsAPI.delete(form.id);
       fetchData();
@@ -66,10 +70,8 @@ export default function CampaignFormsPage() {
       <div className="px-8 py-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Campaign Forms</h1>
-            <p className="text-gray-500 text-sm mt-1">
-              Send clients a strategy form for the month ahead • Sales, launches, key dates
-            </p>
+            <h1 className="text-2xl font-semibold text-white">{config.pageTitle}</h1>
+            <p className="text-gray-500 text-sm mt-1">{config.pageSubtitle}</p>
           </div>
           <button
             onClick={() => setShowCreate(true)}
@@ -82,7 +84,7 @@ export default function CampaignFormsPage() {
         {forms.length === 0 ? (
           <div className="border border-gray-800 rounded-lg p-12 text-center">
             <p className="text-gray-500">
-              No campaign forms yet. Create one and send the link to your client.
+              No forms yet. Create one and send the link to your client.
             </p>
           </div>
         ) : (
@@ -91,7 +93,9 @@ export default function CampaignFormsPage() {
               <thead className="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
                 <tr>
                   <th className="px-6 py-3 font-semibold">Client</th>
-                  <th className="px-6 py-3 font-semibold">Planning Month</th>
+                  {config.hasMonth && (
+                    <th className="px-6 py-3 font-semibold">Planning Month</th>
+                  )}
                   <th className="px-6 py-3 font-semibold">Status</th>
                   <th className="px-6 py-3 font-semibold">Sent</th>
                   <th className="px-6 py-3 font-semibold text-right">Actions</th>
@@ -103,7 +107,9 @@ export default function CampaignFormsPage() {
                     <td className="px-6 py-4 text-white font-medium">
                       {form.client?.name}
                     </td>
-                    <td className="px-6 py-4 text-gray-300">{formatMonth(form.month)}</td>
+                    {config.hasMonth && (
+                      <td className="px-6 py-4 text-gray-300">{formatMonth(form.month)}</td>
+                    )}
                     <td className="px-6 py-4">
                       {form.status === 'SUBMITTED' ? (
                         <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-green-950 text-green-300 border border-green-800">
@@ -152,6 +158,7 @@ export default function CampaignFormsPage() {
 
       {showCreate && (
         <CreateFormModal
+          config={config}
           clients={clients}
           onClose={() => setShowCreate(false)}
           onCreated={() => {
@@ -162,17 +169,23 @@ export default function CampaignFormsPage() {
       )}
 
       {viewingForm && (
-        <FormResponsesModal form={viewingForm} onClose={() => setViewingForm(null)} />
+        <FormResponsesModal
+          config={config}
+          form={viewingForm}
+          onClose={() => setViewingForm(null)}
+        />
       )}
     </div>
   );
 }
 
 function CreateFormModal({
+  config,
   clients,
   onClose,
   onCreated,
 }: {
+  config: FormConfig;
   clients: Client[];
   onClose: () => void;
   onCreated: () => void;
@@ -183,14 +196,14 @@ function CreateFormModal({
   const [error, setError] = useState('');
 
   const handleCreate = async () => {
-    if (!clientId || !month) {
-      setError('Select a client and month');
+    if (!clientId) {
+      setError('Select a client');
       return;
     }
     setError('');
     setSaving(true);
     try {
-      await formsAPI.create(clientId, month);
+      await formsAPI.create(clientId, config.type, config.hasMonth ? month : undefined);
       onCreated();
     } catch (err) {
       console.error(err);
@@ -203,9 +216,11 @@ function CreateFormModal({
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-md w-full">
         <div className="p-6 border-b border-gray-800">
-          <h2 className="text-xl font-bold text-white">New Campaign Form</h2>
+          <h2 className="text-xl font-bold text-white">New {config.hasMonth ? 'Campaign' : 'Onboarding'} Form</h2>
           <p className="text-gray-500 text-sm mt-1">
-            Pick the client and the month you're planning for.
+            {config.hasMonth
+              ? "Pick the client and the month you're planning for."
+              : 'Pick the client you want to onboard.'}
           </p>
         </div>
 
@@ -231,17 +246,19 @@ function CreateFormModal({
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">
-              Planning Month
-            </label>
-            <input
-              type="month"
-              value={month}
-              onChange={(e) => setMonth(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-            />
-          </div>
+          {config.hasMonth && (
+            <div>
+              <label className="block text-sm font-semibold text-gray-300 mb-2">
+                Planning Month
+              </label>
+              <input
+                type="month"
+                value={month}
+                onChange={(e) => setMonth(e.target.value)}
+                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
+              />
+            </div>
+          )}
         </div>
 
         <div className="border-t border-gray-800 p-6 flex gap-3">
@@ -265,27 +282,24 @@ function CreateFormModal({
 }
 
 function FormResponsesModal({
+  config,
   form,
   onClose,
 }: {
+  config: FormConfig;
   form: CampaignForm;
   onClose: () => void;
 }) {
-  const sections: { label: string; value?: string | null }[] = [
-    { label: 'Sales & Promotions', value: form.sales },
-    { label: 'Product Launches & New Arrivals', value: form.launches },
-    { label: 'Special Dates & Events', value: form.specialDates },
-    { label: 'Things to Avoid', value: form.avoidances },
-    { label: 'Anything Else', value: form.notes },
-  ];
+  const answers = form as unknown as Record<string, string | null | undefined>;
+  const heading = config.hasMonth
+    ? `${form.client?.name} — ${formatMonth(form.month)}`
+    : `${form.client?.name} — Onboarding`;
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6 border-b border-gray-800">
-          <h2 className="text-2xl font-bold text-white mb-1">
-            {form.client?.name} — {formatMonth(form.month)}
-          </h2>
+          <h2 className="text-2xl font-bold text-white mb-1">{heading}</h2>
           <p className="text-gray-500 text-sm">
             Submitted{' '}
             {form.submittedAt ? format(new Date(form.submittedAt), "MMM d, yyyy 'at' h:mma") : ''}
@@ -293,12 +307,12 @@ function FormResponsesModal({
         </div>
 
         <div className="p-6 space-y-6">
-          {sections.map((section) => (
-            <div key={section.label}>
-              <h3 className="font-semibold text-gray-300 mb-2">{section.label}</h3>
-              {section.value ? (
+          {config.questions.map((q) => (
+            <div key={q.key}>
+              <h3 className="font-semibold text-gray-300 mb-2">{q.label}</h3>
+              {answers[q.key] ? (
                 <p className="text-gray-400 whitespace-pre-wrap bg-gray-900 border border-gray-800 rounded p-3">
-                  {section.value}
+                  {answers[q.key]}
                 </p>
               ) : (
                 <p className="text-gray-600 italic text-sm">Nothing provided</p>
