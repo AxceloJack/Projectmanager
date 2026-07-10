@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar.js';
 import CalendarView from '../components/CalendarView.js';
 import ClientsPage from '../components/ClientsPage.js';
+import CampaignFormsPage from '../components/CampaignFormsPage.js';
 import AdminPage from './AdminPage.js';
 import { clientsAPI } from '../lib/api.js';
 import { useAuthStore } from '../store/auth.js';
 import { Client } from '../types/index.js';
 
-type TabType = 'calendar' | 'clients' | 'admin';
+type TabType = 'calendar' | 'clients' | 'forms' | 'admin';
 
 export default function DashboardPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -80,6 +81,16 @@ export default function DashboardPage() {
             Clients
           </button>
           <button
+            onClick={() => setActiveTab('forms')}
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+              activeTab === 'forms'
+                ? 'border-orange-500 text-orange-500'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            Campaign Forms
+          </button>
+          <button
             onClick={() => setActiveTab('admin')}
             className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'admin'
@@ -102,6 +113,8 @@ export default function DashboardPage() {
           )
         ) : activeTab === 'clients' ? (
           <ClientsPage onClientSelect={handleClientSelect} />
+        ) : activeTab === 'forms' ? (
+          <CampaignFormsPage />
         ) : (
           <AdminPage />
         )}

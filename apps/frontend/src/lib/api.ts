@@ -44,9 +44,18 @@ export const tasksAPI = {
     API.post(`/tasks/${taskId}/comments`, { content }),
 };
 
+// Public links always use the canonical domain in production,
+// regardless of which domain the team member is browsing on.
+export const shareOrigin = import.meta.env.PROD
+  ? 'https://app.axcelo.co'
+  : window.location.origin;
+
 export const publicAPI = {
   getClient: (publicKey: string) =>
     API.get(`/public/clients/${publicKey}`),
+  getForm: (publicKey: string) => API.get(`/public/forms/${publicKey}`),
+  submitForm: (publicKey: string, data: Record<string, string>) =>
+    API.post(`/public/forms/${publicKey}`, data),
   addComment: (publicKey: string, taskId: string, content: string, clientName: string) =>
     API.post(`/public/clients/${publicKey}/comments`, {
       taskId,
@@ -68,6 +77,13 @@ export const adminAPI = {
     API.post(`/admin/users/${userId}/approve`),
   rejectUser: (userId: string) =>
     API.post(`/admin/users/${userId}/reject`),
+};
+
+export const formsAPI = {
+  list: () => API.get('/forms'),
+  create: (clientId: string, month: string) =>
+    API.post('/forms', { clientId, month }),
+  delete: (id: string) => API.delete(`/forms/${id}`),
 };
 
 export const slackAPI = {

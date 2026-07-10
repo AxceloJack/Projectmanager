@@ -40,6 +40,22 @@ export interface Task {
   updatedAt: string;
 }
 
+export interface CampaignForm {
+  id: string;
+  clientId: string;
+  client?: { id: string; name: string };
+  month: string;
+  publicKey: string;
+  status: 'PENDING' | 'SUBMITTED';
+  sales?: string | null;
+  launches?: string | null;
+  specialDates?: string | null;
+  avoidances?: string | null;
+  notes?: string | null;
+  submittedAt?: string | null;
+  createdAt: string;
+}
+
 export interface TaskComment {
   id: string;
   taskId: string;

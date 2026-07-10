@@ -7,6 +7,7 @@ import taskRoutes from './routes/tasks.js';
 import publicRoutes from './routes/public.js';
 import slackRoutes from './routes/slack.js';
 import adminRoutes from './routes/admin.js';
+import formsRoutes from './routes/forms.js';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/public', publicRoutes);
 app.use('/api/slack', slackRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/forms', formsRoutes);
 
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });

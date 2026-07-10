@@ -63,11 +63,32 @@ model Client {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
-  tasks     Task[]
-  campaigns Campaign[]
+  tasks         Task[]
+  campaigns     Campaign[]
+  campaignForms CampaignForm[]
 
   @@index([workspaceId])
   @@map("clients")
+}
+
+model CampaignForm {
+  id           String    @id @default(cuid())
+  clientId     String
+  client       Client    @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  month        String // YYYY-MM the strategy is planned for
+  publicKey    String    @unique @default(cuid())
+  status       String    @default("PENDING") // PENDING | SUBMITTED
+  sales        String?
+  launches     String?
+  specialDates String?
+  avoidances   String?
+  notes        String?
+  submittedAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([clientId])
+  @@map("campaign_forms")
 }
 
 model Task {

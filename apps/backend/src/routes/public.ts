@@ -4,6 +4,68 @@ import { PrismaClient } from '@prisma/client';
 const router = Router();
 const prisma = new PrismaClient();
 
+router.get('/forms/:publicKey', async (req, res: Response) => {
+  try {
+    const form = await prisma.campaignForm.findUnique({
+      where: { publicKey: req.params.publicKey },
+      include: { client: { select: { name: true } } },
+    });
+
+    if (!form) {
+      return res.status(404).json({ error: 'Form not found' });
+    }
+
+    res.json({
+      clientName: form.client.name,
+      month: form.month,
+      status: form.status,
+      sales: form.sales,
+      launches: form.launches,
+      specialDates: form.specialDates,
+      avoidances: form.avoidances,
+      notes: form.notes,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch form' });
+  }
+});
+
+router.post('/forms/:publicKey', async (req, res: Response) => {
+  try {
+    const form = await prisma.campaignForm.findUnique({
+      where: { publicKey: req.params.publicKey },
+    });
+
+    if (!form) {
+      return res.status(404).json({ error: 'Form not found' });
+    }
+
+    const { sales, launches, specialDates, avoidances, notes } = req.body as Record<
+      string,
+      string | undefined
+    >;
+
+    await prisma.campaignForm.update({
+      where: { id: form.id },
+      data: {
+        sales: sales || null,
+        launches: launches || null,
+        specialDates: specialDates || null,
+        avoidances: avoidances || null,
+        notes: notes || null,
+        status: 'SUBMITTED',
+        submittedAt: new Date(),
+      },
+    });
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to submit form' });
+  }
+});
+
 router.get('/clients/:publicKey', async (req, res: Response) => {
   try {
     const { publicKey } = req.params;

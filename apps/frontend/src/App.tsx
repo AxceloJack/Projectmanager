@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage.js';
 import SignUpPage from './pages/SignUpPage.js';
 import DashboardPage from './pages/DashboardPage.js';
 import ClientViewPage from './pages/ClientViewPage.js';
+import PublicFormPage from './pages/PublicFormPage.js';
 import ProtectedRoute from './components/ProtectedRoute.js';
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
           }
         />
         <Route path="/public/:publicKey" element={<ClientViewPage />} />
+        <Route path="/form/:publicKey" element={<PublicFormPage />} />
       </Routes>
     </Router>
   );

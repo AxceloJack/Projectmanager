@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { format, eachDayOfInterval, startOfMonth, endOfMonth, isSameMonth, isSunday, isSaturday, addMonths, subMonths } from 'date-fns';
-import { tasksAPI } from '../lib/api.js';
+import { tasksAPI, shareOrigin } from '../lib/api.js';
 import { Client, Task } from '../types/index.js';
 import TaskModal from './TaskModal.js';
 import TaskCard from './TaskCard.js';
@@ -67,10 +67,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
           </div>
           <button
             onClick={() => {
-              // Always share the canonical domain, regardless of which
-              // domain the team member is browsing on.
-              const origin = import.meta.env.PROD ? 'https://app.axcelo.co' : window.location.origin;
-              const publicUrl = `${origin}/public/${client.publicKey}`;
+              const publicUrl = `${shareOrigin}/public/${client.publicKey}`;
               navigator.clipboard.writeText(publicUrl);
               alert('Public link copied to clipboard!');
             }}
