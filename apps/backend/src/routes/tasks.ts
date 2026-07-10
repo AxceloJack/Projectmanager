@@ -167,7 +167,9 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
     });
 
     if (status === 'CLIENT_REVIEW') {
-      notifyTaskClientReview(req.params.id, req.user.workspaceId);
+      // Must complete before the response is sent: Vercel freezes the
+      // function after res.json(), which kills in-flight requests.
+      await notifyTaskClientReview(req.params.id, req.user.workspaceId);
     }
 
     res.json(updated);
