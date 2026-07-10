@@ -67,7 +67,10 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
           </div>
           <button
             onClick={() => {
-              const publicUrl = `${window.location.origin}/public/${client.publicKey}`;
+              // Always share the canonical domain, regardless of which
+              // domain the team member is browsing on.
+              const origin = import.meta.env.PROD ? 'https://app.axcelo.co' : window.location.origin;
+              const publicUrl = `${origin}/public/${client.publicKey}`;
               navigator.clipboard.writeText(publicUrl);
               alert('Public link copied to clipboard!');
             }}
