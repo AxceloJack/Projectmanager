@@ -6,6 +6,8 @@ import { format } from 'date-fns';
 
 interface ClientsPageProps {
   onClientSelect: (client: Client) => void;
+  // Notify the dashboard so the sidebar client list stays in sync.
+  onClientsChange?: () => void;
 }
 
 const SERVICE_TYPE_LABELS: Record<string, string> = {
@@ -14,7 +16,7 @@ const SERVICE_TYPE_LABELS: Record<string, string> = {
   CAMPAIGNS_ONLY: 'Campaigns',
 };
 
-export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
+export default function ClientsPage({ onClientSelect, onClientsChange }: ClientsPageProps) {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -37,6 +39,7 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
 
   const handleSave = (client: Client) => {
     fetchClients();
+    onClientsChange?.();
     setShowForm(false);
     setSelectedClientForEdit(null);
   };
@@ -47,6 +50,7 @@ export default function ClientsPage({ onClientSelect }: ClientsPageProps) {
     try {
       await clientsAPI.delete(clientId);
       fetchClients();
+      onClientsChange?.();
     } catch (error) {
       console.error('Failed to delete client:', error);
       alert('Failed to delete client');

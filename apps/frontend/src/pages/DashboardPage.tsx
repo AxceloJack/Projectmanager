@@ -131,7 +131,7 @@ export default function DashboardPage() {
             </div>
           )
         ) : activeTab === 'clients' ? (
-          <ClientsPage onClientSelect={handleClientSelect} />
+          <ClientsPage onClientSelect={handleClientSelect} onClientsChange={fetchClients} />
         ) : activeTab === 'forms' ? (
           <FormsPage config={CAMPAIGN_CONFIG} />
         ) : activeTab === 'onboarding' ? (
