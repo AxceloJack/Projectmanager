@@ -228,13 +228,33 @@ export default function FinancePage() {
 
         {/* Summary cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-          <SummaryCard label="Money In" value={money(income, base)} color="text-green-400" />
-          <SummaryCard label="Money Out" value={money(expense, base)} color="text-red-400" />
-          <SummaryCard label="Net" value={money(net, base)} color={net >= 0 ? 'text-white' : 'text-red-400'} />
+          <SummaryCard
+            label="Money In"
+            value={money(income, base)}
+            valueColor="text-green-400"
+            iconBg="bg-green-500/10 text-green-400"
+            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19V5M5 12l7-7 7 7" />}
+          />
+          <SummaryCard
+            label="Money Out"
+            value={money(expense, base)}
+            valueColor="text-red-400"
+            iconBg="bg-red-500/10 text-red-400"
+            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M19 12l-7 7-7-7" />}
+          />
+          <SummaryCard
+            label="Net"
+            value={money(net, base)}
+            valueColor={net >= 0 ? 'text-white' : 'text-red-400'}
+            iconBg="bg-gray-500/10 text-gray-300"
+            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 5h6m-6 5h6M4 5h.01M4 12h.01M4 19h.01" />}
+          />
           <SummaryCard
             label="Each owner · 50%"
             value={money(perOwner, base)}
-            color={perOwner >= 0 ? 'text-orange-400' : 'text-red-400'}
+            valueColor={perOwner >= 0 ? 'text-orange-400' : 'text-red-400'}
+            iconBg="bg-orange-500/10 text-orange-400"
+            icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" />}
           />
         </div>
 
@@ -348,11 +368,30 @@ export default function FinancePage() {
   );
 }
 
-function SummaryCard({ label, value, color }: { label: string; value: string; color: string }) {
+function SummaryCard({
+  label,
+  value,
+  valueColor,
+  icon,
+  iconBg,
+}: {
+  label: string;
+  value: string;
+  valueColor: string;
+  icon: React.ReactNode;
+  iconBg: string;
+}) {
   return (
-    <div className="border border-gray-800 rounded-lg p-5 bg-gray-900/40">
-      <p className="text-gray-500 text-xs uppercase tracking-wider mb-1">{label}</p>
-      <p className={`text-xl sm:text-2xl font-semibold ${color}`}>{value}</p>
+    <div className="border border-gray-800 rounded-xl p-4 bg-gray-900/40 flex items-center gap-3">
+      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {icon}
+        </svg>
+      </div>
+      <div className="min-w-0">
+        <p className="text-gray-500 text-xs uppercase tracking-wider truncate">{label}</p>
+        <p className={`text-lg sm:text-xl font-semibold truncate ${valueColor}`}>{value}</p>
+      </div>
     </div>
   );
 }
