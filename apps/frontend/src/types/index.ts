@@ -40,17 +40,32 @@ export interface Task {
   updatedAt: string;
 }
 
+export type FinanceFrequency = 'WEEKLY' | 'MONTHLY' | 'QUARTERLY' | 'YEARLY';
+
 export interface FinanceEntry {
   id: string;
   workspaceId: string;
+  clientId?: string | null;
+  client?: { id: string; name: string } | null;
   date: string;
   description: string;
   category?: string | null;
   type: 'INCOME' | 'EXPENSE';
   amount: number;
+  currency: string;
   status: 'PAID' | 'PENDING';
+  recurring: boolean;
+  frequency?: FinanceFrequency | null;
+  endDate?: string | null;
   notes?: string | null;
   createdAt: string;
+}
+
+export interface FxRates {
+  base: string;
+  rates: Record<string, number>;
+  updatedAt: string | null;
+  live: boolean;
 }
 
 export type FormType = 'CAMPAIGN' | 'ONBOARDING';

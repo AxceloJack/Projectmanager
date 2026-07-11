@@ -33,17 +33,24 @@ model FinanceEntry {
   id          String    @id @default(cuid())
   workspaceId String
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  date        DateTime
+  clientId    String?
+  client      Client?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  date        DateTime // one-off date, or first occurrence if recurring
   description String
   category    String?
   type        String    @default("EXPENSE") // INCOME | EXPENSE
   amount      Float
+  currency    String    @default("GBP") // currency this entry was paid/spent in
   status      String    @default("PAID") // PAID | PENDING
+  recurring   Boolean   @default(false)
+  frequency   String? // WEEKLY | MONTHLY | QUARTERLY | YEARLY
+  endDate     DateTime? // optional last occurrence for recurring entries
   notes       String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
   @@index([workspaceId])
+  @@index([clientId])
   @@map("finance_entries")
 }
 
@@ -83,9 +90,10 @@ model Client {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 
-  tasks         Task[]
-  campaigns     Campaign[]
-  campaignForms CampaignForm[]
+  tasks          Task[]
+  campaigns      Campaign[]
+  campaignForms  CampaignForm[]
+  financeEntries FinanceEntry[]
 
   @@index([workspaceId])
   @@map("clients")
