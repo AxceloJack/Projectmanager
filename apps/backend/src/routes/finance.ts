@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth.js';
 import { AuthRequest } from '../types/index.js';
-import { getRates } from '../utils/fxRates.js';
+import { getRates, getFrozenRate } from '../utils/fxRates.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -75,8 +75,22 @@ router.post('/', async (req: AuthRequest, res: Response) => {
     }
 
     const data = parseEntryBody(req.body);
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: req.user.workspaceId },
+      select: { currency: true },
+    });
+    const base = workspace?.currency || 'GBP';
+    const fxRate = await getFrozenRate(data.currency, base, data.date!);
+
     const entry = await prisma.financeEntry.create({
-      data: { ...data, date: data.date!, amount: data.amount!, workspaceId: req.user.workspaceId },
+      data: {
+        ...data,
+        date: data.date!,
+        amount: data.amount!,
+        workspaceId: req.user.workspaceId,
+        fxRate,
+        fxBase: base,
+      },
     });
 
     res.status(201).json(entry);
@@ -99,6 +113,20 @@ router.patch('/currency', async (req: AuthRequest, res: Response) => {
       where: { id: req.user.workspaceId },
       data: { currency },
     });
+
+    // Re-freeze every entry against the new base so historical values
+    // stay correct instead of falling back to live conversion.
+    const entries = await prisma.financeEntry.findMany({
+      where: { workspaceId: req.user.workspaceId },
+      select: { id: true, currency: true, date: true },
+    });
+    for (const e of entries) {
+      const fxRate = await getFrozenRate(e.currency, currency, e.date);
+      await prisma.financeEntry.update({
+        where: { id: e.id },
+        data: { fxRate, fxBase: currency },
+      });
+    }
 
     res.json({ currency });
   } catch (error) {
@@ -123,9 +151,18 @@ router.patch('/:id', async (req: AuthRequest, res: Response) => {
       if (!client) return res.status(400).json({ error: 'Invalid client' });
     }
 
+    const data = parseEntryBody(req.body);
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: req.user.workspaceId },
+      select: { currency: true },
+    });
+    const base = workspace?.currency || 'GBP';
+    // Re-freeze in case amount, currency or date changed.
+    const fxRate = await getFrozenRate(data.currency, base, data.date ?? existing.date);
+
     const entry = await prisma.financeEntry.update({
       where: { id: existing.id },
-      data: parseEntryBody(req.body),
+      data: { ...data, fxRate, fxBase: base },
     });
 
     res.json(entry);

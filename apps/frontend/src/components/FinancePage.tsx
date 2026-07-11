@@ -28,13 +28,13 @@ function money(amount: number, currency: string) {
   }
 }
 
-// Convert an amount in `from` currency into the base currency.
-// rates are base -> currency (e.g. base GBP, rates.USD = 1.27).
-function toBase(amount: number, from: string, base: string, rates: Record<string, number>) {
-  if (from === base) return amount;
-  const r = rates[from];
-  if (!r) return amount;
-  return amount / r;
+// Convert an entry's amount into the base currency. Prefer the rate frozen
+// at the entry's date; fall back to live rates only if it isn't available.
+function entryInBase(entry: FinanceEntry, base: string, liveRates: Record<string, number>) {
+  if (entry.currency === base) return entry.amount;
+  if (entry.fxBase === base && entry.fxRate != null) return entry.amount * entry.fxRate;
+  const r = liveRates[entry.currency];
+  return r ? entry.amount / r : entry.amount;
 }
 
 function stepDate(d: Date, freq: FinanceFrequency): Date {
@@ -145,7 +145,7 @@ export default function FinancePage() {
   let income = 0;
   let expense = 0;
   for (const o of occurrences) {
-    const converted = toBase(o.entry.amount, o.entry.currency, base, fx.rates);
+    const converted = entryInBase(o.entry, base, fx.rates);
     if (o.entry.type === 'INCOME') income += converted;
     else expense += converted;
   }
@@ -167,8 +167,7 @@ export default function FinancePage() {
           <div>
             <h1 className="text-2xl font-semibold text-white">Finance</h1>
             <p className="text-gray-500 text-sm mt-1">
-              Income &amp; expenses, converted to {base}
-              {fx.updatedAt && fx.live ? ' · live rates' : fx.updatedAt ? ' · cached rates' : ' · rates unavailable'}
+              Income &amp; expenses in {base} · exchange rates locked at each entry's date
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -259,7 +258,7 @@ export default function FinancePage() {
               <tbody className="divide-y divide-gray-800">
                 {occurrences.map((o) => {
                   const e = o.entry;
-                  const converted = toBase(e.amount, e.currency, base, fx.rates);
+                  const converted = entryInBase(e, base, fx.rates);
                   return (
                     <tr key={o.key} className="hover:bg-gray-900/50 transition">
                       <td className="px-5 py-4 text-gray-400 text-sm whitespace-nowrap">

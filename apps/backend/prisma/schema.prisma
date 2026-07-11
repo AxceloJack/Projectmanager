@@ -45,6 +45,8 @@ model FinanceEntry {
   recurring   Boolean   @default(false)
   frequency   String? // WEEKLY | MONTHLY | QUARTERLY | YEARLY
   endDate     DateTime? // optional last occurrence for recurring entries
+  fxRate      Float? // base value of 1 unit of `currency`, frozen at the entry date
+  fxBase      String? // base currency the fxRate was frozen against
   notes       String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

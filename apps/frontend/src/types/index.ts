@@ -57,6 +57,8 @@ export interface FinanceEntry {
   recurring: boolean;
   frequency?: FinanceFrequency | null;
   endDate?: string | null;
+  fxRate?: number | null;
+  fxBase?: string | null;
   notes?: string | null;
   createdAt: string;
 }
