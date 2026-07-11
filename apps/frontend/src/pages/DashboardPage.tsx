@@ -4,12 +4,13 @@ import CalendarView from '../components/CalendarView.js';
 import ClientsPage from '../components/ClientsPage.js';
 import FormsPage from '../components/FormsPage.js';
 import { CAMPAIGN_CONFIG, ONBOARDING_CONFIG } from '../lib/formConfig.js';
+import FinancePage from '../components/FinancePage.js';
 import AdminPage from './AdminPage.js';
 import { clientsAPI } from '../lib/api.js';
 import { useAuthStore } from '../store/auth.js';
 import { Client } from '../types/index.js';
 
-type TabType = 'calendar' | 'clients' | 'forms' | 'onboarding' | 'admin';
+type TabType = 'calendar' | 'clients' | 'forms' | 'onboarding' | 'finance' | 'admin';
 
 export default function DashboardPage() {
   const [clients, setClients] = useState<Client[]>([]);
@@ -110,6 +111,16 @@ export default function DashboardPage() {
             Onboarding
           </button>
           <button
+            onClick={() => setActiveTab('finance')}
+            className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+              activeTab === 'finance'
+                ? 'border-orange-500 text-orange-500'
+                : 'border-transparent text-gray-400 hover:text-gray-300'
+            }`}
+          >
+            Finance
+          </button>
+          <button
             onClick={() => setActiveTab('admin')}
             className={`py-3 font-medium text-sm transition-colors border-b-2 ${
               activeTab === 'admin'
@@ -136,6 +147,8 @@ export default function DashboardPage() {
           <FormsPage config={CAMPAIGN_CONFIG} />
         ) : activeTab === 'onboarding' ? (
           <FormsPage config={ONBOARDING_CONFIG} />
+        ) : activeTab === 'finance' ? (
+          <FinancePage />
         ) : (
           <AdminPage />
         )}

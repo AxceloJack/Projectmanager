@@ -86,6 +86,14 @@ export const formsAPI = {
   delete: (id: string) => API.delete(`/forms/${id}`),
 };
 
+export const financeAPI = {
+  list: () => API.get('/finance'),
+  create: (data: any) => API.post('/finance', data),
+  update: (id: string, data: any) => API.patch(`/finance/${id}`, data),
+  delete: (id: string) => API.delete(`/finance/${id}`),
+  setCurrency: (currency: string) => API.patch('/finance/currency', { currency }),
+};
+
 export const slackAPI = {
   getIntegration: () =>
     API.get('/slack/integration'),

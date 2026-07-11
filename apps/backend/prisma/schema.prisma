@@ -17,14 +17,34 @@ model Workspace {
   slug      String   @unique
   ownerId   String?
   owner     User?    @relation("owned_workspaces", fields: [ownerId], references: [id], onDelete: SetNull)
+  currency  String   @default("GBP") // display currency for the finance tracker
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   users              User[]
   clients            Client[]
   slackIntegrations  SlackIntegration[]
+  financeEntries     FinanceEntry[]
 
   @@map("workspaces")
+}
+
+model FinanceEntry {
+  id          String    @id @default(cuid())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  date        DateTime
+  description String
+  category    String?
+  type        String    @default("EXPENSE") // INCOME | EXPENSE
+  amount      Float
+  status      String    @default("PAID") // PAID | PENDING
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([workspaceId])
+  @@map("finance_entries")
 }
 
 model User {

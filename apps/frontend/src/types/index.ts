@@ -40,6 +40,19 @@ export interface Task {
   updatedAt: string;
 }
 
+export interface FinanceEntry {
+  id: string;
+  workspaceId: string;
+  date: string;
+  description: string;
+  category?: string | null;
+  type: 'INCOME' | 'EXPENSE';
+  amount: number;
+  status: 'PAID' | 'PENDING';
+  notes?: string | null;
+  createdAt: string;
+}
+
 export type FormType = 'CAMPAIGN' | 'ONBOARDING';
 
 export interface CampaignForm {
@@ -83,6 +96,7 @@ export interface Workspace {
   name: string;
   slug: string;
   ownerId: string;
+  currency?: string;
 }
 
 export interface AuthResponse {
