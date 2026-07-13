@@ -28,13 +28,17 @@ function money(amount: number, currency: string) {
   }
 }
 
-// Convert an entry's amount into the base currency. Prefer the rate frozen
-// at the entry's date; fall back to live rates only if it isn't available.
-function entryInBase(entry: FinanceEntry, base: string, liveRates: Record<string, number>) {
-  if (entry.currency === base) return entry.amount;
-  if (entry.fxBase === base && entry.fxRate != null) return entry.amount * entry.fxRate;
+// Convert a value in an entry's currency into the base currency. Prefer the
+// rate frozen at the entry's date; fall back to live rates if unavailable.
+function valueInBase(value: number, entry: FinanceEntry, base: string, liveRates: Record<string, number>) {
+  if (entry.currency === base) return value;
+  if (entry.fxBase === base && entry.fxRate != null) return value * entry.fxRate;
   const r = liveRates[entry.currency];
-  return r ? entry.amount / r : entry.amount;
+  return r ? value / r : value;
+}
+
+function entryInBase(entry: FinanceEntry, base: string, liveRates: Record<string, number>) {
+  return valueInBase(entry.amount, entry, base, liveRates);
 }
 
 function stepDate(d: Date, freq: FinanceFrequency): Date {
@@ -148,6 +152,8 @@ export default function FinancePage() {
     const converted = entryInBase(o.entry, base, fx.rates);
     if (o.entry.type === 'INCOME') income += converted;
     else expense += converted;
+    // Fees always leave the account, whichever way the entry points.
+    if (o.entry.fee) expense += valueInBase(o.entry.fee, o.entry, base, fx.rates);
   }
   const net = income - expense;
   const perOwner = net / 2;
@@ -315,6 +321,9 @@ export default function FinancePage() {
                         {e.currency !== base && (
                           <div className="text-xs text-[#9aa6b8] font-normal">≈ {money(converted, base)}</div>
                         )}
+                        {e.fee ? (
+                          <div className="text-xs text-[#c0392b] font-normal">− {money(e.fee, e.currency)} fee</div>
+                        ) : null}
                       </td>
                       <td className="px-5 py-4">
                         <div className="flex justify-end gap-2">
@@ -412,6 +421,7 @@ function EntryModal({
   const [category, setCategory] = useState(entry?.category || '');
   const [type, setType] = useState<'INCOME' | 'EXPENSE'>(entry?.type || 'EXPENSE');
   const [amount, setAmount] = useState(entry ? String(entry.amount) : '');
+  const [fee, setFee] = useState(entry?.fee ? String(entry.fee) : '');
   const [currency, setCurrency] = useState(entry?.currency || base);
   const [status, setStatus] = useState<'PAID' | 'PENDING'>(entry?.status || 'PAID');
   const [clientId, setClientId] = useState(entry?.clientId || '');
@@ -439,6 +449,7 @@ function EntryModal({
       category,
       type,
       amount: value,
+      fee: fee ? parseFloat(fee) : 0,
       currency,
       status,
       clientId: clientId || null,
@@ -515,6 +526,22 @@ function EntryModal({
               className={inputClass}
               placeholder="e.g. Google Workspace, Client retainer"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Fee (optional)</label>
+            <input
+              type="number"
+              step="0.01"
+              min="0"
+              value={fee}
+              onChange={(e) => setFee(e.target.value)}
+              className={inputClass}
+              placeholder="0.00"
+            />
+            <p className="text-xs text-[#7b879c] mt-1.5 ml-1">
+              In {currency} — processing/service fee, deducted from your net automatically.
+            </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

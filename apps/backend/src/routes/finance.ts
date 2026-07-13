@@ -47,6 +47,10 @@ function parseEntryBody(body: any) {
     category: body.category || null,
     type: body.type === 'INCOME' ? 'INCOME' : 'EXPENSE',
     amount: body.amount !== undefined ? Number(body.amount) : undefined,
+    fee:
+      body.fee === undefined || body.fee === null || body.fee === '' || isNaN(Number(body.fee))
+        ? 0
+        : Math.max(0, Number(body.fee)),
     currency: VALID_CURRENCIES.includes(body.currency) ? body.currency : 'GBP',
     status: body.status === 'PENDING' ? 'PENDING' : 'PAID',
     recurring,

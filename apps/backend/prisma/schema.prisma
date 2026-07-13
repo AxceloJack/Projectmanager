@@ -40,6 +40,7 @@ model FinanceEntry {
   category    String?
   type        String    @default("EXPENSE") // INCOME | EXPENSE
   amount      Float
+  fee         Float     @default(0) // service/processing fee in `currency`, always deducted
   currency    String    @default("GBP") // currency this entry was paid/spent in
   status      String    @default("PAID") // PAID | PENDING
   recurring   Boolean   @default(false)

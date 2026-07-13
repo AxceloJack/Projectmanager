@@ -52,6 +52,7 @@ export interface FinanceEntry {
   category?: string | null;
   type: 'INCOME' | 'EXPENSE';
   amount: number;
+  fee?: number | null;
   currency: string;
   status: 'PAID' | 'PENDING';
   recurring: boolean;
