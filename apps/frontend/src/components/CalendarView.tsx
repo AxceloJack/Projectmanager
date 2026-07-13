@@ -61,13 +61,13 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
   };
 
   return (
-    <div className="flex-1 flex flex-col bg-black">
+    <div className="flex-1 flex flex-col neu-surface">
       {/* Header */}
-      <div className="border-b border-gray-800 px-8 py-6">
+      <div className="border-b border-[#cdd4de] px-8 py-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl font-semibold text-white">{client.name}</h1>
-            <p className="text-gray-500 text-sm mt-1">Campaign Timeline • Click + to add tasks</p>
+            <h1 className="text-2xl font-bold text-[#474747]">{client.name}</h1>
+            <p className="text-[#7b879c] text-sm mt-1">Campaign timeline • click + to add tasks</p>
           </div>
           <button
             onClick={() => {
@@ -75,7 +75,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
               navigator.clipboard.writeText(publicUrl);
               alert('Public link copied to clipboard!');
             }}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium text-sm transition flex items-center gap-2"
+            className="btn-accent px-4 py-2.5 rounded-2xl font-semibold text-sm flex items-center gap-2"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
               <path d="M11 7C11 9.20914 9.20914 11 7 11C4.79086 11 3 9.20914 3 7C3 4.79086 4.79086 3 7 3C9.20914 3 11 4.79086 11 7ZM4.97715 7C4.97715 8.11719 5.88281 9.02284 7 9.02284C8.11719 9.02284 9.02284 8.11719 9.02284 7C9.02284 5.88281 8.11719 4.97716 7 4.97716C5.88281 4.97716 4.97715 5.88281 4.97715 7Z" fill="currentColor"></path>
@@ -91,24 +91,24 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
         <div className="flex justify-between items-center">
           <button
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="p-2 hover:bg-gray-900 rounded text-gray-400 hover:text-white transition"
+            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
             title="Previous month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-lg font-semibold text-white">{format(currentMonth, 'MMMM yyyy')}</h2>
-          <div className="flex gap-2">
+          <h2 className="text-lg font-bold text-[#474747]">{format(currentMonth, 'MMMM yyyy')}</h2>
+          <div className="flex gap-2 items-center">
             <button
               onClick={() => setCurrentMonth(new Date())}
-              className="px-3 py-1 text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
+              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#474747] rounded-xl"
             >
               Today
             </button>
             <button
               onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-              className="p-2 hover:bg-gray-900 rounded text-gray-400 hover:text-white transition"
+              className="neu-pressable p-2.5 rounded-xl text-[#474747]"
               title="Next month"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -121,13 +121,13 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
 
       {/* Calendar */}
       <div className="flex-1 overflow-auto p-4 sm:p-8">
-        <div className="border border-gray-800 rounded-lg overflow-hidden w-full">
+        <div className="neu-card rounded-2xl overflow-hidden w-full">
           {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-0 bg-gray-900 border-b border-gray-800 w-full">
+          <div className="grid grid-cols-7 gap-0 border-b border-[#cdd4de] w-full">
             {weekDays.map((day) => (
               <div
                 key={day}
-                className="px-2 sm:px-4 py-2 sm:py-3 font-semibold text-gray-300 text-center text-xs sm:text-sm uppercase tracking-wide border-r border-gray-800 last:border-r-0"
+                className="px-2 sm:px-4 py-2 sm:py-3 font-semibold text-[#7b879c] text-center text-xs sm:text-sm uppercase tracking-wide border-r border-[#cdd4de] last:border-r-0"
               >
                 {day}
               </div>
@@ -139,14 +139,14 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
             {calendarDays.map((day, index) => (
               <div
                 key={index}
-                className={`min-h-24 sm:min-h-32 p-2 sm:p-3 border-r border-b border-gray-800 last:border-r-0 group relative overflow-hidden ${
-                  day && isSameMonth(day, currentMonth) ? 'bg-black hover:bg-gray-900' : 'bg-gray-950'
-                } transition`}
+                className={`min-h-24 sm:min-h-32 p-2 sm:p-3 border-r border-b border-[#cdd4de] last:border-r-0 group relative overflow-hidden transition ${
+                  day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#d9dee6]' : 'bg-[#d6dbe3]'
+                }`}
               >
                 {day && (
                   <>
                     <div className="flex items-center justify-between mb-2.5">
-                      <div className={`font-semibold text-sm ${isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-600'}`}>
+                      <div className={`font-semibold text-sm ${isSameMonth(day, currentMonth) ? 'text-[#474747]' : 'text-[#a9b3c1]'}`}>
                         {format(day, 'd')}
                       </div>
                       {isSameMonth(day, currentMonth) && (
@@ -155,7 +155,7 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
                             setSelectedDateForNewTask(day);
                             setShowNewTaskForm(true);
                           }}
-                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-orange-500/10 rounded text-orange-500 hover:text-orange-400"
+                          className="opacity-0 group-hover:opacity-100 transition-opacity p-1 rounded-lg text-[#fe7300] hover:text-[#e56100]"
                           title="Add task"
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

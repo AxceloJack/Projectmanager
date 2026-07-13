@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 import { tasksAPI } from '../lib/api.js';
 import { Task, TaskStatus, TaskTag } from '../types/index.js';
@@ -23,10 +23,10 @@ const taskStatuses: TaskStatus[] = [
 const taskTags: TaskTag[] = ['FLOW', 'CAMPAIGN', 'SIDE_QUEST'];
 
 const statusLabels: Record<TaskStatus, string> = {
-  NOT_STARTED: 'Not Started',
-  DESIGN_PHASE: 'Design Phase',
-  CLIENT_REVIEW: 'Client Review',
-  NEEDS_REVISIONS: 'Needs Revisions',
+  NOT_STARTED: 'Not started',
+  DESIGN_PHASE: 'Design phase',
+  CLIENT_REVIEW: 'Client review',
+  NEEDS_REVISIONS: 'Needs revisions',
   READY_FOR_KLAVIYO: 'Ready for Klaviyo',
   COMPLETE: 'Complete',
 };
@@ -34,8 +34,11 @@ const statusLabels: Record<TaskStatus, string> = {
 const tagLabels: Record<TaskTag, string> = {
   FLOW: 'Flow',
   CAMPAIGN: 'Campaign',
-  SIDE_QUEST: 'Side Quest',
+  SIDE_QUEST: 'Side quest',
 };
+
+const labelCls = 'block text-sm font-semibold text-[#474747] mb-2 ml-1';
+const inputCls = 'neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none';
 
 export default function TaskModal({
   task,
@@ -66,24 +69,9 @@ export default function TaskModal({
 
     try {
       if (task) {
-        await tasksAPI.update(task.id, {
-          title,
-          description,
-          dueDate,
-          status,
-          tag,
-          figmaLink,
-        });
+        await tasksAPI.update(task.id, { title, description, dueDate, status, tag, figmaLink });
       } else {
-        await tasksAPI.create({
-          clientId,
-          title,
-          description,
-          dueDate,
-          status,
-          tag,
-          figmaLink,
-        });
+        await tasksAPI.create({ clientId, title, description, dueDate, status, tag, figmaLink });
       }
       onSave();
     } catch (error) {
@@ -119,41 +107,39 @@ export default function TaskModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-black">
-          <h2 className="text-xl font-semibold text-white">
-            {task ? 'Edit Task' : 'Create Task'}
-          </h2>
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 flex justify-between items-center sticky top-0 bg-[#e0e5ec] z-10 rounded-t-[24px]">
+          <h2 className="text-xl font-bold text-[#474747]">{task ? 'Edit task' : 'Create task'}</h2>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-white p-2 hover:bg-gray-900 rounded transition"
+            className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-5">
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Task Title</label>
+            <label className={labelCls}>Task title</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
+              className={inputCls}
               placeholder="Enter task title"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Description</label>
+            <label className={labelCls}>Description</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition resize-none"
+              className={`${inputCls} resize-none`}
               placeholder="Enter task description"
               rows={3}
             />
@@ -161,23 +147,19 @@ export default function TaskModal({
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Due Date</label>
+              <label className={labelCls}>Due date</label>
               <input
                 type="date"
                 value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 required
-                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
+                className={inputCls}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Status</label>
-              <select
-                value={status}
-                onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-              >
+              <label className={labelCls}>Status</label>
+              <select value={status} onChange={(e) => setStatus(e.target.value as TaskStatus)} className={inputCls}>
                 {taskStatuses.map((s) => (
                   <option key={s} value={s}>
                     {statusLabels[s]}
@@ -187,12 +169,8 @@ export default function TaskModal({
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Tag</label>
-              <select
-                value={tag}
-                onChange={(e) => setTag(e.target.value as TaskTag)}
-                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-              >
+              <label className={labelCls}>Tag</label>
+              <select value={tag} onChange={(e) => setTag(e.target.value as TaskTag)} className={inputCls}>
                 {taskTags.map((t) => (
                   <option key={t} value={t}>
                     {tagLabels[t]}
@@ -203,28 +181,28 @@ export default function TaskModal({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Figma Link</label>
+            <label className={labelCls}>Figma link</label>
             <input
               type="url"
               value={figmaLink}
               onChange={(e) => setFigmaLink(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
+              className={inputCls}
               placeholder="Leave empty to use the client's Figma board"
             />
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-gray-800">
+          <div className="flex gap-3 pt-2">
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="btn-accent flex-1 py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {loading ? 'Saving...' : task ? 'Update' : 'Create'}
+              {loading ? 'Saving…' : task ? 'Update' : 'Create'}
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-300 py-2.5 px-4 rounded font-semibold transition"
+              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
             >
               Cancel
             </button>
@@ -232,7 +210,7 @@ export default function TaskModal({
               <button
                 type="button"
                 onClick={handleDelete}
-                className="bg-red-950 hover:bg-red-900 text-red-400 py-2.5 px-4 rounded font-semibold transition border border-red-900"
+                className="neu-pressable py-3 px-4 rounded-2xl font-semibold text-[#c0392b]"
               >
                 Delete
               </button>
@@ -240,21 +218,17 @@ export default function TaskModal({
           </div>
         </form>
 
-        {/* Comments Section */}
+        {/* Comments */}
         {task && (
-          <div className="border-t border-gray-800 p-6 bg-black/30 space-y-4">
-            <h3 className="font-bold text-gray-300">Comments & Notes</h3>
+          <div className="px-6 pb-6 pt-5 border-t border-[#cdd4de] space-y-4">
+            <h3 className="font-bold text-[#474747]">Comments &amp; notes</h3>
 
             {comments.length > 0 && (
               <div className="space-y-3 max-h-48 overflow-y-auto">
                 {comments.map((comment) => (
-                  <div key={comment.id} className="bg-gray-800/30 border border-gray-700/50 p-3 rounded-lg">
-                    <div className="text-xs font-semibold text-gray-400 mb-1">
-                      {comment.user?.email}
-                    </div>
-                    <div className="text-sm text-gray-300">
-                      {comment.content}
-                    </div>
+                  <div key={comment.id} className="neu-inset p-3 rounded-xl">
+                    <div className="text-xs font-semibold text-[#7b879c] mb-1">{comment.user?.email}</div>
+                    <div className="text-sm text-[#474747]">{comment.content}</div>
                   </div>
                 ))}
               </div>
@@ -265,13 +239,10 @@ export default function TaskModal({
                 type="text"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add a note..."
-                className="flex-1 px-4 py-2 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/30 transition"
+                placeholder="Add a note…"
+                className="neu-input flex-1 px-4 py-2.5 rounded-xl text-sm focus:outline-none"
               />
-              <button
-                type="submit"
-                className="bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition"
-              >
+              <button type="submit" className="btn-accent px-5 py-2.5 rounded-xl font-semibold text-sm">
                 Add
               </button>
             </form>

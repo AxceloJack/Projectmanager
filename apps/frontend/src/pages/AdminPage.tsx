@@ -94,42 +94,42 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="neu-surface min-h-full">
       {/* Header */}
-      <div className="border-b border-gray-800 px-8 py-6">
-        <h1 className="text-3xl font-bold text-white">Admin Settings</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage team members and integrations</p>
+      <div className="border-b border-[#cdd4de] px-8 py-6">
+        <h1 className="text-2xl font-bold text-[#474747]">Admin settings</h1>
+        <p className="text-[#7b879c] text-sm mt-1">Manage team members and integrations</p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-gray-800 px-8 flex gap-8">
+      <div className="border-b border-[#cdd4de] px-8 pt-4 flex gap-7">
         <button
           onClick={() => setActiveTab('users')}
-          className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+          className={`pb-3 font-semibold text-sm transition-colors border-b-2 -mb-px ${
             activeTab === 'users'
-              ? 'border-orange-500 text-orange-500'
-              : 'border-transparent text-gray-400 hover:text-gray-300'
+              ? 'border-[#fe7300] text-[#fe7300]'
+              : 'border-transparent text-[#7b879c] hover:text-[#474747]'
           }`}
         >
           Users
         </button>
         <button
           onClick={() => setActiveTab('slack')}
-          className={`py-3 font-medium text-sm transition-colors border-b-2 ${
+          className={`pb-3 font-semibold text-sm transition-colors border-b-2 -mb-px ${
             activeTab === 'slack'
-              ? 'border-orange-500 text-orange-500'
-              : 'border-transparent text-gray-400 hover:text-gray-300'
+              ? 'border-[#fe7300] text-[#fe7300]'
+              : 'border-transparent text-[#7b879c] hover:text-[#474747]'
           }`}
         >
-          Slack Integration
+          Slack integration
         </button>
       </div>
 
       {/* Content */}
       <div className="p-8 max-w-4xl mx-auto">
         {error && (
-          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-4 mb-6">
-            <p className="text-red-400 text-sm font-medium">{error}</p>
+          <div className="neu-inset rounded-2xl p-4 mb-6">
+            <p className="text-[#c0392b] text-sm font-medium">{error}</p>
           </div>
         )}
 
@@ -137,23 +137,22 @@ export default function AdminPage() {
           <>
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-gray-400">Loading pending users...</p>
+                <p className="text-[#7b879c]">Loading pending users…</p>
               </div>
             ) : pendingUsers.length === 0 ? (
               <div className="text-center py-12">
-                <svg className="w-16 h-16 text-gray-700 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 className="text-xl font-bold text-gray-300 mb-2">No Pending Users</h3>
-                <p className="text-gray-500">All team members have been approved!</p>
+                <div className="neu-raised w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5">
+                  <svg className="w-9 h-9 text-[#9aa6b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-[#474747] mb-2">No pending users</h3>
+                <p className="text-[#7b879c]">All team members have been approved.</p>
               </div>
             ) : (
               <div className="space-y-4">
                 {pendingUsers.map((user) => (
-                  <div
-                    key={user.id}
-                    className="bg-gray-900 border border-gray-800 rounded-lg p-6 hover:border-orange-500/50 transition"
-                  >
+                  <div key={user.id} className="neu-card rounded-2xl p-6">
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
@@ -163,8 +162,8 @@ export default function AdminPage() {
                             </span>
                           </div>
                           <div>
-                            <p className="text-white font-semibold">{user.email}</p>
-                            <p className="text-gray-500 text-xs">
+                            <p className="text-[#474747] font-semibold">{user.email}</p>
+                            <p className="text-[#7b879c] text-xs">
                               Requested {format(new Date(user.createdAt), 'MMM d, yyyy • h:mm a')}
                             </p>
                           </div>
@@ -175,7 +174,7 @@ export default function AdminPage() {
                         <button
                           onClick={() => handleApprove(user.id)}
                           disabled={actionLoading === user.id}
-                          className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                          className="px-4 py-2 bg-[#3f9d54] hover:bg-[#357a41] text-white rounded-xl font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                         >
                           {actionLoading === user.id ? (
                             <>
@@ -197,7 +196,7 @@ export default function AdminPage() {
                         <button
                           onClick={() => handleReject(user.id)}
                           disabled={actionLoading === user.id}
-                          className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                          className="px-4 py-2 bg-[#d9534f] hover:bg-[#c0392b] text-white rounded-xl font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                         >
                           {actionLoading === user.id ? (
                             <>
@@ -226,60 +225,60 @@ export default function AdminPage() {
         ) : (
           <div className="space-y-6">
             {slackIntegration ? (
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
+              <div className="neu-card rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded flex items-center justify-center">
+                  <div className="w-9 h-9 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center">
                     <span className="text-white text-sm font-bold">S</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">Slack Workspace Connected</h3>
-                    <p className="text-gray-500 text-sm">Connected since {format(new Date(slackIntegration.createdAt), 'MMM d, yyyy')}</p>
+                    <h3 className="text-lg font-bold text-[#474747]">Slack workspace connected</h3>
+                    <p className="text-[#7b879c] text-sm">Connected since {format(new Date(slackIntegration.createdAt), 'MMM d, yyyy')}</p>
                   </div>
                 </div>
-                <div className="space-y-2 mb-4">
-                  <p className="text-gray-400 text-sm"><strong>Team ID:</strong> {slackIntegration.teamId}</p>
-                  <p className="text-gray-400 text-sm"><strong>Channel ID:</strong> {slackIntegration.channelId}</p>
+                <div className="space-y-2 mb-5">
+                  <p className="text-[#474747] text-sm"><strong>Team ID:</strong> {slackIntegration.teamId}</p>
+                  <p className="text-[#474747] text-sm"><strong>Channel ID:</strong> {slackIntegration.channelId}</p>
                 </div>
                 <button
                   onClick={() => setActiveTab('slack')}
-                  className="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg font-semibold text-sm transition"
+                  className="neu-pressable px-4 py-2.5 text-[#474747] rounded-xl font-semibold text-sm"
                 >
-                  Update Configuration
+                  Update configuration
                 </button>
               </div>
             ) : (
-              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
-                <h3 className="text-lg font-semibold text-white mb-4">Connect Slack Workspace</h3>
-                <p className="text-gray-400 text-sm mb-6">
+              <div className="neu-card rounded-2xl p-6">
+                <h3 className="text-lg font-bold text-[#474747] mb-3">Connect Slack workspace</h3>
+                <p className="text-[#7b879c] text-sm mb-6">
                   Connect your Slack workspace to receive notifications when tasks are ready for client review.
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Slack Team ID</label>
+                    <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Slack team ID</label>
                     <input
                       type="text"
                       value={slackForm.teamId}
                       onChange={(e) => setSlackForm({ ...slackForm, teamId: e.target.value })}
-                      placeholder="e.g., T12345678"
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:border-orange-500"
+                      placeholder="e.g. T12345678"
+                      className="neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Bot Token</label>
+                    <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Bot token</label>
                     <input
                       type="password"
                       value={slackForm.botToken}
                       onChange={(e) => setSlackForm({ ...slackForm, botToken: e.target.value })}
-                      placeholder="e.g., xoxb-..."
-                      className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:outline-none focus:border-orange-500"
+                      placeholder="e.g. xoxb-…"
+                      className="neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none"
                     />
                   </div>
                   <button
                     onClick={handleConnectSlack}
                     disabled={actionLoading === 'slack-connect'}
-                    className="w-full px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-semibold text-sm transition disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-accent w-full py-3 px-4 rounded-2xl font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {actionLoading === 'slack-connect' ? 'Connecting...' : 'Connect Workspace'}
+                    {actionLoading === 'slack-connect' ? 'Connecting…' : 'Connect workspace'}
                   </button>
                 </div>
               </div>

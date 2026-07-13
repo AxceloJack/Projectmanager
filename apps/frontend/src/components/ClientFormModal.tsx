@@ -15,6 +15,8 @@ const SERVICE_TYPES = [
   { value: 'CAMPAIGNS_ONLY', label: 'Campaigns Only' },
 ];
 
+const inputCls = 'neu-input w-full px-4 py-2.5 rounded-xl text-sm focus:outline-none';
+
 export default function ClientFormModal({ client, onSave, onCancel }: ClientFormModalProps) {
   const [name, setName] = useState(client?.name || '');
   const [serviceType, setServiceType] = useState(client?.serviceType || 'FLOW_ONLY');
@@ -64,48 +66,42 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg w-full max-w-md max-h-[90vh] flex flex-col">
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="p-6 border-b border-gray-800 flex justify-between items-center">
-          <h2 className="text-xl font-semibold text-white">
-            {client ? 'Edit Client' : 'New Client'}
-          </h2>
+        <div className="p-6 flex justify-between items-center">
+          <h2 className="text-xl font-bold text-[#474747]">{client ? 'Edit client' : 'New client'}</h2>
           <button
             onClick={onCancel}
-            className="text-gray-400 hover:text-white text-2xl"
+            className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
           >
             ×
           </button>
         </div>
 
-        {/* Scrollable Form Content */}
-        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto p-6 space-y-5">
+        {/* Scrollable form */}
+        <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-6 space-y-5">
           {error && (
-            <div className="bg-red-950 border border-red-900 rounded p-3">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="neu-inset rounded-2xl p-3">
+              <p className="text-[#c0392b] text-sm">{error}</p>
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Client Name</label>
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Client name</label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
               placeholder="Enter client name"
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+              className={inputCls}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Service</label>
-            <select
-              value={serviceType}
-              onChange={(e) => setServiceType(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
-            >
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Service</label>
+            <select value={serviceType} onChange={(e) => setServiceType(e.target.value)} className={inputCls}>
               {SERVICE_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
                   {type.label}
@@ -115,65 +111,65 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Timeline</label>
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Timeline</label>
             <input
               type="date"
               value={kickOffDate}
               onChange={(e) => setKickOffDate(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+              className={inputCls}
             />
           </div>
 
-          <div className="border-t border-gray-800 pt-5">
-            <h3 className="text-sm font-semibold text-gray-300 mb-3">Integrations</h3>
+          <div className="border-t border-[#cdd4de] pt-5">
+            <h3 className="text-sm font-semibold text-[#474747] mb-3 ml-1">Integrations</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Figma</label>
+                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Figma</label>
                 <input
                   type="url"
                   value={figmaLink}
                   onChange={(e) => setFigmaLink(e.target.value)}
                   placeholder="Figma project link"
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Slack Channel ID</label>
+                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Slack channel ID</label>
                 <input
                   type="text"
                   value={slackId}
                   onChange={(e) => setSlackId(e.target.value)}
-                  placeholder="e.g., C1234567890"
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  placeholder="e.g. C1234567890"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Slack User ID</label>
+                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Slack user ID</label>
                 <input
                   type="text"
                   value={slackUserId}
                   onChange={(e) => setSlackUserId(e.target.value)}
-                  placeholder="e.g., U1234567890 or user@company.com"
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  placeholder="e.g. U1234567890 or user@company.com"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Klaviyo</label>
+                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Klaviyo</label>
                 <input
                   type="text"
                   value={klaviyoApi}
                   onChange={(e) => setKlaviyoApi(e.target.value)}
-                  placeholder="Klaviyo API Key"
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  placeholder="Klaviyo API key"
+                  className={inputCls}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-400 mb-2">Billing Date</label>
+                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Billing date</label>
                 <input
                   type="date"
                   value={klaviyoBillingDate}
                   onChange={(e) => setKlaviyoBillingDate(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50"
+                  className={inputCls}
                   title="Cleanup task will be scheduled 1 day before"
                 />
               </div>
@@ -181,20 +177,20 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           </div>
         </form>
 
-        {/* Fixed Footer Buttons */}
-        <div className="border-t border-gray-800 p-6 bg-black flex gap-3">
+        {/* Footer */}
+        <div className="p-6 flex gap-3">
           <button
             type="button"
             onClick={handleSubmit}
             disabled={loading || !name}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="btn-accent flex-1 py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {loading ? 'Saving...' : client ? 'Update Client' : 'Create Client'}
+            {loading ? 'Saving…' : client ? 'Update client' : 'Create client'}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-300 py-2.5 px-4 rounded font-semibold transition"
+            className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
           >
             Cancel
           </button>

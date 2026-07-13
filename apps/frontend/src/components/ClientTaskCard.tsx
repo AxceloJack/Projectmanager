@@ -6,17 +6,17 @@ interface ClientTaskCardProps {
   publicKey: string;
 }
 
-const statusColors: Record<TaskStatus, { bg: string; text: string; border: string }> = {
-  NOT_STARTED: { bg: 'bg-gray-900', text: 'text-gray-300', border: 'border-gray-800' },
-  DESIGN_PHASE: { bg: 'bg-blue-950', text: 'text-blue-300', border: 'border-blue-800' },
-  CLIENT_REVIEW: { bg: 'bg-orange-950', text: 'text-orange-300', border: 'border-orange-800' },
-  NEEDS_REVISIONS: { bg: 'bg-red-950', text: 'text-red-300', border: 'border-red-800' },
-  READY_FOR_KLAVIYO: { bg: 'bg-green-950', text: 'text-green-300', border: 'border-green-800' },
-  COMPLETE: { bg: 'bg-purple-950', text: 'text-purple-300', border: 'border-purple-800' },
+const statusColor: Record<TaskStatus, string> = {
+  NOT_STARTED: '#9aa6b8',
+  DESIGN_PHASE: '#3b82c4',
+  CLIENT_REVIEW: '#fe7300',
+  NEEDS_REVISIONS: '#d9534f',
+  READY_FOR_KLAVIYO: '#3f9d54',
+  COMPLETE: '#7b6bc4',
 };
 
 const statusLabels: Record<TaskStatus, string> = {
-  NOT_STARTED: 'Not Started',
+  NOT_STARTED: 'Not started',
   DESIGN_PHASE: 'Design',
   CLIENT_REVIEW: 'Review',
   NEEDS_REVISIONS: 'Revisions',
@@ -24,22 +24,23 @@ const statusLabels: Record<TaskStatus, string> = {
   COMPLETE: 'Complete',
 };
 
-export default function ClientTaskCard({
-  task,
-  onClick,
-  publicKey,
-}: ClientTaskCardProps) {
-  const colors = statusColors[task.status];
+export default function ClientTaskCard({ task, onClick }: ClientTaskCardProps) {
+  const color = statusColor[task.status];
   const label = statusLabels[task.status];
 
   return (
     <button
       onClick={onClick}
-      className={`w-full text-left px-2 py-1 rounded border text-xs font-medium truncate transition-all hover:shadow-md cursor-pointer ${colors.bg} ${colors.text} ${colors.border}`}
+      className="neu-raised-sm w-full text-left px-2.5 py-2 rounded-xl cursor-pointer active:scale-[0.98] transition-transform"
       title={task.title}
     >
-      <span className="block truncate">{task.title}</span>
-      <span className="text-xs opacity-70">{label}</span>
+      <span className="block truncate text-xs font-semibold text-[#474747]">{task.title}</span>
+      <span className="flex items-center gap-1.5 mt-1">
+        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
+        <span className="text-[11px] font-medium truncate" style={{ color }}>
+          {label}
+        </span>
+      </span>
     </button>
   );
 }

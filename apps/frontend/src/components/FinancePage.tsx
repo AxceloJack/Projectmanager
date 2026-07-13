@@ -154,19 +154,19 @@ export default function FinancePage() {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+      <div className="neu-surface flex-1 flex items-center justify-center">
+        <p className="text-[#7b879c]">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-black">
+    <div className="neu-surface flex-1 overflow-y-auto">
       <div className="px-8 py-6">
         <div className="flex justify-between items-start mb-6 gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-semibold text-white">Finance</h1>
-            <p className="text-gray-500 text-sm mt-1">
+            <h1 className="text-2xl font-bold text-[#474747]">Finance</h1>
+            <p className="text-[#7b879c] text-sm mt-1">
               Income &amp; expenses in {base} · exchange rates locked at each entry's date
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function FinancePage() {
             <select
               value={base}
               onChange={(e) => handleCurrencyChange(e.target.value)}
-              className="px-3 py-2 bg-gray-900 border border-gray-800 rounded text-white text-sm focus:outline-none focus:border-orange-500 transition"
+              className="neu-input px-3.5 py-2.5 rounded-xl text-sm focus:outline-none"
               title="Base currency for totals"
             >
               {CURRENCIES.map((c) => (
@@ -188,9 +188,9 @@ export default function FinancePage() {
                 setEditing(null);
                 setShowForm(true);
               }}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium text-sm transition whitespace-nowrap"
+              className="btn-accent px-4 py-2.5 rounded-2xl font-semibold text-sm whitespace-nowrap"
             >
-              + New Entry
+              + New entry
             </button>
           </div>
         </div>
@@ -199,7 +199,7 @@ export default function FinancePage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => setViewMonth(subMonths(viewMonth, 1))}
-            className="p-2 hover:bg-gray-900 rounded text-gray-400 hover:text-white transition"
+            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
             title="Previous month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,17 +207,17 @@ export default function FinancePage() {
             </svg>
           </button>
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-semibold text-white">{format(viewMonth, 'MMMM yyyy')}</h2>
+            <h2 className="text-lg font-bold text-[#474747]">{format(viewMonth, 'MMMM yyyy')}</h2>
             <button
               onClick={() => setViewMonth(startOfMonth(new Date()))}
-              className="px-3 py-1 text-xs font-medium text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
+              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#474747] rounded-xl"
             >
               This month
             </button>
           </div>
           <button
             onClick={() => setViewMonth(addMonths(viewMonth, 1))}
-            className="p-2 hover:bg-gray-900 rounded text-gray-400 hover:text-white transition"
+            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
             title="Next month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,85 +231,81 @@ export default function FinancePage() {
           <SummaryCard
             label="Money In"
             value={money(income, base)}
-            valueColor="text-green-400"
-            iconBg="bg-green-500/10 text-green-400"
+            valueColor="text-[#2f7a3f]"
+            iconBg="bg-[#d7ead4] text-[#357a41]"
             icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19V5M5 12l7-7 7 7" />}
           />
           <SummaryCard
             label="Money Out"
             value={money(expense, base)}
-            valueColor="text-red-400"
-            iconBg="bg-red-500/10 text-red-400"
+            valueColor="text-[#c0392b]"
+            iconBg="bg-[#f6d6d3] text-[#a83a30]"
             icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v14M19 12l-7 7-7-7" />}
           />
           <SummaryCard
             label="Net"
             value={money(net, base)}
-            valueColor={net >= 0 ? 'text-white' : 'text-red-400'}
-            iconBg="bg-gray-500/10 text-gray-300"
+            valueColor={net >= 0 ? 'text-[#474747]' : 'text-[#c0392b]'}
+            iconBg="bg-[#dbe0e8] text-[#5f6b7a]"
             icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 5h6m-6 5h6M4 5h.01M4 12h.01M4 19h.01" />}
           />
           <SummaryCard
             label="Each owner · 50%"
             value={money(perOwner, base)}
-            valueColor={perOwner >= 0 ? 'text-orange-400' : 'text-red-400'}
-            iconBg="bg-orange-500/10 text-orange-400"
+            valueColor={perOwner >= 0 ? 'text-[#e56100]' : 'text-[#c0392b]'}
+            iconBg="bg-[#fbe0cc] text-[#b5591f]"
             icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z" />}
           />
         </div>
 
         {occurrences.length === 0 ? (
-          <div className="border border-gray-800 rounded-lg p-12 text-center">
-            <p className="text-gray-500">Nothing for {format(viewMonth, 'MMMM yyyy')}. Add an entry to start tracking.</p>
+          <div className="neu-inset rounded-2xl p-12 text-center">
+            <p className="text-[#7b879c]">Nothing for {format(viewMonth, 'MMMM yyyy')}. Add an entry to start tracking.</p>
           </div>
         ) : (
-          <div className="border border-gray-800 rounded-lg overflow-hidden">
+          <div className="neu-card rounded-2xl overflow-hidden">
             <table className="w-full text-left">
-              <thead className="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+              <thead className="text-[#7b879c] text-xs uppercase tracking-wider border-b border-[#cdd4de]">
                 <tr>
-                  <th className="px-5 py-3 font-semibold">Date</th>
-                  <th className="px-5 py-3 font-semibold">Description</th>
-                  <th className="px-5 py-3 font-semibold">Category</th>
-                  <th className="px-5 py-3 font-semibold">Status</th>
-                  <th className="px-5 py-3 font-semibold text-right">Amount</th>
-                  <th className="px-5 py-3 font-semibold text-right">Actions</th>
+                  <th className="px-5 py-3.5 font-semibold">Date</th>
+                  <th className="px-5 py-3.5 font-semibold">Description</th>
+                  <th className="px-5 py-3.5 font-semibold">Category</th>
+                  <th className="px-5 py-3.5 font-semibold">Status</th>
+                  <th className="px-5 py-3.5 font-semibold text-right">Amount</th>
+                  <th className="px-5 py-3.5 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-[#d3d9e2]">
                 {occurrences.map((o) => {
                   const e = o.entry;
                   const converted = entryInBase(e, base, fx.rates);
                   return (
-                    <tr key={o.key} className="hover:bg-gray-900/50 transition">
-                      <td className="px-5 py-4 text-gray-400 text-sm whitespace-nowrap">
+                    <tr key={o.key} className="hover:bg-[#d9dee6]/60 transition-colors">
+                      <td className="px-5 py-4 text-[#7b879c] text-sm whitespace-nowrap">
                         {format(o.date, 'd MMM yyyy')}
                       </td>
                       <td className="px-5 py-4">
-                        <div className="text-white flex items-center gap-2">
+                        <div className="text-[#474747] font-medium flex items-center gap-2">
                           {e.description}
                           {e.recurring && e.frequency && (
-                            <span className="text-[10px] uppercase tracking-wide bg-orange-500/10 text-orange-400 border border-orange-500/30 rounded px-1.5 py-0.5">
+                            <span className="text-[10px] uppercase tracking-wide bg-[#fbe0cc] text-[#b5591f] rounded-full px-2 py-0.5">
                               ↻ {FREQ_LABEL[e.frequency]}
                             </span>
                           )}
                         </div>
-                        {e.client && <div className="text-xs text-gray-500 mt-0.5">{e.client.name}</div>}
+                        {e.client && <div className="text-xs text-[#7b879c] mt-0.5">{e.client.name}</div>}
                       </td>
-                      <td className="px-5 py-4 text-gray-400 text-sm">{e.category || '—'}</td>
+                      <td className="px-5 py-4 text-[#7b879c] text-sm">{e.category || '—'}</td>
                       <td className="px-5 py-4">
                         {e.status === 'PAID' ? (
-                          <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-green-950 text-green-300 border border-green-800">
-                            Paid
-                          </span>
+                          <span className="pill pill-green">Paid</span>
                         ) : (
-                          <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-gray-900 text-gray-400 border border-gray-800">
-                            Pending
-                          </span>
+                          <span className="pill pill-gray">Pending</span>
                         )}
                       </td>
                       <td
                         className={`px-5 py-4 text-right font-semibold whitespace-nowrap ${
-                          e.type === 'INCOME' ? 'text-green-400' : 'text-red-400'
+                          e.type === 'INCOME' ? 'text-[#2f7a3f]' : 'text-[#c0392b]'
                         }`}
                       >
                         <div>
@@ -317,7 +313,7 @@ export default function FinancePage() {
                           {money(e.amount, e.currency)}
                         </div>
                         {e.currency !== base && (
-                          <div className="text-xs text-gray-500 font-normal">≈ {money(converted, base)}</div>
+                          <div className="text-xs text-[#9aa6b8] font-normal">≈ {money(converted, base)}</div>
                         )}
                       </td>
                       <td className="px-5 py-4">
@@ -327,13 +323,13 @@ export default function FinancePage() {
                               setEditing(e);
                               setShowForm(true);
                             }}
-                            className="px-3 py-1.5 bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 rounded text-xs font-medium transition"
+                            className="neu-pressable px-3.5 py-1.5 text-[#474747] rounded-lg text-xs font-semibold"
                           >
                             Edit
                           </button>
                           <button
                             onClick={() => handleDelete(e)}
-                            className="px-3 py-1.5 bg-gray-900 hover:bg-red-950 border border-gray-800 hover:border-red-900 text-gray-500 hover:text-red-400 rounded text-xs font-medium transition"
+                            className="neu-pressable px-3.5 py-1.5 text-[#c0392b] rounded-lg text-xs font-semibold"
                           >
                             Delete
                           </button>
@@ -382,15 +378,15 @@ function SummaryCard({
   iconBg: string;
 }) {
   return (
-    <div className="border border-gray-800 rounded-xl p-4 bg-gray-900/40 flex items-center gap-3">
-      <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${iconBg}`}>
+    <div className="neu-card rounded-2xl p-4 flex items-center gap-3">
+      <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           {icon}
         </svg>
       </div>
       <div className="min-w-0">
-        <p className="text-gray-500 text-xs uppercase tracking-wider truncate">{label}</p>
-        <p className={`text-lg sm:text-xl font-semibold truncate ${valueColor}`}>{value}</p>
+        <p className="text-[#7b879c] text-xs uppercase tracking-wider truncate">{label}</p>
+        <p className={`text-lg sm:text-xl font-bold truncate ${valueColor}`}>{value}</p>
       </div>
     </div>
   );
@@ -462,33 +458,32 @@ function EntryModal({
     }
   };
 
-  const inputClass =
-    'w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition';
+  const inputClass = 'neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none';
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-800">
-          <h2 className="text-xl font-bold text-white">{entry ? 'Edit Entry' : 'New Entry'}</h2>
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-[#474747]">{entry ? 'Edit entry' : 'New entry'}</h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-5">
           {error && (
-            <div className="bg-red-950 border border-red-900 rounded p-3">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="neu-inset rounded-2xl p-3">
+              <p className="text-[#c0392b] text-sm">{error}</p>
             </div>
           )}
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Type</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Type</label>
               <select value={type} onChange={(e) => setType(e.target.value as any)} className={inputClass}>
                 <option value="EXPENSE">Out</option>
                 <option value="INCOME">In</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Amount</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Amount</label>
               <input
                 type="number"
                 step="0.01"
@@ -500,7 +495,7 @@ function EntryModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Currency</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Currency</label>
               <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClass}>
                 {CURRENCIES.map((c) => (
                   <option key={c} value={c}>
@@ -512,7 +507,7 @@ function EntryModal({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Description</label>
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Description</label>
             <input
               type="text"
               value={description}
@@ -524,7 +519,7 @@ function EntryModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Category</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Category</label>
               <input
                 type="text"
                 value={category}
@@ -534,7 +529,7 @@ function EntryModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Client (optional)</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Client (optional)</label>
               <select value={clientId} onChange={(e) => setClientId(e.target.value)} className={inputClass}>
                 <option value="">— None —</option>
                 {clients.map((c) => (
@@ -548,13 +543,13 @@ function EntryModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">
                 {repeats === 'ONEOFF' ? 'Date' : 'Starts'}
               </label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Status</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Status</label>
               <select value={status} onChange={(e) => setStatus(e.target.value as any)} className={inputClass}>
                 <option value="PAID">Paid</option>
                 <option value="PENDING">Pending</option>
@@ -564,7 +559,7 @@ function EntryModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">Repeats</label>
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Repeats</label>
               <select value={repeats} onChange={(e) => setRepeats(e.target.value as any)} className={inputClass}>
                 <option value="ONEOFF">One-off</option>
                 <option value="WEEKLY">Weekly</option>
@@ -575,14 +570,14 @@ function EntryModal({
             </div>
             {repeats !== 'ONEOFF' && (
               <div>
-                <label className="block text-sm font-semibold text-gray-300 mb-2">Ends (optional)</label>
+                <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Ends (optional)</label>
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputClass} />
               </div>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Notes (optional)</label>
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Notes (optional)</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -596,16 +591,16 @@ function EntryModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-300 py-2.5 px-4 rounded font-medium transition"
+              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+              className="btn-accent flex-1 py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {saving ? 'Saving...' : entry ? 'Update' : 'Add Entry'}
+              {saving ? 'Saving…' : entry ? 'Update' : 'Add entry'}
             </button>
           </div>
         </form>

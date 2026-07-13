@@ -40,27 +40,27 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-          className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
+          className="neu-pressable px-4 py-2 text-[#474747] rounded-xl font-semibold"
         >
           ← Previous
         </button>
-        <h2 className="text-xl font-semibold text-white">
+        <h2 className="text-xl font-bold text-[#474747]">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
         <button
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-          className="px-4 py-2 text-gray-400 hover:text-white hover:bg-gray-900 rounded transition"
+          className="neu-pressable px-4 py-2 text-[#474747] rounded-xl font-semibold"
         >
           Next →
         </button>
       </div>
 
-      <div className="border border-gray-800 rounded-lg overflow-hidden">
-        <div className="grid grid-cols-7 gap-0 border-b bg-gray-900">
+      <div className="neu-card rounded-2xl overflow-hidden">
+        <div className="grid grid-cols-7 gap-0 border-b border-[#cdd4de]">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="px-4 py-3 font-semibold text-gray-300 text-center border-r border-gray-800 last:border-r-0"
+              className="px-4 py-3 font-semibold text-[#7b879c] text-center text-sm uppercase tracking-wide border-r border-[#cdd4de] last:border-r-0"
             >
               {day}
             </div>
@@ -71,13 +71,13 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
           {calendarDays.map((day, index) => (
             <div
               key={index}
-              className={`min-h-32 p-3 border-r border-b border-gray-800 last:border-r-0 ${
-                day && isSameMonth(day, currentMonth) ? 'bg-black hover:bg-gray-900' : 'bg-gray-950'
-              } transition`}
+              className={`min-h-32 p-3 border-r border-b border-[#cdd4de] last:border-r-0 transition ${
+                day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#d9dee6]' : 'bg-[#d6dbe3]'
+              }`}
             >
               {day && (
                 <>
-                  <div className={`font-semibold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-white' : 'text-gray-600'}`}>
+                  <div className={`font-semibold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-[#474747]' : 'text-[#a9b3c1]'}`}>
                     {format(day, 'd')}
                   </div>
                   <div className="space-y-1">
@@ -130,12 +130,12 @@ function ClientTaskDetail({
   const figmaLink = task.figmaLink || clientFigmaLink;
 
   const statusColors: Record<string, string> = {
-    NOT_STARTED: 'bg-gray-700 text-gray-300',
-    DESIGN_PHASE: 'bg-blue-900 text-blue-300',
-    CLIENT_REVIEW: 'bg-orange-600 text-orange-100',
-    NEEDS_REVISIONS: 'bg-red-900 text-red-300',
-    READY_FOR_KLAVIYO: 'bg-green-900 text-green-300',
-    COMPLETE: 'bg-purple-900 text-purple-300',
+    NOT_STARTED: 'pill-gray',
+    DESIGN_PHASE: 'pill-blue',
+    CLIENT_REVIEW: 'pill-orange',
+    NEEDS_REVISIONS: 'pill-red',
+    READY_FOR_KLAVIYO: 'pill-green',
+    COMPLETE: 'pill-purple',
   };
 
   const handleApprove = async () => {
@@ -193,70 +193,70 @@ function ClientTaskDetail({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-800">
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
           <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-white mb-2">{task.title}</h2>
-              <span className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${statusColors[task.status] || 'bg-gray-800 text-gray-300'}`}>
+              <h2 className="text-2xl font-bold text-[#474747] mb-2">{task.title}</h2>
+              <span className={`pill ${statusColors[task.status] || 'pill-gray'}`}>
                 {task.status.replace(/_/g, ' ')}
               </span>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-white text-2xl"
+              className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
             >
               ×
             </button>
           </div>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="px-6 pb-2 space-y-6">
           {error && (
-            <div className="bg-red-950 border border-red-900 rounded p-3">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="neu-inset rounded-2xl p-3">
+              <p className="text-[#c0392b] text-sm">{error}</p>
             </div>
           )}
 
           {task.description && (
             <div>
-              <h3 className="font-semibold text-gray-300 mb-2">Description</h3>
-              <p className="text-gray-400">{task.description}</p>
+              <h3 className="font-semibold text-[#474747] mb-2">Description</h3>
+              <p className="text-[#7b879c]">{task.description}</p>
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h3 className="font-semibold text-gray-300 mb-1">Due Date</h3>
-              <p className="text-gray-400">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
+              <h3 className="font-semibold text-[#474747] mb-1">Due date</h3>
+              <p className="text-[#7b879c]">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
             </div>
           </div>
 
           {figmaLink && (
-            <div className="border-t border-gray-800 pt-6">
-              <h3 className="font-semibold text-gray-300 mb-3">Deliverables</h3>
+            <div className="border-t border-[#cdd4de] pt-6">
+              <h3 className="font-semibold text-[#474747] mb-3">Deliverables</h3>
               <a
                 href={figmaLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition"
+                className="btn-accent inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-semibold"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                 </svg>
-                View Figma Design
+                View Figma design
               </a>
             </div>
           )}
 
           {task.comments && task.comments.length > 0 && (
-            <div className="border-t border-gray-800 pt-6">
-              <h3 className="font-semibold text-gray-300 mb-3">Notes & Feedback</h3>
+            <div className="border-t border-[#cdd4de] pt-6">
+              <h3 className="font-semibold text-[#474747] mb-3">Notes &amp; feedback</h3>
               <div className="space-y-2">
                 {task.comments.map((comment) => (
-                  <div key={comment.id} className="bg-gray-900 border border-gray-800 p-3 rounded">
-                    <p className="text-gray-400 text-sm">{comment.content}</p>
+                  <div key={comment.id} className="neu-inset p-3 rounded-xl">
+                    <p className="text-[#474747] text-sm">{comment.content}</p>
                   </div>
                 ))}
               </div>
@@ -264,33 +264,33 @@ function ClientTaskDetail({
           )}
 
           {task.status === 'CLIENT_REVIEW' && (
-            <div className="border-t border-gray-800 pt-6">
-              <h3 className="font-semibold text-gray-300 mb-3">Your Action</h3>
-              <p className="text-gray-400 text-sm mb-4">Review the deliverables above and let us know your feedback.</p>
+            <div className="border-t border-[#cdd4de] pt-6">
+              <h3 className="font-semibold text-[#474747] mb-3">Your action</h3>
+              <p className="text-[#7b879c] text-sm mb-4">Review the deliverables above and let us know your feedback.</p>
               <div className="flex gap-3">
                 <button
                   onClick={handleApprove}
                   disabled={loading}
-                  className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="flex-1 bg-[#3f9d54] hover:bg-[#357a41] text-white py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition"
                 >
-                  {loading ? 'Processing...' : 'Approved'}
+                  {loading ? 'Processing…' : 'Approve'}
                 </button>
                 <button
                   onClick={handleNeedsRevision}
                   disabled={loading}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="flex-1 bg-[#d9534f] hover:bg-[#c0392b] text-white py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed transition"
                 >
-                  {loading ? 'Processing...' : 'Needs Revision'}
+                  {loading ? 'Processing…' : 'Needs revision'}
                 </button>
               </div>
             </div>
           )}
         </div>
 
-        <div className="border-t border-gray-800 p-6 bg-black">
+        <div className="p-6">
           <button
             onClick={onClose}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 py-2 px-4 rounded-lg font-medium transition"
+            className="neu-pressable w-full py-3 px-4 rounded-2xl font-semibold text-[#474747]"
           >
             Close
           </button>

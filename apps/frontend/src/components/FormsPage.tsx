@@ -4,6 +4,8 @@ import { formsAPI, clientsAPI, shareOrigin } from '../lib/api.js';
 import { CampaignForm, Client } from '../types/index.js';
 import { FormConfig } from '../lib/formConfig.js';
 
+const inputCls = 'neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none';
+
 function formatMonth(month?: string | null) {
   if (!month) return '';
   const [year, m] = month.split('-').map(Number);
@@ -59,69 +61,59 @@ export default function FormsPage({ config }: { config: FormConfig }) {
 
   if (loading) {
     return (
-      <div className="flex-1 flex items-center justify-center">
-        <p className="text-gray-500">Loading...</p>
+      <div className="neu-surface flex-1 flex items-center justify-center">
+        <p className="text-[#7b879c]">Loading…</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto bg-black">
+    <div className="neu-surface flex-1 overflow-y-auto">
       <div className="px-8 py-6">
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h1 className="text-2xl font-semibold text-white">{config.pageTitle}</h1>
-            <p className="text-gray-500 text-sm mt-1">{config.pageSubtitle}</p>
+            <h1 className="text-2xl font-bold text-[#474747]">{config.pageTitle}</h1>
+            <p className="text-[#7b879c] text-sm mt-1">{config.pageSubtitle}</p>
           </div>
           <button
             onClick={() => setShowCreate(true)}
-            className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded font-medium text-sm transition"
+            className="btn-accent px-4 py-2.5 rounded-2xl font-semibold text-sm"
           >
-            + New Form
+            + New form
           </button>
         </div>
 
         {forms.length === 0 ? (
-          <div className="border border-gray-800 rounded-lg p-12 text-center">
-            <p className="text-gray-500">
-              No forms yet. Create one and send the link to your client.
-            </p>
+          <div className="neu-inset rounded-2xl p-12 text-center">
+            <p className="text-[#7b879c]">No forms yet. Create one and send the link to your client.</p>
           </div>
         ) : (
-          <div className="border border-gray-800 rounded-lg overflow-hidden">
+          <div className="neu-card rounded-2xl overflow-hidden">
             <table className="w-full text-left">
-              <thead className="bg-gray-900 text-gray-400 text-xs uppercase tracking-wider">
+              <thead className="text-[#7b879c] text-xs uppercase tracking-wider border-b border-[#cdd4de]">
                 <tr>
-                  <th className="px-6 py-3 font-semibold">Client</th>
-                  {config.hasMonth && (
-                    <th className="px-6 py-3 font-semibold">Planning Month</th>
-                  )}
-                  <th className="px-6 py-3 font-semibold">Status</th>
-                  <th className="px-6 py-3 font-semibold">Sent</th>
-                  <th className="px-6 py-3 font-semibold text-right">Actions</th>
+                  <th className="px-6 py-3.5 font-semibold">Client</th>
+                  {config.hasMonth && <th className="px-6 py-3.5 font-semibold">Planning month</th>}
+                  <th className="px-6 py-3.5 font-semibold">Status</th>
+                  <th className="px-6 py-3.5 font-semibold">Sent</th>
+                  <th className="px-6 py-3.5 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-800">
+              <tbody className="divide-y divide-[#d3d9e2]">
                 {forms.map((form) => (
-                  <tr key={form.id} className="hover:bg-gray-900/50 transition">
-                    <td className="px-6 py-4 text-white font-medium">
-                      {form.client?.name}
-                    </td>
+                  <tr key={form.id} className="hover:bg-[#d9dee6]/60 transition-colors">
+                    <td className="px-6 py-4 text-[#474747] font-semibold">{form.client?.name}</td>
                     {config.hasMonth && (
-                      <td className="px-6 py-4 text-gray-300">{formatMonth(form.month)}</td>
+                      <td className="px-6 py-4 text-[#474747]">{formatMonth(form.month)}</td>
                     )}
                     <td className="px-6 py-4">
                       {form.status === 'SUBMITTED' ? (
-                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-green-950 text-green-300 border border-green-800">
-                          Submitted
-                        </span>
+                        <span className="pill pill-green">Submitted</span>
                       ) : (
-                        <span className="inline-block px-2.5 py-1 rounded-full text-xs font-medium bg-gray-900 text-gray-400 border border-gray-800">
-                          Waiting on client
-                        </span>
+                        <span className="pill pill-gray">Waiting on client</span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-gray-500 text-sm">
+                    <td className="px-6 py-4 text-[#7b879c] text-sm">
                       {format(new Date(form.createdAt), 'MMM d, yyyy')}
                     </td>
                     <td className="px-6 py-4">
@@ -129,20 +121,20 @@ export default function FormsPage({ config }: { config: FormConfig }) {
                         {form.status === 'SUBMITTED' && (
                           <button
                             onClick={() => setViewingForm(form)}
-                            className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded text-xs font-medium transition"
+                            className="btn-accent px-3.5 py-1.5 rounded-lg text-xs font-semibold"
                           >
-                            View Responses
+                            View responses
                           </button>
                         )}
                         <button
                           onClick={() => handleCopyLink(form)}
-                          className="px-3 py-1.5 bg-gray-900 hover:bg-gray-800 border border-gray-800 text-gray-300 rounded text-xs font-medium transition"
+                          className="neu-pressable px-3.5 py-1.5 text-[#474747] rounded-lg text-xs font-semibold"
                         >
-                          {copiedId === form.id ? 'Copied!' : 'Copy Link'}
+                          {copiedId === form.id ? 'Copied!' : 'Copy link'}
                         </button>
                         <button
                           onClick={() => handleDelete(form)}
-                          className="px-3 py-1.5 bg-gray-900 hover:bg-red-950 border border-gray-800 hover:border-red-900 text-gray-500 hover:text-red-400 rounded text-xs font-medium transition"
+                          className="neu-pressable px-3.5 py-1.5 text-[#c0392b] rounded-lg text-xs font-semibold"
                         >
                           Delete
                         </button>
@@ -169,11 +161,7 @@ export default function FormsPage({ config }: { config: FormConfig }) {
       )}
 
       {viewingForm && (
-        <FormResponsesModal
-          config={config}
-          form={viewingForm}
-          onClose={() => setViewingForm(null)}
-        />
+        <FormResponsesModal config={config} form={viewingForm} onClose={() => setViewingForm(null)} />
       )}
     </div>
   );
@@ -213,31 +201,29 @@ function CreateFormModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-md w-full">
-        <div className="p-6 border-b border-gray-800">
-          <h2 className="text-xl font-bold text-white">New {config.hasMonth ? 'Campaign' : 'Onboarding'} Form</h2>
-          <p className="text-gray-500 text-sm mt-1">
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] max-w-md w-full">
+        <div className="p-6">
+          <h2 className="text-xl font-bold text-[#474747]">
+            New {config.hasMonth ? 'campaign' : 'onboarding'} form
+          </h2>
+          <p className="text-[#7b879c] text-sm mt-1">
             {config.hasMonth
               ? "Pick the client and the month you're planning for."
               : 'Pick the client you want to onboard.'}
           </p>
         </div>
 
-        <div className="p-6 space-y-5">
+        <div className="px-6 space-y-5">
           {error && (
-            <div className="bg-red-950 border border-red-900 rounded p-3">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="neu-inset rounded-2xl p-3">
+              <p className="text-[#c0392b] text-sm">{error}</p>
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-gray-300 mb-2">Client</label>
-            <select
-              value={clientId}
-              onChange={(e) => setClientId(e.target.value)}
-              className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-            >
+            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Client</label>
+            <select value={clientId} onChange={(e) => setClientId(e.target.value)} className={inputCls}>
               {clients.map((client) => (
                 <option key={client.id} value={client.id}>
                   {client.name}
@@ -248,32 +234,25 @@ function CreateFormModal({
 
           {config.hasMonth && (
             <div>
-              <label className="block text-sm font-semibold text-gray-300 mb-2">
-                Planning Month
-              </label>
-              <input
-                type="month"
-                value={month}
-                onChange={(e) => setMonth(e.target.value)}
-                className="w-full px-4 py-2.5 bg-gray-900 border border-gray-800 rounded text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition"
-              />
+              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Planning month</label>
+              <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className={inputCls} />
             </div>
           )}
         </div>
 
-        <div className="border-t border-gray-800 p-6 flex gap-3">
+        <div className="p-6 flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-gray-300 py-2.5 px-4 rounded font-medium transition"
+            className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
           >
             Cancel
           </button>
           <button
             onClick={handleCreate}
             disabled={saving}
-            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white py-2.5 px-4 rounded font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition"
+            className="btn-accent flex-1 py-3 px-4 rounded-2xl font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
           >
-            {saving ? 'Creating...' : 'Create Form'}
+            {saving ? 'Creating…' : 'Create form'}
           </button>
         </div>
       </div>
@@ -296,35 +275,35 @@ function FormResponsesModal({
     : `${form.client?.name} — Onboarding`;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-black border border-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-800">
-          <h2 className="text-2xl font-bold text-white mb-1">{heading}</h2>
-          <p className="text-gray-500 text-sm">
+    <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
+      <div className="neu-card rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-[#474747] mb-1">{heading}</h2>
+          <p className="text-[#7b879c] text-sm">
             Submitted{' '}
             {form.submittedAt ? format(new Date(form.submittedAt), "MMM d, yyyy 'at' h:mma") : ''}
           </p>
         </div>
 
-        <div className="p-6 space-y-6">
+        <div className="px-6 space-y-6">
           {config.questions.map((q) => (
             <div key={q.key}>
-              <h3 className="font-semibold text-gray-300 mb-2">{q.label}</h3>
+              <h3 className="font-semibold text-[#474747] mb-2">{q.label}</h3>
               {answers[q.key] ? (
-                <p className="text-gray-400 whitespace-pre-wrap bg-gray-900 border border-gray-800 rounded p-3">
+                <p className="text-[#474747] whitespace-pre-wrap neu-inset rounded-xl p-3.5">
                   {answers[q.key]}
                 </p>
               ) : (
-                <p className="text-gray-600 italic text-sm">Nothing provided</p>
+                <p className="text-[#9aa6b8] italic text-sm">Nothing provided</p>
               )}
             </div>
           ))}
         </div>
 
-        <div className="border-t border-gray-800 p-6">
+        <div className="p-6">
           <button
             onClick={onClose}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-gray-300 py-2 px-4 rounded-lg font-medium transition"
+            className="neu-pressable w-full py-3 px-4 rounded-2xl font-semibold text-[#474747]"
           >
             Close
           </button>

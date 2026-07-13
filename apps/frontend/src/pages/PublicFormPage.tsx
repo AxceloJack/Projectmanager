@@ -67,16 +67,16 @@ export default function PublicFormPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <p className="text-gray-400">Loading...</p>
+      <div className="neu-surface min-h-screen flex items-center justify-center">
+        <p className="text-[#7b879c]">Loading…</p>
       </div>
     );
   }
 
   if (!form || !config) {
     return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <p className="text-gray-400">{error || 'Form not found.'}</p>
+      <div className="neu-surface min-h-screen flex items-center justify-center p-4">
+        <p className="text-[#7b879c]">{error || 'Form not found.'}</p>
       </div>
     );
   }
@@ -88,12 +88,12 @@ export default function PublicFormPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg mb-6 shadow-lg">
-          <AxceloLogo className="w-9 h-9 text-white" mono />
+      <div className="neu-surface min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="neu-raised inline-flex items-center justify-center w-[70px] h-[70px] rounded-[22px] mb-6">
+          <AxceloLogo className="w-9 h-9" />
         </div>
-        <h1 className="text-3xl font-bold text-white mb-3 text-center">Thank you!</h1>
-        <p className="text-gray-400 text-center max-w-md">
+        <h1 className="text-3xl font-bold text-[#474747] mb-3 text-center">Thank you!</h1>
+        <p className="text-[#7b879c] text-center max-w-md">
           {config.hasMonth
             ? `We've received your plans for ${formatMonth(form.month)}. The team will build your campaign strategy around them — you'll see it all on your calendar soon.`
             : "We've received your details. The team will get everything set up and be in touch shortly — welcome aboard!"}
@@ -103,67 +103,67 @@ export default function PublicFormPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="neu-surface min-h-screen">
       {/* Branded header */}
-      <div className="border-b border-gray-800 bg-black/50">
+      <div className="border-b border-[#cdd4de]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3">
-          <div className="w-8 h-8 flex items-center justify-center">
+          <div className="neu-raised-sm w-10 h-10 rounded-xl flex items-center justify-center">
             <AxceloLogo className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-white">Axcelo</p>
-            <p className="text-xs text-gray-500">
-              {config.hasMonth ? 'Campaign Strategy Form' : 'Onboarding Form'}
+            <p className="text-sm font-bold text-[#474747]">Axcelo</p>
+            <p className="text-xs text-[#7b879c]">
+              {config.hasMonth ? 'Campaign strategy form' : 'Onboarding form'}
             </p>
           </div>
         </div>
       </div>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-        <h1 className="text-3xl font-bold text-white mb-2">{heading}</h1>
-        <p className="text-gray-400 mb-10">{config.publicIntro(subject)}</p>
+        <h1 className="text-3xl font-bold text-[#474747] mb-2">{heading}</h1>
+        <p className="text-[#7b879c] mb-10">{config.publicIntro(subject)}</p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {config.questions.map((q) => (
             <div key={q.key}>
-              <label className="block text-white font-semibold mb-1">{q.label}</label>
-              <p className="text-gray-500 text-sm mb-3">{q.hint}</p>
+              <label className="block text-[#474747] font-semibold mb-1">{q.label}</label>
+              <p className="text-[#7b879c] text-sm mb-3">{q.hint}</p>
               <textarea
                 value={answers[q.key] || ''}
                 onChange={(e) => setAnswers({ ...answers, [q.key]: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 bg-gray-900 border border-gray-800 rounded-lg text-white placeholder-gray-600 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/50 transition resize-y"
-                placeholder="Type here..."
+                className="neu-input w-full px-4 py-3 rounded-2xl focus:outline-none resize-y"
+                placeholder="Type here…"
               />
             </div>
           ))}
 
           {error && (
-            <div className="bg-red-950 border border-red-900 rounded p-3">
-              <p className="text-red-400 text-sm">{error}</p>
+            <div className="neu-inset rounded-2xl p-3">
+              <p className="text-[#c0392b] text-sm">{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white py-3.5 px-4 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg"
+            className="btn-accent w-full py-3.5 px-4 rounded-[20px] font-semibold disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {submitting
-              ? 'Submitting...'
+              ? 'Submitting…'
               : form.status === 'SUBMITTED'
-                ? 'Update Answers'
+                ? 'Update answers'
                 : 'Submit to Axcelo'}
           </button>
 
           {form.status === 'SUBMITTED' && (
-            <p className="text-gray-500 text-sm text-center">
+            <p className="text-[#7b879c] text-sm text-center">
               You've already submitted this form — feel free to update your answers.
             </p>
           )}
         </form>
 
-        <p className="text-gray-600 text-xs text-center mt-10">
+        <p className="text-[#9aa6b8] text-xs text-center mt-10">
           © {new Date().getFullYear()} Axcelo. All campaigns managed with precision.
         </p>
       </div>
