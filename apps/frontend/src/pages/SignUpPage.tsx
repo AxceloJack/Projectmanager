@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { authAPI } from '../lib/api.js';
 import AxceloLogo from '../components/AxceloLogo.js';
 
-const inputCls = 'neu-input w-full px-5 py-3.5 rounded-2xl text-[#474747] focus:outline-none';
+const inputCls = 'neu-input w-full px-5 py-3.5 rounded-2xl text-[#17181c] focus:outline-none';
 
 export default function SignUpPage() {
   const [email, setEmail] = useState('');
@@ -56,8 +56,8 @@ export default function SignUpPage() {
           <div className="neu-raised inline-flex items-center justify-center w-[70px] h-[70px] rounded-[22px] mb-5">
             <AxceloLogo className="w-9 h-9" />
           </div>
-          <h1 className="text-[34px] font-bold text-[#474747] tracking-tight">Axcelo</h1>
-          <p className="text-[#7b879c] text-sm mt-1">Email campaign command center</p>
+          <h1 className="text-[34px] font-bold text-[#17181c] tracking-tight">Axcelo</h1>
+          <p className="text-[#626875] text-sm mt-1">Email campaign command center</p>
         </div>
 
         {/* Form card */}
@@ -69,18 +69,18 @@ export default function SignUpPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold text-[#474747]">Registration successful</h2>
-              <p className="text-[#7b879c] text-sm">
+              <h2 className="text-2xl font-bold text-[#17181c]">Registration successful</h2>
+              <p className="text-[#626875] text-sm">
                 Your account has been created and is pending admin approval. You'll be able to log in once
                 approved.
               </p>
-              <div className="pt-4 border-t border-[#cdd4de]">
-                <p className="text-[#9aa6b8] text-sm">Redirecting to login…</p>
+              <div className="pt-4 border-t border-[#eceef2]">
+                <p className="text-[#9aa0ab] text-sm">Redirecting to login…</p>
               </div>
             </div>
           ) : (
             <>
-              <h2 className="text-2xl font-bold text-[#474747] mb-6">Create account</h2>
+              <h2 className="text-2xl font-bold text-[#17181c] mb-6">Create account</h2>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 {error && (
@@ -90,7 +90,7 @@ export default function SignUpPage() {
                 )}
 
                 <div>
-                  <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Email address</label>
+                  <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Email address</label>
                   <input
                     type="email"
                     value={email}
@@ -102,7 +102,7 @@ export default function SignUpPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Password</label>
+                  <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Password</label>
                   <input
                     type="password"
                     value={password}
@@ -114,7 +114,7 @@ export default function SignUpPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Confirm password</label>
+                  <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Confirm password</label>
                   <input
                     type="password"
                     value={confirmPassword}
@@ -144,8 +144,8 @@ export default function SignUpPage() {
                 </button>
               </form>
 
-              <div className="mt-7 pt-6 border-t border-[#cdd4de]">
-                <p className="text-[#7b879c] text-sm text-center">
+              <div className="mt-7 pt-6 border-t border-[#eceef2]">
+                <p className="text-[#626875] text-sm text-center">
                   Already have an account?{' '}
                   <Link to="/login" className="text-[#fe7300] hover:text-[#e56100] font-semibold">
                     Sign in
@@ -156,7 +156,7 @@ export default function SignUpPage() {
           )}
         </div>
 
-        <p className="text-center text-[#9aa6b8] text-xs mt-7">
+        <p className="text-center text-[#9aa0ab] text-xs mt-7">
           © 2026 Axcelo. All campaigns managed with precision.
         </p>
       </div>

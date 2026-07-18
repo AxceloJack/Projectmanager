@@ -40,27 +40,27 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-          className="neu-pressable px-4 py-2 text-[#474747] rounded-xl font-semibold"
+          className="neu-pressable px-4 py-2 text-[#17181c] rounded-xl font-semibold"
         >
           ← Previous
         </button>
-        <h2 className="text-xl font-bold text-[#474747]">
+        <h2 className="text-xl font-bold text-[#17181c]">
           {format(currentMonth, 'MMMM yyyy')}
         </h2>
         <button
           onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-          className="neu-pressable px-4 py-2 text-[#474747] rounded-xl font-semibold"
+          className="neu-pressable px-4 py-2 text-[#17181c] rounded-xl font-semibold"
         >
           Next →
         </button>
       </div>
 
       <div className="neu-card rounded-2xl overflow-hidden">
-        <div className="grid grid-cols-7 gap-0 border-b border-[#cdd4de]">
+        <div className="grid grid-cols-7 gap-0 border-b border-[#eceef2]">
           {weekDays.map((day) => (
             <div
               key={day}
-              className="px-4 py-3 font-semibold text-[#7b879c] text-center text-sm uppercase tracking-wide border-r border-[#cdd4de] last:border-r-0"
+              className="px-4 py-3 font-semibold text-[#626875] text-center text-sm uppercase tracking-wide border-r border-[#eceef2] last:border-r-0"
             >
               {day}
             </div>
@@ -71,13 +71,13 @@ export default function ClientCalendar({ client, publicKey, onTaskUpdate }: Clie
           {calendarDays.map((day, index) => (
             <div
               key={index}
-              className={`min-h-32 p-3 border-r border-b border-[#cdd4de] last:border-r-0 transition ${
-                day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#d9dee6]' : 'bg-[#d6dbe3]'
+              className={`min-h-32 p-3 border-r border-b border-[#eceef2] last:border-r-0 transition ${
+                day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#eef0f3]' : 'bg-[#f5f6f8]'
               }`}
             >
               {day && (
                 <>
-                  <div className={`font-semibold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-[#474747]' : 'text-[#a9b3c1]'}`}>
+                  <div className={`font-semibold text-sm mb-2 ${isSameMonth(day, currentMonth) ? 'text-[#17181c]' : 'text-[#c0c5cf]'}`}>
                     {format(day, 'd')}
                   </div>
                   <div className="space-y-1">
@@ -198,14 +198,14 @@ function ClientTaskDetail({
         <div className="p-6">
           <div className="flex justify-between items-start">
             <div className="flex-1">
-              <h2 className="text-2xl font-bold text-[#474747] mb-2">{task.title}</h2>
+              <h2 className="text-2xl font-bold text-[#17181c] mb-2">{task.title}</h2>
               <span className={`pill ${statusColors[task.status] || 'pill-gray'}`}>
                 {task.status.replace(/_/g, ' ')}
               </span>
             </div>
             <button
               onClick={onClose}
-              className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
+              className="neu-pressable text-[#626875] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
             >
               ×
             </button>
@@ -221,21 +221,21 @@ function ClientTaskDetail({
 
           {task.description && (
             <div>
-              <h3 className="font-semibold text-[#474747] mb-2">Description</h3>
-              <p className="text-[#7b879c]">{task.description}</p>
+              <h3 className="font-semibold text-[#17181c] mb-2">Description</h3>
+              <p className="text-[#626875]">{task.description}</p>
             </div>
           )}
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h3 className="font-semibold text-[#474747] mb-1">Due date</h3>
-              <p className="text-[#7b879c]">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
+              <h3 className="font-semibold text-[#17181c] mb-1">Due date</h3>
+              <p className="text-[#626875]">{format(new Date(task.dueDate), 'MMM d, yyyy')}</p>
             </div>
           </div>
 
           {figmaLink && (
-            <div className="border-t border-[#cdd4de] pt-6">
-              <h3 className="font-semibold text-[#474747] mb-3">Deliverables</h3>
+            <div className="border-t border-[#eceef2] pt-6">
+              <h3 className="font-semibold text-[#17181c] mb-3">Deliverables</h3>
               <a
                 href={figmaLink}
                 target="_blank"
@@ -251,12 +251,12 @@ function ClientTaskDetail({
           )}
 
           {task.comments && task.comments.length > 0 && (
-            <div className="border-t border-[#cdd4de] pt-6">
-              <h3 className="font-semibold text-[#474747] mb-3">Notes &amp; feedback</h3>
+            <div className="border-t border-[#eceef2] pt-6">
+              <h3 className="font-semibold text-[#17181c] mb-3">Notes &amp; feedback</h3>
               <div className="space-y-2">
                 {task.comments.map((comment) => (
                   <div key={comment.id} className="neu-inset p-3 rounded-xl">
-                    <p className="text-[#474747] text-sm">{comment.content}</p>
+                    <p className="text-[#17181c] text-sm">{comment.content}</p>
                   </div>
                 ))}
               </div>
@@ -264,9 +264,9 @@ function ClientTaskDetail({
           )}
 
           {task.status === 'CLIENT_REVIEW' && (
-            <div className="border-t border-[#cdd4de] pt-6">
-              <h3 className="font-semibold text-[#474747] mb-3">Your action</h3>
-              <p className="text-[#7b879c] text-sm mb-4">Review the deliverables above and let us know your feedback.</p>
+            <div className="border-t border-[#eceef2] pt-6">
+              <h3 className="font-semibold text-[#17181c] mb-3">Your action</h3>
+              <p className="text-[#626875] text-sm mb-4">Review the deliverables above and let us know your feedback.</p>
               <div className="flex gap-3">
                 <button
                   onClick={handleApprove}
@@ -290,7 +290,7 @@ function ClientTaskDetail({
         <div className="p-6">
           <button
             onClick={onClose}
-            className="neu-pressable w-full py-3 px-4 rounded-2xl font-semibold text-[#474747]"
+            className="neu-pressable w-full py-3 px-4 rounded-2xl font-semibold text-[#17181c]"
           >
             Close
           </button>

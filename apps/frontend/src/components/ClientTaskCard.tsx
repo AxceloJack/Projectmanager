@@ -6,13 +6,13 @@ interface ClientTaskCardProps {
   publicKey: string;
 }
 
-const statusColor: Record<TaskStatus, string> = {
-  NOT_STARTED: '#9aa6b8',
-  DESIGN_PHASE: '#3b82c4',
-  CLIENT_REVIEW: '#fe7300',
-  NEEDS_REVISIONS: '#d9534f',
-  READY_FOR_KLAVIYO: '#3f9d54',
-  COMPLETE: '#7b6bc4',
+const statusStyle: Record<TaskStatus, { bar: string; bg: string; text: string; done?: boolean }> = {
+  NOT_STARTED: { bar: '#8892a4', bg: '#f2f4f7', text: '#5b6470' },
+  DESIGN_PHASE: { bar: '#2f80ed', bg: '#eaf2fe', text: '#1d63b0' },
+  CLIENT_REVIEW: { bar: '#fe7300', bg: '#fff1e2', text: '#c25e00' },
+  NEEDS_REVISIONS: { bar: '#e5484d', bg: '#fdeaea', text: '#c0392b' },
+  READY_FOR_KLAVIYO: { bar: '#2fa96b', bg: '#e6f7ee', text: '#1f8a52', done: true },
+  COMPLETE: { bar: '#8b5cf6', bg: '#f0eafc', text: '#6d43c9', done: true },
 };
 
 const statusLabels: Record<TaskStatus, string> = {
@@ -25,19 +25,24 @@ const statusLabels: Record<TaskStatus, string> = {
 };
 
 export default function ClientTaskCard({ task, onClick }: ClientTaskCardProps) {
-  const color = statusColor[task.status];
+  const s = statusStyle[task.status];
   const label = statusLabels[task.status];
 
   return (
     <button
       onClick={onClick}
-      className="neu-raised-sm w-full text-left px-2.5 py-2 rounded-xl cursor-pointer active:scale-[0.98] transition-transform"
+      className="w-full text-left rounded-lg pl-2.5 pr-2 py-1.5 shadow-sm hover:shadow-md hover:-translate-y-px transition-all cursor-pointer"
+      style={{ background: s.bg, borderLeft: `3px solid ${s.bar}` }}
       title={task.title}
     >
-      <span className="block truncate text-xs font-semibold text-[#474747]">{task.title}</span>
-      <span className="flex items-center gap-1.5 mt-1">
-        <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: color }} />
-        <span className="text-[11px] font-medium truncate" style={{ color }}>
+      <span className="block truncate text-xs font-semibold text-[#17181c]">{task.title}</span>
+      <span className="flex items-center gap-1 mt-0.5">
+        {s.done && (
+          <svg className="w-3 h-3 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke={s.text} strokeWidth="3">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+          </svg>
+        )}
+        <span className="text-[11px] font-bold truncate" style={{ color: s.text }}>
           {label}
         </span>
       </span>

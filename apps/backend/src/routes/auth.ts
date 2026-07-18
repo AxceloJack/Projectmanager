@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { AuthRequest } from '../types/index.js';
+import { isAdminEmail } from '../config/admins.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -44,14 +45,17 @@ router.post('/register', async (req, res: Response) => {
       });
     }
 
+    // Allow-listed emails are auto-approved and made admins.
+    const admin = isAdminEmail(email);
+
     // Create user in the Axcelo workspace
     const user = await prisma.user.create({
       data: {
         email,
         passwordHash,
         workspaceId: workspace.id,
-        role: 'MEMBER',
-        approved: false,
+        role: admin ? 'ADMIN' : 'MEMBER',
+        approved: admin,
       },
     });
 
@@ -84,7 +88,7 @@ router.post('/login', async (req, res: Response) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    if (!user.approved) {
+    if (!user.approved && !isAdminEmail(user.email)) {
       return res.status(403).json({ error: 'Your account is pending admin approval' });
     }
 

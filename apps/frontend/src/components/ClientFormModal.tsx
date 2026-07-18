@@ -70,10 +70,10 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
       <div className="neu-card rounded-[24px] w-full max-w-md max-h-[90vh] flex flex-col">
         {/* Header */}
         <div className="p-6 flex justify-between items-center">
-          <h2 className="text-xl font-bold text-[#474747]">{client ? 'Edit client' : 'New client'}</h2>
+          <h2 className="text-xl font-bold text-[#17181c]">{client ? 'Edit client' : 'New client'}</h2>
           <button
             onClick={onCancel}
-            className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
+            className="neu-pressable text-[#626875] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center text-xl leading-none"
           >
             ×
           </button>
@@ -88,7 +88,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           )}
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Client name</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Client name</label>
             <input
               type="text"
               value={name}
@@ -100,7 +100,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Service</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Service</label>
             <select value={serviceType} onChange={(e) => setServiceType(e.target.value)} className={inputCls}>
               {SERVICE_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -111,7 +111,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Timeline</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Timeline</label>
             <input
               type="date"
               value={kickOffDate}
@@ -120,11 +120,11 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
             />
           </div>
 
-          <div className="border-t border-[#cdd4de] pt-5">
-            <h3 className="text-sm font-semibold text-[#474747] mb-3 ml-1">Integrations</h3>
+          <div className="border-t border-[#eceef2] pt-5">
+            <h3 className="text-sm font-semibold text-[#17181c] mb-3 ml-1">Integrations</h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Figma</label>
+                <label className="block text-sm font-medium text-[#626875] mb-2 ml-1">Figma</label>
                 <input
                   type="url"
                   value={figmaLink}
@@ -134,7 +134,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Slack channel ID</label>
+                <label className="block text-sm font-medium text-[#626875] mb-2 ml-1">Slack channel ID</label>
                 <input
                   type="text"
                   value={slackId}
@@ -144,7 +144,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Slack user ID</label>
+                <label className="block text-sm font-medium text-[#626875] mb-2 ml-1">Slack user ID</label>
                 <input
                   type="text"
                   value={slackUserId}
@@ -154,7 +154,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Klaviyo</label>
+                <label className="block text-sm font-medium text-[#626875] mb-2 ml-1">Klaviyo</label>
                 <input
                   type="text"
                   value={klaviyoApi}
@@ -164,7 +164,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#7b879c] mb-2 ml-1">Billing date</label>
+                <label className="block text-sm font-medium text-[#626875] mb-2 ml-1">Billing date</label>
                 <input
                   type="date"
                   value={klaviyoBillingDate}
@@ -190,7 +190,7 @@ export default function ClientFormModal({ client, onSave, onCancel }: ClientForm
           <button
             type="button"
             onClick={onCancel}
-            className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
+            className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#17181c]"
           >
             Cancel
           </button>

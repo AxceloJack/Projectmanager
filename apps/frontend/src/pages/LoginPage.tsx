@@ -42,8 +42,8 @@ export default function LoginPage() {
           <div className="neu-raised inline-flex items-center justify-center w-[70px] h-[70px] rounded-[22px] mb-5">
             <AxceloLogo className="w-9 h-9" />
           </div>
-          <h1 className="text-[34px] font-bold text-[#474747] tracking-tight">Axcelo</h1>
-          <p className="text-[#7b879c] text-sm mt-1">Email campaign command center</p>
+          <h1 className="text-[34px] font-bold text-[#17181c] tracking-tight">Axcelo</h1>
+          <p className="text-[#626875] text-sm mt-1">Email campaign command center</p>
         </div>
 
         {/* Form card */}
@@ -56,7 +56,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">
                 Email address
               </label>
               <input
@@ -64,13 +64,13 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="neu-input w-full px-5 py-3.5 rounded-2xl text-[#474747] focus:outline-none"
+                className="neu-input w-full px-5 py-3.5 rounded-2xl text-[#17181c] focus:outline-none"
                 placeholder="name@axcelo.co"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">
                 Password
               </label>
               <input
@@ -78,7 +78,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="neu-input w-full px-5 py-3.5 rounded-2xl text-[#474747] focus:outline-none"
+                className="neu-input w-full px-5 py-3.5 rounded-2xl text-[#17181c] focus:outline-none"
                 placeholder="••••••••"
               />
             </div>
@@ -102,8 +102,8 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-7 pt-6 border-t border-[#cdd4de]">
-            <p className="text-[#7b879c] text-sm text-center">
+          <div className="mt-7 pt-6 border-t border-[#eceef2]">
+            <p className="text-[#626875] text-sm text-center">
               Don't have an account?{' '}
               <Link to="/signup" className="text-[#fe7300] hover:text-[#e56100] font-semibold">
                 Sign up
@@ -112,7 +112,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-center text-[#9aa6b8] text-xs mt-7">
+        <p className="text-center text-[#9aa0ab] text-xs mt-7">
           © 2026 Axcelo. All campaigns managed with precision.
         </p>
       </div>

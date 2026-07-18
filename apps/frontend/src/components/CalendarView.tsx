@@ -63,11 +63,11 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
   return (
     <div className="flex-1 flex flex-col neu-surface">
       {/* Header */}
-      <div className="border-b border-[#cdd4de] px-8 py-6">
+      <div className="border-b border-[#eceef2] px-8 py-6">
         <div className="flex justify-between items-start mb-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#474747]">{client.name}</h1>
-            <p className="text-[#7b879c] text-sm mt-1">Campaign timeline • click + to add tasks</p>
+            <h1 className="text-2xl font-bold text-[#17181c]">{client.name}</h1>
+            <p className="text-[#626875] text-sm mt-1">Campaign timeline • click + to add tasks</p>
           </div>
           <button
             onClick={() => {
@@ -91,24 +91,24 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
         <div className="flex justify-between items-center">
           <button
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
+            className="neu-pressable p-2.5 rounded-xl text-[#17181c]"
             title="Previous month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
-          <h2 className="text-lg font-bold text-[#474747]">{format(currentMonth, 'MMMM yyyy')}</h2>
+          <h2 className="text-lg font-bold text-[#17181c]">{format(currentMonth, 'MMMM yyyy')}</h2>
           <div className="flex gap-2 items-center">
             <button
               onClick={() => setCurrentMonth(new Date())}
-              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#474747] rounded-xl"
+              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#17181c] rounded-xl"
             >
               Today
             </button>
             <button
               onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-              className="neu-pressable p-2.5 rounded-xl text-[#474747]"
+              className="neu-pressable p-2.5 rounded-xl text-[#17181c]"
               title="Next month"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -123,11 +123,11 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
       <div className="flex-1 overflow-auto p-4 sm:p-8">
         <div className="neu-card rounded-2xl overflow-hidden w-full">
           {/* Week Days Header */}
-          <div className="grid grid-cols-7 gap-0 border-b border-[#cdd4de] w-full">
+          <div className="grid grid-cols-7 gap-0 border-b border-[#eceef2] w-full">
             {weekDays.map((day) => (
               <div
                 key={day}
-                className="px-2 sm:px-4 py-2 sm:py-3 font-semibold text-[#7b879c] text-center text-xs sm:text-sm uppercase tracking-wide border-r border-[#cdd4de] last:border-r-0"
+                className="px-2 sm:px-4 py-2 sm:py-3 font-semibold text-[#626875] text-center text-xs sm:text-sm uppercase tracking-wide border-r border-[#eceef2] last:border-r-0"
               >
                 {day}
               </div>
@@ -139,14 +139,14 @@ export default function CalendarView({ client, onTasksChange }: CalendarViewProp
             {calendarDays.map((day, index) => (
               <div
                 key={index}
-                className={`min-h-24 sm:min-h-32 p-2 sm:p-3 border-r border-b border-[#cdd4de] last:border-r-0 group relative overflow-hidden transition ${
-                  day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#d9dee6]' : 'bg-[#d6dbe3]'
+                className={`min-h-24 sm:min-h-32 p-2 sm:p-3 border-r border-b border-[#eceef2] last:border-r-0 group relative overflow-hidden transition ${
+                  day && isSameMonth(day, currentMonth) ? 'bg-transparent hover:bg-[#eef0f3]' : 'bg-[#f5f6f8]'
                 }`}
               >
                 {day && (
                   <>
                     <div className="flex items-center justify-between mb-2.5">
-                      <div className={`font-semibold text-sm ${isSameMonth(day, currentMonth) ? 'text-[#474747]' : 'text-[#a9b3c1]'}`}>
+                      <div className={`font-semibold text-sm ${isSameMonth(day, currentMonth) ? 'text-[#17181c]' : 'text-[#c0c5cf]'}`}>
                         {format(day, 'd')}
                       </div>
                       {isSameMonth(day, currentMonth) && (

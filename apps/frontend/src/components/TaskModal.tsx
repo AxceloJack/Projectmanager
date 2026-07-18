@@ -37,7 +37,7 @@ const tagLabels: Record<TaskTag, string> = {
   SIDE_QUEST: 'Side quest',
 };
 
-const labelCls = 'block text-sm font-semibold text-[#474747] mb-2 ml-1';
+const labelCls = 'block text-sm font-semibold text-[#17181c] mb-2 ml-1';
 const inputCls = 'neu-input w-full px-4 py-2.5 rounded-xl focus:outline-none';
 
 export default function TaskModal({
@@ -109,11 +109,11 @@ export default function TaskModal({
   return (
     <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
       <div className="neu-card rounded-[24px] max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 flex justify-between items-center sticky top-0 bg-[#e0e5ec] z-10 rounded-t-[24px]">
-          <h2 className="text-xl font-bold text-[#474747]">{task ? 'Edit task' : 'Create task'}</h2>
+        <div className="p-6 flex justify-between items-center sticky top-0 bg-[#ffffff] z-10 rounded-t-[24px]">
+          <h2 className="text-xl font-bold text-[#17181c]">{task ? 'Edit task' : 'Create task'}</h2>
           <button
             onClick={onClose}
-            className="neu-pressable text-[#7b879c] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center"
+            className="neu-pressable text-[#626875] hover:text-[#fe7300] w-9 h-9 rounded-xl flex items-center justify-center"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -202,7 +202,7 @@ export default function TaskModal({
             <button
               type="button"
               onClick={onClose}
-              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
+              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#17181c]"
             >
               Cancel
             </button>
@@ -220,15 +220,15 @@ export default function TaskModal({
 
         {/* Comments */}
         {task && (
-          <div className="px-6 pb-6 pt-5 border-t border-[#cdd4de] space-y-4">
-            <h3 className="font-bold text-[#474747]">Comments &amp; notes</h3>
+          <div className="px-6 pb-6 pt-5 border-t border-[#eceef2] space-y-4">
+            <h3 className="font-bold text-[#17181c]">Comments &amp; notes</h3>
 
             {comments.length > 0 && (
               <div className="space-y-3 max-h-48 overflow-y-auto">
                 {comments.map((comment) => (
                   <div key={comment.id} className="neu-inset p-3 rounded-xl">
-                    <div className="text-xs font-semibold text-[#7b879c] mb-1">{comment.user?.email}</div>
-                    <div className="text-sm text-[#474747]">{comment.content}</div>
+                    <div className="text-xs font-semibold text-[#626875] mb-1">{comment.user?.email}</div>
+                    <div className="text-sm text-[#17181c]">{comment.content}</div>
                   </div>
                 ))}
               </div>

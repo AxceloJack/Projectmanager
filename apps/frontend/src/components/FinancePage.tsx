@@ -161,7 +161,7 @@ export default function FinancePage() {
   if (loading) {
     return (
       <div className="neu-surface flex-1 flex items-center justify-center">
-        <p className="text-[#7b879c]">Loading…</p>
+        <p className="text-[#626875]">Loading…</p>
       </div>
     );
   }
@@ -171,8 +171,8 @@ export default function FinancePage() {
       <div className="px-8 py-6">
         <div className="flex justify-between items-start mb-6 gap-4 flex-wrap">
           <div>
-            <h1 className="text-2xl font-bold text-[#474747]">Finance</h1>
-            <p className="text-[#7b879c] text-sm mt-1">
+            <h1 className="text-2xl font-bold text-[#17181c]">Finance</h1>
+            <p className="text-[#626875] text-sm mt-1">
               Income &amp; expenses in {base} · exchange rates locked at each entry's date
             </p>
           </div>
@@ -205,7 +205,7 @@ export default function FinancePage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => setViewMonth(subMonths(viewMonth, 1))}
-            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
+            className="neu-pressable p-2.5 rounded-xl text-[#17181c]"
             title="Previous month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,17 +213,17 @@ export default function FinancePage() {
             </svg>
           </button>
           <div className="flex items-center gap-3">
-            <h2 className="text-lg font-bold text-[#474747]">{format(viewMonth, 'MMMM yyyy')}</h2>
+            <h2 className="text-lg font-bold text-[#17181c]">{format(viewMonth, 'MMMM yyyy')}</h2>
             <button
               onClick={() => setViewMonth(startOfMonth(new Date()))}
-              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#474747] rounded-xl"
+              className="neu-pressable px-3.5 py-2 text-xs font-semibold text-[#17181c] rounded-xl"
             >
               This month
             </button>
           </div>
           <button
             onClick={() => setViewMonth(addMonths(viewMonth, 1))}
-            className="neu-pressable p-2.5 rounded-xl text-[#474747]"
+            className="neu-pressable p-2.5 rounded-xl text-[#17181c]"
             title="Next month"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -251,7 +251,7 @@ export default function FinancePage() {
           <SummaryCard
             label="Net"
             value={money(net, base)}
-            valueColor={net >= 0 ? 'text-[#474747]' : 'text-[#c0392b]'}
+            valueColor={net >= 0 ? 'text-[#17181c]' : 'text-[#c0392b]'}
             iconBg="bg-[#dbe0e8] text-[#5f6b7a]"
             icon={<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m-6 5h6m-6 5h6M4 5h.01M4 12h.01M4 19h.01" />}
           />
@@ -266,12 +266,12 @@ export default function FinancePage() {
 
         {occurrences.length === 0 ? (
           <div className="neu-inset rounded-2xl p-12 text-center">
-            <p className="text-[#7b879c]">Nothing for {format(viewMonth, 'MMMM yyyy')}. Add an entry to start tracking.</p>
+            <p className="text-[#626875]">Nothing for {format(viewMonth, 'MMMM yyyy')}. Add an entry to start tracking.</p>
           </div>
         ) : (
           <div className="neu-card rounded-2xl overflow-hidden">
             <table className="w-full text-left">
-              <thead className="text-[#7b879c] text-xs uppercase tracking-wider border-b border-[#cdd4de]">
+              <thead className="text-[#626875] text-xs uppercase tracking-wider border-b border-[#eceef2]">
                 <tr>
                   <th className="px-5 py-3.5 font-semibold">Date</th>
                   <th className="px-5 py-3.5 font-semibold">Description</th>
@@ -281,17 +281,17 @@ export default function FinancePage() {
                   <th className="px-5 py-3.5 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#d3d9e2]">
+              <tbody className="divide-y divide-[#eceef2]">
                 {occurrences.map((o) => {
                   const e = o.entry;
                   const converted = entryInBase(e, base, fx.rates);
                   return (
-                    <tr key={o.key} className="hover:bg-[#d9dee6]/60 transition-colors">
-                      <td className="px-5 py-4 text-[#7b879c] text-sm whitespace-nowrap">
+                    <tr key={o.key} className="hover:bg-[#eef0f3]/60 transition-colors">
+                      <td className="px-5 py-4 text-[#626875] text-sm whitespace-nowrap">
                         {format(o.date, 'd MMM yyyy')}
                       </td>
                       <td className="px-5 py-4">
-                        <div className="text-[#474747] font-medium flex items-center gap-2">
+                        <div className="text-[#17181c] font-medium flex items-center gap-2">
                           {e.description}
                           {e.recurring && e.frequency && (
                             <span className="text-[10px] uppercase tracking-wide bg-[#fbe0cc] text-[#b5591f] rounded-full px-2 py-0.5">
@@ -299,9 +299,9 @@ export default function FinancePage() {
                             </span>
                           )}
                         </div>
-                        {e.client && <div className="text-xs text-[#7b879c] mt-0.5">{e.client.name}</div>}
+                        {e.client && <div className="text-xs text-[#626875] mt-0.5">{e.client.name}</div>}
                       </td>
-                      <td className="px-5 py-4 text-[#7b879c] text-sm">{e.category || '—'}</td>
+                      <td className="px-5 py-4 text-[#626875] text-sm">{e.category || '—'}</td>
                       <td className="px-5 py-4">
                         {e.status === 'PAID' ? (
                           <span className="pill pill-green">Paid</span>
@@ -319,7 +319,7 @@ export default function FinancePage() {
                           {money(e.amount, e.currency)}
                         </div>
                         {e.currency !== base && (
-                          <div className="text-xs text-[#9aa6b8] font-normal">≈ {money(converted, base)}</div>
+                          <div className="text-xs text-[#9aa0ab] font-normal">≈ {money(converted, base)}</div>
                         )}
                         {e.fee ? (
                           <div className="text-xs text-[#c0392b] font-normal">− {money(e.fee, e.currency)} fee</div>
@@ -332,7 +332,7 @@ export default function FinancePage() {
                               setEditing(e);
                               setShowForm(true);
                             }}
-                            className="neu-pressable px-3.5 py-1.5 text-[#474747] rounded-lg text-xs font-semibold"
+                            className="neu-pressable px-3.5 py-1.5 text-[#17181c] rounded-lg text-xs font-semibold"
                           >
                             Edit
                           </button>
@@ -394,7 +394,7 @@ function SummaryCard({
         </svg>
       </div>
       <div className="min-w-0">
-        <p className="text-[#7b879c] text-xs uppercase tracking-wider truncate">{label}</p>
+        <p className="text-[#626875] text-xs uppercase tracking-wider truncate">{label}</p>
         <p className={`text-lg sm:text-xl font-bold truncate ${valueColor}`}>{value}</p>
       </div>
     </div>
@@ -475,7 +475,7 @@ function EntryModal({
     <div className="neu-overlay fixed inset-0 flex items-center justify-center z-50 p-4">
       <div className="neu-card rounded-[24px] max-w-lg w-full max-h-[90vh] overflow-y-auto">
         <div className="p-6">
-          <h2 className="text-xl font-bold text-[#474747]">{entry ? 'Edit entry' : 'New entry'}</h2>
+          <h2 className="text-xl font-bold text-[#17181c]">{entry ? 'Edit entry' : 'New entry'}</h2>
         </div>
 
         <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-5">
@@ -487,14 +487,14 @@ function EntryModal({
 
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Type</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Type</label>
               <select value={type} onChange={(e) => setType(e.target.value as any)} className={inputClass}>
                 <option value="EXPENSE">Out</option>
                 <option value="INCOME">In</option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Amount</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Amount</label>
               <input
                 type="number"
                 step="0.01"
@@ -506,7 +506,7 @@ function EntryModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Currency</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Currency</label>
               <select value={currency} onChange={(e) => setCurrency(e.target.value)} className={inputClass}>
                 {CURRENCIES.map((c) => (
                   <option key={c} value={c}>
@@ -518,7 +518,7 @@ function EntryModal({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Description</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Description</label>
             <input
               type="text"
               value={description}
@@ -529,7 +529,7 @@ function EntryModal({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Fee (optional)</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Fee (optional)</label>
             <input
               type="number"
               step="0.01"
@@ -539,14 +539,14 @@ function EntryModal({
               className={inputClass}
               placeholder="0.00"
             />
-            <p className="text-xs text-[#7b879c] mt-1.5 ml-1">
+            <p className="text-xs text-[#626875] mt-1.5 ml-1">
               In {currency} — processing/service fee, deducted from your net automatically.
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Category</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Category</label>
               <input
                 type="text"
                 value={category}
@@ -556,7 +556,7 @@ function EntryModal({
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Client (optional)</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Client (optional)</label>
               <select value={clientId} onChange={(e) => setClientId(e.target.value)} className={inputClass}>
                 <option value="">— None —</option>
                 {clients.map((c) => (
@@ -570,13 +570,13 @@ function EntryModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">
                 {repeats === 'ONEOFF' ? 'Date' : 'Starts'}
               </label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className={inputClass} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Status</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Status</label>
               <select value={status} onChange={(e) => setStatus(e.target.value as any)} className={inputClass}>
                 <option value="PAID">Paid</option>
                 <option value="PENDING">Pending</option>
@@ -586,7 +586,7 @@ function EntryModal({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Repeats</label>
+              <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Repeats</label>
               <select value={repeats} onChange={(e) => setRepeats(e.target.value as any)} className={inputClass}>
                 <option value="ONEOFF">One-off</option>
                 <option value="WEEKLY">Weekly</option>
@@ -597,14 +597,14 @@ function EntryModal({
             </div>
             {repeats !== 'ONEOFF' && (
               <div>
-                <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Ends (optional)</label>
+                <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Ends (optional)</label>
                 <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className={inputClass} />
               </div>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Notes (optional)</label>
+            <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Notes (optional)</label>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -618,7 +618,7 @@ function EntryModal({
             <button
               type="button"
               onClick={onClose}
-              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#474747]"
+              className="neu-pressable flex-1 py-3 px-4 rounded-2xl font-semibold text-[#17181c]"
             >
               Cancel
             </button>

@@ -60,7 +60,7 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="neu-surface flex h-screen items-center justify-center">
-        <p className="text-[#7b879c]">Loading…</p>
+        <p className="text-[#626875]">Loading…</p>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export default function DashboardPage() {
 
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Tab navigation */}
-        <div className="px-8 pt-4 flex gap-7 border-b border-[#cdd4de]">
+        <div className="px-8 pt-4 flex gap-7 border-b border-[#eceef2]">
           {TABS.map((tab) => (
             <button
               key={tab.id}
@@ -84,7 +84,7 @@ export default function DashboardPage() {
               className={`pb-3 font-semibold text-sm border-b-2 -mb-px transition-colors ${
                 activeTab === tab.id
                   ? 'border-[#fe7300] text-[#fe7300]'
-                  : 'border-transparent text-[#7b879c] hover:text-[#474747]'
+                  : 'border-transparent text-[#626875] hover:text-[#17181c]'
               }`}
             >
               {tab.label}
@@ -98,7 +98,7 @@ export default function DashboardPage() {
             <CalendarView client={selectedClient} onTasksChange={fetchClients} />
           ) : (
             <div className="flex-1 flex items-center justify-center">
-              <p className="text-[#7b879c]">Select a client from the sidebar to get started.</p>
+              <p className="text-[#626875]">Select a client from the sidebar to get started.</p>
             </div>
           )
         ) : activeTab === 'clients' ? (

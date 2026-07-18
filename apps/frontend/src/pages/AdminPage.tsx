@@ -96,19 +96,19 @@ export default function AdminPage() {
   return (
     <div className="neu-surface min-h-full">
       {/* Header */}
-      <div className="border-b border-[#cdd4de] px-8 py-6">
-        <h1 className="text-2xl font-bold text-[#474747]">Admin settings</h1>
-        <p className="text-[#7b879c] text-sm mt-1">Manage team members and integrations</p>
+      <div className="border-b border-[#eceef2] px-8 py-6">
+        <h1 className="text-2xl font-bold text-[#17181c]">Admin settings</h1>
+        <p className="text-[#626875] text-sm mt-1">Manage team members and integrations</p>
       </div>
 
       {/* Tabs */}
-      <div className="border-b border-[#cdd4de] px-8 pt-4 flex gap-7">
+      <div className="border-b border-[#eceef2] px-8 pt-4 flex gap-7">
         <button
           onClick={() => setActiveTab('users')}
           className={`pb-3 font-semibold text-sm transition-colors border-b-2 -mb-px ${
             activeTab === 'users'
               ? 'border-[#fe7300] text-[#fe7300]'
-              : 'border-transparent text-[#7b879c] hover:text-[#474747]'
+              : 'border-transparent text-[#626875] hover:text-[#17181c]'
           }`}
         >
           Users
@@ -118,7 +118,7 @@ export default function AdminPage() {
           className={`pb-3 font-semibold text-sm transition-colors border-b-2 -mb-px ${
             activeTab === 'slack'
               ? 'border-[#fe7300] text-[#fe7300]'
-              : 'border-transparent text-[#7b879c] hover:text-[#474747]'
+              : 'border-transparent text-[#626875] hover:text-[#17181c]'
           }`}
         >
           Slack integration
@@ -137,17 +137,17 @@ export default function AdminPage() {
           <>
             {loading ? (
               <div className="flex items-center justify-center py-12">
-                <p className="text-[#7b879c]">Loading pending users…</p>
+                <p className="text-[#626875]">Loading pending users…</p>
               </div>
             ) : pendingUsers.length === 0 ? (
               <div className="text-center py-12">
                 <div className="neu-raised w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-5">
-                  <svg className="w-9 h-9 text-[#9aa6b8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-9 h-9 text-[#9aa0ab]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <h3 className="text-xl font-bold text-[#474747] mb-2">No pending users</h3>
-                <p className="text-[#7b879c]">All team members have been approved.</p>
+                <h3 className="text-xl font-bold text-[#17181c] mb-2">No pending users</h3>
+                <p className="text-[#626875]">All team members have been approved.</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -162,8 +162,8 @@ export default function AdminPage() {
                             </span>
                           </div>
                           <div>
-                            <p className="text-[#474747] font-semibold">{user.email}</p>
-                            <p className="text-[#7b879c] text-xs">
+                            <p className="text-[#17181c] font-semibold">{user.email}</p>
+                            <p className="text-[#626875] text-xs">
                               Requested {format(new Date(user.createdAt), 'MMM d, yyyy • h:mm a')}
                             </p>
                           </div>
@@ -231,30 +231,30 @@ export default function AdminPage() {
                     <span className="text-white text-sm font-bold">S</span>
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-[#474747]">Slack workspace connected</h3>
-                    <p className="text-[#7b879c] text-sm">Connected since {format(new Date(slackIntegration.createdAt), 'MMM d, yyyy')}</p>
+                    <h3 className="text-lg font-bold text-[#17181c]">Slack workspace connected</h3>
+                    <p className="text-[#626875] text-sm">Connected since {format(new Date(slackIntegration.createdAt), 'MMM d, yyyy')}</p>
                   </div>
                 </div>
                 <div className="space-y-2 mb-5">
-                  <p className="text-[#474747] text-sm"><strong>Team ID:</strong> {slackIntegration.teamId}</p>
-                  <p className="text-[#474747] text-sm"><strong>Channel ID:</strong> {slackIntegration.channelId}</p>
+                  <p className="text-[#17181c] text-sm"><strong>Team ID:</strong> {slackIntegration.teamId}</p>
+                  <p className="text-[#17181c] text-sm"><strong>Channel ID:</strong> {slackIntegration.channelId}</p>
                 </div>
                 <button
                   onClick={() => setActiveTab('slack')}
-                  className="neu-pressable px-4 py-2.5 text-[#474747] rounded-xl font-semibold text-sm"
+                  className="neu-pressable px-4 py-2.5 text-[#17181c] rounded-xl font-semibold text-sm"
                 >
                   Update configuration
                 </button>
               </div>
             ) : (
               <div className="neu-card rounded-2xl p-6">
-                <h3 className="text-lg font-bold text-[#474747] mb-3">Connect Slack workspace</h3>
-                <p className="text-[#7b879c] text-sm mb-6">
+                <h3 className="text-lg font-bold text-[#17181c] mb-3">Connect Slack workspace</h3>
+                <p className="text-[#626875] text-sm mb-6">
                   Connect your Slack workspace to receive notifications when tasks are ready for client review.
                 </p>
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Slack team ID</label>
+                    <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Slack team ID</label>
                     <input
                       type="text"
                       value={slackForm.teamId}
@@ -264,7 +264,7 @@ export default function AdminPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-[#474747] mb-2 ml-1">Bot token</label>
+                    <label className="block text-sm font-semibold text-[#17181c] mb-2 ml-1">Bot token</label>
                     <input
                       type="password"
                       value={slackForm.botToken}

@@ -2,6 +2,7 @@ import { Router, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth.js';
 import { AuthRequest } from '../types/index.js';
+import { isAdminEmail } from '../config/admins.js';
 
 const router = Router();
 const prisma = new PrismaClient();
@@ -19,7 +20,7 @@ const adminMiddleware = async (req: AuthRequest, res: Response, next: Function) 
       where: { id: req.user.userId },
     });
 
-    if (!user || user.role !== 'ADMIN') {
+    if (!user || (user.role !== 'ADMIN' && !isAdminEmail(user.email))) {
       return res.status(403).json({ error: 'Insufficient permissions' });
     }
 

@@ -68,7 +68,7 @@ export default function PublicFormPage() {
   if (loading) {
     return (
       <div className="neu-surface min-h-screen flex items-center justify-center">
-        <p className="text-[#7b879c]">Loading…</p>
+        <p className="text-[#626875]">Loading…</p>
       </div>
     );
   }
@@ -76,7 +76,7 @@ export default function PublicFormPage() {
   if (!form || !config) {
     return (
       <div className="neu-surface min-h-screen flex items-center justify-center p-4">
-        <p className="text-[#7b879c]">{error || 'Form not found.'}</p>
+        <p className="text-[#626875]">{error || 'Form not found.'}</p>
       </div>
     );
   }
@@ -92,8 +92,8 @@ export default function PublicFormPage() {
         <div className="neu-raised inline-flex items-center justify-center w-[70px] h-[70px] rounded-[22px] mb-6">
           <AxceloLogo className="w-9 h-9" />
         </div>
-        <h1 className="text-3xl font-bold text-[#474747] mb-3 text-center">Thank you!</h1>
-        <p className="text-[#7b879c] text-center max-w-md">
+        <h1 className="text-3xl font-bold text-[#17181c] mb-3 text-center">Thank you!</h1>
+        <p className="text-[#626875] text-center max-w-md">
           {config.hasMonth
             ? `We've received your plans for ${formatMonth(form.month)}. The team will build your campaign strategy around them — you'll see it all on your calendar soon.`
             : "We've received your details. The team will get everything set up and be in touch shortly — welcome aboard!"}
@@ -105,14 +105,14 @@ export default function PublicFormPage() {
   return (
     <div className="neu-surface min-h-screen">
       {/* Branded header */}
-      <div className="border-b border-[#cdd4de]">
+      <div className="border-b border-[#eceef2]">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-3">
           <div className="neu-raised-sm w-10 h-10 rounded-xl flex items-center justify-center">
             <AxceloLogo className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-sm font-bold text-[#474747]">Axcelo</p>
-            <p className="text-xs text-[#7b879c]">
+            <p className="text-sm font-bold text-[#17181c]">Axcelo</p>
+            <p className="text-xs text-[#626875]">
               {config.hasMonth ? 'Campaign strategy form' : 'Onboarding form'}
             </p>
           </div>
@@ -120,14 +120,14 @@ export default function PublicFormPage() {
       </div>
 
       <div className="max-w-3xl mx-auto px-4 sm:px-6 py-10">
-        <h1 className="text-3xl font-bold text-[#474747] mb-2">{heading}</h1>
-        <p className="text-[#7b879c] mb-10">{config.publicIntro(subject)}</p>
+        <h1 className="text-3xl font-bold text-[#17181c] mb-2">{heading}</h1>
+        <p className="text-[#626875] mb-10">{config.publicIntro(subject)}</p>
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {config.questions.map((q) => (
             <div key={q.key}>
-              <label className="block text-[#474747] font-semibold mb-1">{q.label}</label>
-              <p className="text-[#7b879c] text-sm mb-3">{q.hint}</p>
+              <label className="block text-[#17181c] font-semibold mb-1">{q.label}</label>
+              <p className="text-[#626875] text-sm mb-3">{q.hint}</p>
               <textarea
                 value={answers[q.key] || ''}
                 onChange={(e) => setAnswers({ ...answers, [q.key]: e.target.value })}
@@ -157,13 +157,13 @@ export default function PublicFormPage() {
           </button>
 
           {form.status === 'SUBMITTED' && (
-            <p className="text-[#7b879c] text-sm text-center">
+            <p className="text-[#626875] text-sm text-center">
               You've already submitted this form — feel free to update your answers.
             </p>
           )}
         </form>
 
-        <p className="text-[#9aa6b8] text-xs text-center mt-10">
+        <p className="text-[#9aa0ab] text-xs text-center mt-10">
           © {new Date().getFullYear()} Axcelo. All campaigns managed with precision.
         </p>
       </div>

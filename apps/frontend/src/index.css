@@ -3,149 +3,154 @@
 @tailwind utilities;
 
 :root {
-  /* Soft-UI (neumorphic) design tokens */
-  --neu-bg: #e0e5ec;
-  --neu-light: #ffffff;
-  --neu-dark: #a3b1c6;
-  --neu-text: #474747;
-  --neu-text-muted: #7b879c;
-  --neu-accent: #fe7300;
-  --neu-accent-dark: #e56100;
+  --page: #f5f6f8;
+  --card: #ffffff;
+  --line: #eceef2;
+  --text: #17181c;
+  --text-2: #626875;
+  --text-3: #9aa0ab;
+  --accent: #fe7300;
+  --accent-dark: #e56100;
+  --accent-tint: #fff2e8;
 }
 
 body {
   font-family: 'Source Sans 3', system-ui, -apple-system, 'Segoe UI', sans-serif;
-}
-
-* {
-  @apply transition-colors;
+  background: var(--page);
+  color: var(--text);
 }
 
 @layer components {
-  /* Flat base surface — the same colour the raised elements sit on */
+  /* Light-grey page canvas */
   .neu-surface {
-    background: var(--neu-bg);
-    color: var(--neu-text);
+    background: var(--page);
+    color: var(--text);
   }
 
-  /* Extruded surface: light highlight top-left, soft shadow bottom-right */
+  /* Elevated white card — real figure/ground separation */
+  .neu-card,
   .neu-raised {
-    background: var(--neu-bg);
-    box-shadow: 7px 7px 15px var(--neu-dark), -7px -7px 15px var(--neu-light);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 6px 16px rgba(16, 24, 40, 0.06);
   }
   .neu-raised-sm {
-    background: var(--neu-bg);
-    box-shadow: 4px 4px 9px var(--neu-dark), -4px -4px 9px var(--neu-light);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
   }
 
-  /* Pressed / sunken surface */
+  /* Recessed panel — light fill, for empty states / read-only blocks */
   .neu-inset {
-    background: var(--neu-bg);
-    box-shadow: inset 4px 4px 8px var(--neu-dark), inset -4px -4px 8px var(--neu-light);
+    background: #f1f3f6;
+    border: 1px solid var(--line);
+    border-radius: 12px;
   }
 
-  /* Input fields read as gently sunken */
+  /* Inputs — clean bordered field with an orange focus ring */
   .neu-input {
-    background: var(--neu-bg);
-    color: var(--neu-text);
-    box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
-    transition: box-shadow 0.15s ease;
+    background: #fff;
+    color: var(--text);
+    border: 1px solid #d9dde3;
+    border-radius: 12px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
   }
   .neu-input::placeholder {
-    color: var(--neu-text-muted);
+    color: var(--text-3);
   }
   .neu-input:focus {
     outline: none;
-    box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light),
-      0 0 0 2px rgba(254, 115, 0, 0.4);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(254, 115, 0, 0.16);
   }
 
-  /* Clear, solid CTA — the deliberate high-contrast element in the hybrid */
+  /* Solid primary CTA */
   .btn-accent {
-    background: var(--neu-accent);
+    background: var(--accent);
     color: #fff;
-    box-shadow: 5px 5px 11px var(--neu-dark), -5px -5px 11px var(--neu-light);
-    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.1s ease;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.1), 0 2px 10px rgba(254, 115, 0, 0.28);
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
   }
   .btn-accent:hover {
-    background: var(--neu-accent-dark);
+    background: var(--accent-dark);
   }
   .btn-accent:active {
     transform: translateY(1px);
-    box-shadow: inset 3px 3px 7px rgba(140, 74, 0, 0.5);
   }
 
-  /* Soft, low-emphasis pressable (icon buttons, secondary actions) */
+  /* Secondary button — white with a hairline, lifts on hover */
   .neu-pressable {
-    background: var(--neu-bg);
-    box-shadow: 4px 4px 9px var(--neu-dark), -4px -4px 9px var(--neu-light);
-    transition: box-shadow 0.15s ease, transform 0.1s ease;
+    background: #fff;
+    border: 1px solid #e3e5ea;
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
+    transition: background 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+  }
+  .neu-pressable:hover {
+    background: #f7f8fa;
+    box-shadow: 0 2px 8px rgba(16, 24, 40, 0.08);
   }
   .neu-pressable:active {
     transform: translateY(1px);
-    box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
   }
 
-  /* Raised card shorthand */
-  .neu-card {
-    background: var(--neu-bg);
-    border-radius: 20px;
-    box-shadow: 7px 7px 15px var(--neu-dark), -7px -7px 15px var(--neu-light);
-  }
-
-  /* Sidebar / nav item — soft raised, sinks when active */
+  /* Nav / client item — clear highlighted active state */
   .neu-nav {
-    background: var(--neu-bg);
-    color: var(--neu-text);
-    box-shadow: 4px 4px 9px var(--neu-dark), -4px -4px 9px var(--neu-light);
-    transition: box-shadow 0.15s ease, color 0.15s ease;
+    background: transparent;
+    color: var(--text-2);
+    border-radius: 12px;
+    transition: background 0.15s ease, color 0.15s ease;
   }
   .neu-nav:hover {
-    color: var(--neu-accent);
+    background: #eceef2;
+    color: var(--text);
   }
   .neu-nav-active {
-    background: var(--neu-bg);
-    color: var(--neu-accent);
-    box-shadow: inset 3px 3px 6px var(--neu-dark), inset -3px -3px 6px var(--neu-light);
+    background: var(--accent-tint);
+    color: var(--accent-dark);
+    border-radius: 12px;
   }
 
-  /* Status / meta pills — soft tinted, no borders */
+  /* Status / meta pills — bold tinted */
   .pill {
     display: inline-block;
     border-radius: 9999px;
     font-size: 12px;
     font-weight: 600;
-    padding: 4px 12px;
+    padding: 3px 11px;
     white-space: nowrap;
   }
   .pill-gray {
-    background: #d5dbe4;
-    color: #5f6b7a;
+    background: #eceef2;
+    color: #5b6470;
   }
   .pill-blue {
-    background: #d6e4f5;
-    color: #2b5a8c;
+    background: #e4effb;
+    color: #1d63b0;
   }
   .pill-orange {
-    background: #fbe0cc;
+    background: #ffe9d6;
     color: #b5591f;
   }
   .pill-red {
-    background: #f6d6d3;
-    color: #a83a30;
+    background: #fde3e4;
+    color: #c0392b;
   }
   .pill-green {
-    background: #d7ead4;
-    color: #357a41;
+    background: #dcf3e6;
+    color: #1f8a52;
   }
   .pill-purple {
-    background: #e4ddf3;
-    color: #5b4a8c;
+    background: #eee7fc;
+    color: #6d43c9;
   }
 
-  /* Modal backdrop over light content */
+  /* Modal backdrop */
   .neu-overlay {
-    background: rgba(120, 132, 150, 0.45);
-    backdrop-filter: blur(3px);
+    background: rgba(17, 24, 39, 0.5);
+    backdrop-filter: blur(2px);
   }
 }
